@@ -25,6 +25,16 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 @media(max-width:900px){.app{display:block}.sidebar{display:none;height:auto;position:relative}.sidebar.open{display:block}.mobilebar{display:flex;position:sticky;top:0;z-index:20}.topbar{top:66px}.content{padding:14px}.grid4,.grid3,.grid2{grid-template-columns:1fr}.calendar{grid-template-columns:1fr}}
 @media print{@page{size:A4;margin:14mm}html,body{background:white;color:#000}body *{visibility:hidden!important}.printDoc,.printDoc *{visibility:visible!important}.printDoc{display:block!important;position:absolute;left:0;top:0;width:100%;background:white;color:#000;font-family:Arial,sans-serif}.printHeader{display:flex;align-items:center;gap:14px;border-bottom:2px solid #0d2f20;padding-bottom:12px;margin-bottom:18px}.printHeader img{width:70px;height:70px;border-radius:12px;object-fit:cover}.printTitle h1{margin:0;font-size:22pt;color:#0d2f20}.printTitle p{margin:4px 0 0;font-size:10pt;color:#333}.printBlock{border:1px solid #ddd;border-radius:8px;padding:10px;margin-bottom:10px;page-break-inside:avoid}.printGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.printTable{width:100%;border-collapse:collapse;margin-top:8px}.printTable th,.printTable td{border:1px solid #ccc;padding:7px;text-align:left;font-size:10pt}.printTable th{background:#eef3eb}.printFooter{position:fixed;bottom:0;left:0;right:0;border-top:1px solid #ccc;padding-top:6px;font-size:9pt;color:#555}.noPrint{display:none!important}}
 </style>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0d2f20">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="NHANLÆG">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="NHANLÆG">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
 </head>
 <body>
 <div id="printArea" class="printDoc"></div>
@@ -253,4 +263,15 @@ routeKm.oninput=calcRoute; routeRate.oninput=calcRoute; calcRoute();
 renderCal();renderChecklist(); if(document.getElementById('hCustomer')) renderHistory()}
 render()
 </script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function(error) {
+      console.log('ServiceWorker fejl:', error);
+    });
+  });
+}
+</script>
+
 </body></html>
