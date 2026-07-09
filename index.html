@@ -37,6 +37,12 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
   .toolbar .btn{width:auto}
 }
 
+
+.actionRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.miniBtn{border:0;border-radius:10px;padding:8px 10px;font-weight:800;background:#eef5eb;color:#0d2f20}
+.miniBtn.danger{background:#fee2e2;color:#b91c1c}
+.miniBtn.copy{background:#dbeafe;color:#1d4ed8}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -55,13 +61,13 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 <div class="app noPrint">
 <aside class="sidebar" id="side"><div class="brand"><img src="logo.png" class="logo"><div><h1>Nordisk Have & Anlæg</h1><p>Driftsystem</p><small style="display:block;color:#b9d4bd;margin-top:5px;font-size:11px;line-height:1.35">Ordrestyring • Planlægning • Dokumentation</small></div></div>
 <div class="nav">
-<button class="active" onclick="show('dash',this,'Dashboard')">🏠 Dashboard</button><button onclick="show('daily',this,'Daglig tjekliste')">✅ Daglig tjekliste</button><button onclick="show('cust',this,'Kunder')">👥 Kunder</button><button onclick="show('history',this,'Kundehistorik')">📚 Historik</button><button onclick="show('profile',this,'Ejendomsprofil')">🏡 Ejendomsprofil</button><button onclick="show('job',this,'Arbejdsordrer')">🚚 Arbejdsordrer</button><button onclick="show('work',this,'Udfør opgave')">▶️ Udfør</button><button onclick="show('plan',this,'Klippeplan')">📅 Klippeplan</button><button onclick="show('cal',this,'Kalender')">🗓️ Kalender</button><button onclick="show('agreements',this,'Aftaler')">📄 Aftaler</button><button onclick="show('offers',this,'Tilbud')">📋 Tilbud</button><button onclick="show('materials',this,'Materialer')">📦 Materialer</button><button onclick="show('employees',this,'Medarbejdere')">👷 Medarbejdere</button><button onclick="show('weather',this,'Vejr')">🌦️ Vejr</button><button onclick="show('machines',this,'Maskiner')">🚜 Maskiner</button><button onclick="show('invoice',this,'Faktura')">🧾 Faktura</button><button onclick="show('risk',this,'Risiko / vigtige noter')">⚠️ Risiko</button><button onclick="show('deviation',this,'Afvigelser')">🚨 Afvigelser</button><button onclick="show('route',this,'Rute / kørsel')">🗺️ Rute</button><button onclick="show('backup',this,'Backup')">💾 Backup</button>
+<button class="active" onclick="show('dash',this,'Dashboard')">🏠 Dashboard</button><button onclick="show('daily',this,'Daglig tjekliste')">✅ Daglig tjekliste</button><button onclick="show('cust',this,'Kunder')">👥 Kunder</button><button onclick="show('history',this,'Kundehistorik')">📚 Historik</button><button onclick="show('profile',this,'Ejendomsprofil')">🏡 Ejendomsprofil</button><button onclick="show('job',this,'Arbejdsordrer')">🚚 Arbejdsordrer</button><button onclick="show('work',this,'Udfør opgave')">▶️ Udfør</button><button onclick="show('plan',this,'Klippeplan')">📅 Klippeplan</button><button onclick="show('cal',this,'Kalender')">🗓️ Kalender</button><button onclick="show('agreements',this,'Aftaler')">📄 Aftaler</button><button onclick="show('offers',this,'Tilbud')">📋 Tilbud</button><button onclick="show('materials',this,'Materialer')">📦 Materialer</button><button onclick="show('employees',this,'Medarbejdere')">👷 Medarbejdere</button><button onclick="show('weather',this,'Vejr')">🌦️ Vejr</button><button onclick="show('machines',this,'Maskiner')">🚜 Maskiner</button><button onclick="show('invoice',this,'Faktura')">🧾 Faktura</button><button onclick="show('risk',this,'Risiko / vigtige noter')">⚠️ Risiko</button><button onclick="show('deviation',this,'Afvigelser')">🚨 Afvigelser</button><button onclick="show('route',this,'Rute / kørsel')">🗺️ Rute</button><button onclick="show('trash',this,'Papirkurv')">🗑️ Papirkurv</button><button onclick="show('documents',this,'Dokumentarkiv')">📎 Dokumenter</button><button onclick="show('signature',this,'Underskrift')">✍️ Underskrift</button><button onclick="show('reminders',this,'Påmindelser')">🔔 Påmindelser</button><button onclick="show('backup',this,'Backup')">💾 Backup</button>
 </div></aside>
 <div class="main">
 <header class="topbar"><div class="title"><h2 id="pageTitle">Dashboard</h2><p id="pageSub">Professionel ejendomsservice · ordrestyring · planlægning · dokumentation</p></div><div class="toolbar"><button class="btn secondary" onclick="printAllJobs()">Print opgaver</button><button class="btn secondary" onclick="printAnonJobs()">Print anonymt</button><button class="btn secondary" onclick="printAgreements()">Print aftaler</button><button class="btn" onclick="showById('job','Arbejdsordrer')">+ Opgave</button></div></header>
 <div class="content">
 
-<section id="dash"><div class="grid4"><div class="card stat"><span>Kunder</span><b id="sC">0</b></div><div class="card stat"><span>Opgaver</span><b id="sJ">0</b></div><div class="card stat"><span>Klar faktura</span><b id="sF">0</b></div><div class="card stat"><span>Uge 1 / Uge 2</span><b><span id="sW1">0</span>/<span id="sW2">0</span></b></div></div><div class="grid2"><div class="card"><h2>Dagens drift</h2><div class="list" id="today"></div></div><div class="card weather"><h2>🌦️ Vejr-råd</h2><div class="big" id="wTemp">--°</div><p id="wText">Åbn Vejr og tryk “Hent vejr”.</p><span class="badge blue" id="wAdviceShort">Afventer data</span></div></div>
+<section id="dash"><div class="card" style="border-left:7px solid var(--gold)"><h2>DRIFT KLAR TIL I MORGEN</h2><p class="muted">Stabil version til kunder, opgaver, kalender, print, billeder, aftaler, påmindelser og fakturagrundlag.</p></div><div class="grid4"><div class="card stat"><span>Kunder</span><b id="sC">0</b></div><div class="card stat"><span>Opgaver</span><b id="sJ">0</b></div><div class="card stat"><span>Klar faktura</span><b id="sF">0</b></div><div class="card stat"><span>Uge 1 / Uge 2</span><b><span id="sW1">0</span>/<span id="sW2">0</span></b></div></div><div class="grid2"><div class="card"><h2>Dagens drift</h2><div class="list" id="today"></div></div><div class="card weather"><h2>🌦️ Vejr-råd</h2><div class="big" id="wTemp">--°</div><p id="wText">Åbn Vejr og tryk “Hent vejr”.</p><span class="badge blue" id="wAdviceShort">Afventer data</span></div></div>
 <div class="card"><h2>📅 Ugens opgaver</h2><p class="muted">Denne uge fra mandag til søndag.</p><div class="list" id="weekOne"></div></div>
 <div class="card"><h2>📅 Uge nr. 2</h2><p class="muted">Næste uge fra mandag til søndag.</p><div class="list" id="weekTwo"></div></div></section>
 
@@ -152,13 +158,46 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 <h2>Kørsel: <span id="routePrice">0 kr.</span></h2>
 </div></section>
 
+
+<section id="trash" class="hidden"><div class="card"><h2>Papirkurv</h2>
+<p class="muted">Slettede ting gemmes her, så du kan gendanne dem, hvis du har trykket forkert.</p>
+<button class="btn danger" onclick="emptyTrash()">Tøm papirkurv permanent</button>
+<div class="list" id="trashList"></div></div></section>
+
+
+<section id="documents" class="hidden"><div class="card"><h2>Dokumentarkiv</h2>
+<p class="muted">Gem aftaler, kort, billeder, PDF’er og andre bilag på kunden.</p>
+<div class="grid3"><div><label>Kunde</label><select id="docCustomer"></select></div><div><label>Dokumenttype</label><select id="docType"><option>Aftale</option><option>Kort</option><option>Billede</option><option>Tilbud</option><option>Faktura</option><option>Andet</option></select></div><div><label>Dokumentnavn</label><input id="docName"></div></div>
+<label>Fil</label><input id="docFile" type="file">
+<label>Note</label><textarea id="docNote"></textarea>
+<button class="btn" onclick="addDocument()">Gem dokument</button>
+<button class="btn secondary" onclick="printDocuments()">Print dokumentliste</button>
+<div class="list" id="docList"></div></div></section>
+
+<section id="signature" class="hidden"><div class="card"><h2>Underskrift</h2>
+<p class="muted">Bruges til kundeaccept, ekstraarbejde eller godkendelse af udført arbejde.</p>
+<div class="grid2"><div><label>Kunde</label><select id="sigCustomer"></select></div><div><label>Type</label><select id="sigType"><option>Udført arbejde godkendt</option><option>Ekstraarbejde godkendt</option><option>Aftale godkendt</option><option>Tilbud accepteret</option></select></div></div>
+<label>Navn på underskriver</label><input id="sigName">
+<label>Note</label><textarea id="sigNote"></textarea>
+<canvas id="sigCanvas" width="720" height="260" style="width:100%;height:220px;border:1px solid #cfd8ca;border-radius:14px;background:white;touch-action:none"></canvas>
+<div class="toolbar"><button class="btn secondary" onclick="clearSignature()">Ryd</button><button class="btn" onclick="saveSignature()">Gem underskrift</button><button class="btn secondary" onclick="printSignatures()">Print underskrifter</button></div>
+<div class="list" id="sigList"></div></div></section>
+
+<section id="reminders" class="hidden"><div class="card"><h2>Påmindelser</h2>
+<p class="muted">Aftaler der udløber, maskiner til service og opgaver der skal følges op.</p>
+<div class="grid3"><div><label>Kunde / emne</label><input id="remTitle"></div><div><label>Dato</label><input id="remDate" type="date"></div><div><label>Type</label><select id="remType"><option>Aftale udløber</option><option>Maskinservice</option><option>Opfølgning</option><option>Kunde skal kontaktes</option><option>Andet</option></select></div></div>
+<label>Note</label><textarea id="remNote"></textarea>
+<button class="btn" onclick="addReminder()">Gem påmindelse</button>
+<button class="btn secondary" onclick="printReminders()">Print påmindelser</button>
+<div class="list" id="remList"></div></div></section>
+
 <section id="backup" class="hidden"><div class="card"><h2>Backup</h2><button class="btn" onclick="exportData()">Eksporter backup</button><label>Importer backup</label><input type="file" accept=".json" onchange="importData(event)"><button class="btn danger" onclick="clearAll()">Ryd lokale data</button></div></section>
 </div></div></div>
 <script>
 const types=[['PRI','Privat'],['SOM','Sommerhus'],['GF','Grundejerforening'],['BF','Boligforening'],['AB','Andelsboligforening'],['ERH','Erhverv'],['OFF','Offentlig'],['FOR','Forening'],['LAN','Landbrug'],['EJD','Ejendomsselskab']];
-const serv=[['G','Græsslåning'],['SK','Skråningsklipning'],['HK','Hækklipning'],['KB','Kantbeskæring'],['UK','Ukrudt'],['FR','Fliserens'],['FI','Fliseimprægnering'],['TR','Tagrenderens'],['TT','Tagrens'],['TF','Træfældning'],['SF','Stubfræsning'],['PL','Plantning'],['EJ','Ejendomsservice'],['VS','Vinterservice'],['SN','Snerydning'],['SA','Saltning']];
-const templates={G:['Klip alle græsarealer','Trim kanter','Blæs stier rene','Kontroller skader/sten'],SK:['Kontroller hældning og sikkerhed','Klip skråning','Ryd synlige sten/grene'],HK:['Kontroller fuglereder','Klip hæk','Ryd afklip','Blæs rent'],TR:['Opsæt stige sikkert','Rens tagrender','Rens nedløb','Fjern affald','Tag billede før/efter'],default:['Arbejde udført','Område ryddet','Kunde orienteret']};
-const store={c:JSON.parse(localStorage.c||'[]'),j:JSON.parse(localStorage.j||'[]'),p:JSON.parse(localStorage.p||'[]'),e:JSON.parse(localStorage.e||'[]'),profiles:JSON.parse(localStorage.profiles||'[]'),machines:JSON.parse(localStorage.machines||'[]'),work:JSON.parse(localStorage.work||'[]'),agreements:JSON.parse(localStorage.agreements||'[]'),offers:JSON.parse(localStorage.offers||'[]'),materials:JSON.parse(localStorage.materials||'[]'),employees:JSON.parse(localStorage.employees||'[]'),history:JSON.parse(localStorage.history||'[]'),risks:JSON.parse(localStorage.risks||'[]'),deviations:JSON.parse(localStorage.deviations||'[]')};
+const serv=[['G','Græsslåning'],['SK','Skråningsklipning'],['HK','Hækklipning'],['KB','Kantbeskæring'],['UK','Ukrudt'],['FR','Fliserens'],['FI','Fliseimprægnering'],['TR','Tagrenderens'],['TT','Tagrens'],['TF','Træfældning'],['SF','Stubfræsning'],['PL','Plantning'],['EJ','Ejendomsservice'],['VS','Vinterservice'],['SN','Snerydning'],['SA','Saltning'],['ABH','Algebehandling'],['IMP','Imprægnering'],['FAC','Facaderens'],['EA','Ekstraarbejde']];
+const templates={FR:['Ryd område','Rens fliser','Kontroller fuger','Fjern slam','Tag billede før/efter'],ABH:['Kontroller overflade','Afskærm følsomme områder','Påfør algebehandling','Notér vejrforhold','Tag billede før/efter'],IMP:['Kontroller at overfladen er tør og renset','Påfør imprægnering','Kontroller dækning','Notér produktforbrug','Tag billede efter'],FAC:['Kontroller facade','Afskærm vinduer og døre','Rens facade','Skyl efter','Tag billede før/efter'],EA:['Beskriv ekstraarbejde','Aftal pris/tid med kunde','Tag billede hvis relevant','Få godkendelse/underskrift'],G:['Klip alle græsarealer','Trim kanter','Blæs stier rene','Kontroller skader/sten'],SK:['Kontroller hældning og sikkerhed','Klip skråning','Ryd synlige sten/grene'],HK:['Kontroller fuglereder','Klip hæk','Ryd afklip','Blæs rent'],TR:['Opsæt stige sikkert','Rens tagrender','Rens nedløb','Fjern affald','Tag billede før/efter'],default:['Arbejde udført','Område ryddet','Kunde orienteret']};
+const store={c:JSON.parse(localStorage.c||'[]'),j:JSON.parse(localStorage.j||'[]'),p:JSON.parse(localStorage.p||'[]'),e:JSON.parse(localStorage.e||'[]'),profiles:JSON.parse(localStorage.profiles||'[]'),machines:JSON.parse(localStorage.machines||'[]'),work:JSON.parse(localStorage.work||'[]'),agreements:JSON.parse(localStorage.agreements||'[]'),offers:JSON.parse(localStorage.offers||'[]'),materials:JSON.parse(localStorage.materials||'[]'),employees:JSON.parse(localStorage.employees||'[]'),history:JSON.parse(localStorage.history||'[]'),risks:JSON.parse(localStorage.risks||'[]'),deviations:JSON.parse(localStorage.deviations||'[]'),trash:JSON.parse(localStorage.trash||'[]'),documents:JSON.parse(localStorage.documents||'[]'),signatures:JSON.parse(localStorage.signatures||'[]'),reminders:JSON.parse(localStorage.reminders||'[]')};
 function persist(){for(let k in store)localStorage[k]=JSON.stringify(store[k]);render()}
 function toggleMenu(){side.classList.toggle('open')} function show(id,b,title){document.querySelectorAll('.content section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');pageTitle.textContent=title||'Nordisk Have & Anlæg';side.classList.remove('open');render()} function showById(id,title){show(id,null,title)}
 function sname(c){return (serv.find(x=>x[0]==c)||[])[1]||c} function tname(c){return (types.find(x=>x[0]==c)||[])[1]||c} function cno(t){return 'NH-'+String(store.c.length+1).padStart(3,'0')+'-'+t} function jno(c,s){return c+'-'+s+'-'+String(store.j.filter(x=>x.cno==c&&x.sc==s).length+1).padStart(3,'0')} function intervalText(days,tol){return Number(days)===30?'1 gang pr. måned ± '+tol+' dage':'hver '+days+'. dag ± '+tol+' dage'}
@@ -270,16 +309,146 @@ function renderWeek(targetId, offset){
   document.getElementById(targetId).innerHTML = `<div class="item"><b>${title}</b></div>` + (jobs.map(x=>`<div class="item"><b>${x.date||''}</b> · <span class="code">${x.no}</span><br>${x.c}<br>${x.s} · ${x.status}</div>`).join('') || '<div class="item">Ingen opgaver i denne uge.</div>');
 }
 
-function render(){let co=store.c.map(x=>`<option value="${x.no}">${x.no} · ${x.name}</option>`).join('');cType.innerHTML=types.map(x=>`<option value="${x[0]}">${x[1]} (${x[0]})</option>`).join('');jCustomer.innerHTML=pCustomer.innerHTML=eCustomer.innerHTML=prCustomer.innerHTML=aCustomer.innerHTML=oCustomer.innerHTML=hCustomer.innerHTML=rCustomer.innerHTML=dCustomer.innerHTML=co;let so=serv.map(x=>`<option value="${x[0]}">${x[1]} (${x[0]})</option>`).join('');jService.innerHTML=eService.innerHTML=so;workJob.innerHTML=anonJob.innerHTML=dJob.innerHTML=store.j.map(x=>`<option value="${x.no}">${x.no} · ${x.c} · ${x.s}</option>`).join('');sC.textContent=store.c.length;sJ.textContent=store.j.length;sF.textContent=store.j.filter(x=>x.status=='Klar til faktura').length;sO.textContent=store.offers.length;sW1.textContent=weekJobs(0).length;sW2.textContent=weekJobs(1).length;
+
+function moveToTrash(type,index,label){
+ if(!store[type] || !store[type][index]) return;
+ if(!confirm('Flyt til papirkurv: '+(label||'element')+'?')) return;
+ let item=store[type].splice(index,1)[0];
+ store.trash.push({type,item,deleted:new Date().toISOString()});
+ persist();
+}
+function restoreTrash(i){
+ let t=store.trash[i]; if(!t)return;
+ if(!store[t.type])store[t.type]=[];
+ store[t.type].push(t.item);
+ store.trash.splice(i,1);
+ persist();
+}
+function deleteTrash(i){
+ if(!confirm('Slet permanent?'))return;
+ store.trash.splice(i,1);
+ persist();
+}
+function emptyTrash(){
+ if(!confirm('Tøm hele papirkurven permanent?'))return;
+ store.trash=[];
+ persist();
+}
+function copyJob(i){
+ let j=store.j[i]; if(!j)return;
+ let copy={...j};
+ copy.no=jno(j.cno,j.sc);
+ copy.status='Planlagt';
+ copy.note=(copy.note||'')+' (kopi)';
+ store.j.push(copy);
+ persist();
+}
+function editJob(i){
+ let j=store.j[i]; if(!j)return;
+ let date=prompt('Dato',j.date||''); if(date===null)return;
+ let status=prompt('Status: Planlagt / I gang / Udført / Klar til faktura',j.status||'Planlagt'); if(status===null)return;
+ let price=prompt('Pris',j.price||''); if(price===null)return;
+ let note=prompt('Note',j.note||''); if(note===null)return;
+ j.date=date; j.status=status; j.price=price; j.note=note;
+ persist();
+}
+function editCustomer(i){
+ let c=store.c[i]; if(!c)return;
+ let name=prompt('Kundenavn',c.name||''); if(name===null)return;
+ let contact=prompt('Kontaktperson',c.contact||''); if(contact===null)return;
+ let phone=prompt('Telefon',c.phone||''); if(phone===null)return;
+ let addr=prompt('Adresse',c.addr||''); if(addr===null)return;
+ c.name=name;c.contact=contact;c.phone=phone;c.addr=addr;
+ persist();
+}
+function editAgreement(i){
+ let a=store.agreements[i]; if(!a)return;
+ let scope=prompt('Ydelser / omfang',a.scope||''); if(scope===null)return;
+ let price=prompt('Prisgrundlag',a.price||''); if(price===null)return;
+ let terms=prompt('Særlige vilkår',a.terms||''); if(terms===null)return;
+ a.scope=scope;a.price=price;a.terms=terms;
+ persist();
+}
+function editOffer(i){
+ let o=store.offers[i]; if(!o)return;
+ let text=prompt('Tilbudstekst',o.text||''); if(text===null)return;
+ let price=prompt('Pris',o.price||''); if(price===null)return;
+ o.text=text;o.price=price;
+ persist();
+}
+function editSimple(type,i,fields){
+ let obj=store[type][i]; if(!obj)return;
+ for(let f of fields){
+   let val=prompt(f.label,obj[f.key]||'');
+   if(val===null)return;
+   obj[f.key]=val;
+ }
+ persist();
+}
+
+
+function addDocument(){
+ let c=store.c.find(x=>x.no==docCustomer.value); if(!c)return;
+ let file=docFile.files[0];
+ fileToDataURL(file,data=>{
+   store.documents.push({id:Date.now(),cno:c.no,c:c.name,type:docType.value,name:docName.value||file?.name||'Dokument',note:docNote.value,date:new Date().toISOString().slice(0,10),data,filename:file?.name||''});
+   docName.value='';docNote.value='';docFile.value='';persist();
+ });
+}
+function addReminder(){
+ if(!remTitle.value.trim()||!remDate.value)return;
+ store.reminders.push({id:Date.now(),title:remTitle.value,date:remDate.value,type:remType.value,note:remNote.value,done:false});
+ remTitle.value='';remDate.value='';remNote.value='';persist();
+}
+function toggleReminder(i){store.reminders[i].done=!store.reminders[i].done;persist();}
+function deleteReminder(i){moveToTrash('reminders',i,store.reminders[i].title);}
+let sigDrawing=false;
+function initSignature(){
+ let c=document.getElementById('sigCanvas'); if(!c||c.dataset.ready)return; c.dataset.ready='1';
+ let ctx=c.getContext('2d'); ctx.lineWidth=4; ctx.lineCap='round'; ctx.strokeStyle='#0d2f20';
+ function pos(e){let r=c.getBoundingClientRect();let t=e.touches?e.touches[0]:e;return{x:(t.clientX-r.left)*(c.width/r.width),y:(t.clientY-r.top)*(c.height/r.height)}}
+ function start(e){sigDrawing=true;let p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault()}
+ function move(e){if(!sigDrawing)return;let p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke();e.preventDefault()}
+ function end(){sigDrawing=false}
+ c.addEventListener('mousedown',start); c.addEventListener('mousemove',move); window.addEventListener('mouseup',end);
+ c.addEventListener('touchstart',start,{passive:false}); c.addEventListener('touchmove',move,{passive:false}); c.addEventListener('touchend',end);
+}
+function clearSignature(){let c=document.getElementById('sigCanvas'); if(c)c.getContext('2d').clearRect(0,0,c.width,c.height);}
+function saveSignature(){
+ let cst=store.c.find(x=>x.no==sigCustomer.value); if(!cst)return;
+ let canvas=document.getElementById('sigCanvas');
+ store.signatures.push({id:Date.now(),cno:cst.no,c:cst.name,type:sigType.value,name:sigName.value,note:sigNote.value,date:new Date().toISOString().slice(0,10),img:canvas.toDataURL('image/png')});
+ sigName.value='';sigNote.value='';clearSignature();persist();
+}
+function printDocuments(){
+ let rows=store.documents.map(x=>`<tr><td>${x.date}</td><td>${x.cno}</td><td>${x.c}</td><td>${x.type}</td><td>${x.name}</td><td>${x.note||''}</td></tr>`).join('');
+ printShell('Dokumentarkiv','Dokumenter og bilag',table(['Dato','Kunde nr.','Kunde','Type','Navn','Note'],rows));
+}
+function printSignatures(){
+ let body=store.signatures.map(x=>`<div class="printBlock"><h2>${x.type}</h2><p><b>Kunde:</b> ${x.cno} · ${x.c}<br><b>Navn:</b> ${x.name||''}<br><b>Dato:</b> ${x.date}</p><p>${x.note||''}</p><img src="${x.img}" style="max-width:100%;border:1px solid #ccc;border-radius:8px"></div>`).join('');
+ printShell('Underskrifter','Godkendelser og accept',body||'<div class="printBlock">Ingen underskrifter.</div>');
+}
+function printReminders(){
+ let rows=store.reminders.map(x=>`<tr><td>${x.date}</td><td>${x.type}</td><td>${x.title}</td><td>${x.note||''}</td><td>${x.done?'OK':'Åben'}</td></tr>`).join('');
+ printShell('Påmindelser','Opfølgning og frister',table(['Dato','Type','Emne','Note','Status'],rows));
+}
+
+function render(){let co=store.c.map(x=>`<option value="${x.no}">${x.no} · ${x.name}</option>`).join('');cType.innerHTML=types.map(x=>`<option value="${x[0]}">${x[1]} (${x[0]})</option>`).join('');jCustomer.innerHTML=pCustomer.innerHTML=eCustomer.innerHTML=prCustomer.innerHTML=aCustomer.innerHTML=oCustomer.innerHTML=hCustomer.innerHTML=rCustomer.innerHTML=dCustomer.innerHTML=docCustomer.innerHTML=sigCustomer.innerHTML=co;let so=serv.map(x=>`<option value="${x[0]}">${x[1]} (${x[0]})</option>`).join('');jService.innerHTML=eService.innerHTML=so;workJob.innerHTML=anonJob.innerHTML=dJob.innerHTML=store.j.map(x=>`<option value="${x.no}">${x.no} · ${x.c} · ${x.s}</option>`).join('');sC.textContent=store.c.length;sJ.textContent=store.j.length;sF.textContent=store.j.filter(x=>x.status=='Klar til faktura').length;sO.textContent=store.offers.length;sW1.textContent=weekJobs(0).length;sW2.textContent=weekJobs(1).length;
 today.innerHTML=store.j.filter(x=>x.date==new Date().toISOString().slice(0,10)).map(x=>`<div class="item"><b>${x.no}</b><br>${x.c}<br>${x.s}</div>`).join('')||'<div class="item">Ingen opgaver i dag.</div>';
-cList.innerHTML=store.c.map(x=>`<div class="item"><b>${x.no}</b> <span class="badge">${tname(x.type)}</span><br>${x.name}<br>${x.contact||''} ${x.phone||''}<br>${x.addr||''}</div>`).join('');profileList.innerHTML=store.profiles.map(x=>`<div class="item"><b>${x.cno}</b> · ${x.c}<br>Græs: ${x.grass||0} m² · Skråning: ${x.slope||0} m² · Hæk: ${x.hedge||0} m<br>Fliser: ${x.tiles||0} m² · Tagrender: ${x.gutters||0} m<br>${x.notes||''}</div>`).join('');jList.innerHTML=store.j.map(x=>`<div class="item"><b>${x.no}</b> <span class="badge">${x.status}</span><br>${x.date||'Ingen dato'} · ${x.c}<br>${x.s} · ${x.price||0} kr.<br>${x.note||''}</div>`).join('');pList.innerHTML=store.p.map(x=>{let st=pstat(x.to);return`<div class="item"><b>${x.cno}-${x.sc}</b> <span class="badge ${st}">${st=='red'?'Overskredet':st=='yellow'?'Snart':'OK'}</span><br>${x.c}<br>${x.s}: ${intervalText(x.i,x.t)}<br>Sidst: ${x.last}<br>Næste ønskede dato: ${x.next}<br>Kan udføres: ${x.from} til ${x.to}</div>`}).join('');aList.innerHTML=store.agreements.map(x=>`<div class="item"><b>${x.no}</b> <span class="badge">${x.type}</span><br>${x.cno} · ${x.c}<br>${x.scope||''}<br>${x.price||''} · ${x.payment}</div>`).join('');oList.innerHTML=store.offers.map(x=>`<div class="item"><b>${x.no}</b><br>${x.cno} · ${x.c}<br>${x.text||''}<br><b>${x.price||0} kr.</b></div>`).join('');matList.innerHTML=store.materials.map(x=>`<div class="item"><b>${x.name}</b><br>Antal: ${x.qty||0} · Pris: ${x.price||0} kr.</div>`).join('');empList.innerHTML=store.employees.map(x=>`<div class="item"><b>${x.name}</b><br>${x.role||''}<br>${x.phone||''}</div>`).join('');mList.innerHTML=store.machines.map(x=>`<div class="item"><b>${x.name}</b><br>Timer: ${x.hours||0}<br>Næste service: ${x.service||'Ikke sat'}<br>${x.note||''}</div>`).join('');fList.innerHTML=store.j.filter(x=>x.status=='Klar til faktura').map(x=>`<div class="item"><b>${x.no}</b><br>${x.c}<br>${x.s} · ${x.price||0} kr.</div>`).join('')||'<div class="item">Ingen klar til faktura.</div>';renderWeek('weekOne',0);renderWeek('weekTwo',1);
+cList.innerHTML=store.c.map((x,i)=>`<div class="item"><b>${x.no}</b> <span class="badge">${tname(x.type)}</span><br>${x.name}<br>${x.contact||''} ${x.phone||''}<br>${x.addr||''}<div class="actionRow"><button class="miniBtn" onclick="editCustomer(${i})">✏️ Rediger</button><button class="miniBtn danger" onclick="moveToTrash('c',${i},'${x.no}')">🗑️ Slet</button></div></div>`).join('');profileList.innerHTML=store.profiles.map(x=>`<div class="item"><b>${x.cno}</b> · ${x.c}<br>Græs: ${x.grass||0} m² · Skråning: ${x.slope||0} m² · Hæk: ${x.hedge||0} m<br>Fliser: ${x.tiles||0} m² · Tagrender: ${x.gutters||0} m<br>${x.notes||''}</div>`).join('');jList.innerHTML=store.j.map((x,i)=>`<div class="item"><b>${x.no}</b> <span class="badge">${x.status}</span><br>${x.date||'Ingen dato'} · ${x.c}<br>${x.s} · ${x.price||0} kr.<br>${x.note||''}<div class="actionRow"><button class="miniBtn" onclick="editJob(${i})">✏️ Rediger</button><button class="miniBtn copy" onclick="copyJob(${i})">📋 Kopiér</button><button class="miniBtn danger" onclick="moveToTrash('j',${i},'${x.no}')">🗑️ Slet</button></div></div>`).join('');pList.innerHTML=store.p.map(x=>{let st=pstat(x.to);return`<div class="item"><b>${x.cno}-${x.sc}</b> <span class="badge ${st}">${st=='red'?'Overskredet':st=='yellow'?'Snart':'OK'}</span><br>${x.c}<br>${x.s}: ${intervalText(x.i,x.t)}<br>Sidst: ${x.last}<br>Næste ønskede dato: ${x.next}<br>Kan udføres: ${x.from} til ${x.to}</div>`}).join('');aList.innerHTML=store.agreements.map((x,i)=>`<div class="item"><b>${x.no}</b> <span class="badge">${x.type}</span><br>${x.cno} · ${x.c}<br>${x.scope||''}<br>${x.price||''} · ${x.payment}<div class="actionRow"><button class="miniBtn" onclick="editAgreement(${i})">✏️ Rediger</button><button class="miniBtn danger" onclick="moveToTrash('agreements',${i},'${x.no}')">🗑️ Slet</button></div></div>`).join('');oList.innerHTML=store.offers.map((x,i)=>`<div class="item"><b>${x.no}</b><br>${x.cno} · ${x.c}<br>${x.text||''}<br><b>${x.price||0} kr.</b><div class="actionRow"><button class="miniBtn" onclick="editOffer(${i})">✏️ Rediger</button><button class="miniBtn danger" onclick="moveToTrash('offers',${i},'${x.no}')">🗑️ Slet</button></div></div>`).join('');matList.innerHTML=store.materials.map((x,i)=>`<div class="item"><b>${x.name}</b><br>Antal: ${x.qty||0} · Pris: ${x.price||0} kr.<div class="actionRow"><button class="miniBtn" onclick="editSimple('materials',${i},[{key:'name',label:'Materiale'},{key:'qty',label:'Antal'},{key:'price',label:'Pris'}])">✏️ Rediger</button><button class="miniBtn danger" onclick="moveToTrash('materials',${i},x.name)">🗑️ Slet</button></div></div>`).join('');empList.innerHTML=store.employees.map((x,i)=>`<div class="item"><b>${x.name}</b><br>${x.role||''}<br>${x.phone||''}<div class="actionRow"><button class="miniBtn" onclick="editSimple('employees',${i},[{key:'name',label:'Navn'},{key:'role',label:'Rolle'},{key:'phone',label:'Telefon'}])">✏️ Rediger</button><button class="miniBtn danger" onclick="moveToTrash('employees',${i},x.name)">🗑️ Slet</button></div></div>`).join('');mList.innerHTML=store.machines.map((x,i)=>`<div class="item"><b>${x.name}</b><br>Timer: ${x.hours||0}<br>Næste service: ${x.service||'Ikke sat'}<br>${x.note||''}<div class="actionRow"><button class="miniBtn" onclick="editSimple('machines',${i},[{key:'name',label:'Maskine'},{key:'hours',label:'Timer'},{key:'service',label:'Næste service'},{key:'note',label:'Note'}])">✏️ Rediger</button><button class="miniBtn danger" onclick="moveToTrash('machines',${i},x.name)">🗑️ Slet</button></div></div>`).join('');fList.innerHTML=store.j.filter(x=>x.status=='Klar til faktura').map(x=>`<div class="item"><b>${x.no}</b><br>${x.c}<br>${x.s} · ${x.price||0} kr.</div>`).join('')||'<div class="item">Ingen klar til faktura.</div>';renderWeek('weekOne',0);renderWeek('weekTwo',1);
 dailyJobs.innerHTML=today.innerHTML;
 rList.innerHTML=store.risks.map(x=>`<div class="item"><b>${x.cno}</b> · ${x.c}<br><span class="badge red">${x.type}</span><br>${x.note}</div>`).join('')||'<div class="item">Ingen vigtige noter endnu.</div>';
 dList.innerHTML=store.deviations.map(x=>`<div class="item"><b>${x.date}</b> <span class="badge red">${x.type}</span><br>${x.c} · ${x.job||''}<br>${x.note}${x.img?`<br><img src="${x.img}" style="max-width:100%;border-radius:12px;margin-top:10px">`:''}</div>`).join('')||'<div class="item">Ingen afvigelser endnu.</div>';
 routeJobs.innerHTML=store.j.filter(x=>x.date==new Date().toISOString().slice(0,10)).map(x=>`<label class="item"><input class="routeChk" type="checkbox" value="${x.no}"> <b>${x.no}</b><br>${x.c}<br>${x.s}</label>`).join('')||'<div class="item">Ingen opgaver i dag.</div>';
 routeKm.oninput=calcRoute; routeRate.oninput=calcRoute; calcRoute();
 
-renderCal();renderChecklist(); if(document.getElementById('hCustomer')) renderHistory()}
+
+docList.innerHTML=store.documents.map((x,i)=>`<div class="item"><b>${x.name}</b> <span class="badge">${x.type}</span><br>${x.date} · ${x.cno} · ${x.c}<br>${x.note||''}<div class="actionRow">${x.data?`<a class="miniBtn" href="${x.data}" download="${x.filename||x.name}">Download/åbn</a>`:''}<button class="miniBtn danger" onclick="moveToTrash('documents',${i},'${x.name}')">🗑️ Slet</button></div></div>`).join('')||'<div class="item">Ingen dokumenter endnu.</div>';
+sigList.innerHTML=store.signatures.map((x,i)=>`<div class="item"><b>${x.type}</b><br>${x.date} · ${x.cno} · ${x.c}<br>${x.name||''}<br>${x.note||''}<br><img src="${x.img}" style="max-width:100%;border:1px solid #ddd;border-radius:10px;margin-top:8px"><div class="actionRow"><button class="miniBtn danger" onclick="moveToTrash('signatures',${i},'underskrift')">🗑️ Slet</button></div></div>`).join('')||'<div class="item">Ingen underskrifter endnu.</div>';
+remList.innerHTML=store.reminders.sort((a,b)=>(a.date||'').localeCompare(b.date||'')).map((x,i)=>`<div class="item"><b>${x.date}</b> <span class="badge ${x.done?'ok':'yellow'}">${x.done?'OK':'Åben'}</span><br>${x.type}<br>${x.title}<br>${x.note||''}<div class="actionRow"><button class="miniBtn" onclick="toggleReminder(${i})">${x.done?'Åbn igen':'Marker OK'}</button><button class="miniBtn danger" onclick="deleteReminder(${i})">🗑️ Slet</button></div></div>`).join('')||'<div class="item">Ingen påmindelser endnu.</div>';
+initSignature();
+
+trashList.innerHTML=store.trash.map((x,i)=>`<div class="item"><b>${x.type}</b><br>${x.item.no||x.item.name||x.item.c||'Element'}<br>Slettet: ${new Date(x.deleted).toLocaleString('da-DK')}<div class="actionRow"><button class="miniBtn" onclick="restoreTrash(${i})">↩️ Gendan</button><button class="miniBtn danger" onclick="deleteTrash(${i})">Slet permanent</button></div></div>`).join('')||'<div class="item">Papirkurven er tom.</div>'; renderCal();renderChecklist(); if(document.getElementById('hCustomer')) renderHistory()}
 render()
 </script>
 
