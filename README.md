@@ -1,3 +1,3 @@
-# NHANLÆG KLAR
+# NHANLÆG PRO V7
 
-Stabil single-file version klar til drift om få timer.
+Mere professionel udgave med sidebar, dashboard og forbedret UX.
