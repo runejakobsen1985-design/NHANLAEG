@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NHANLÆG - Driftssystem</title>
 <style>
-:root{--green:#0f3d22;--green2:#176b32;--gold:#d6b45a;--bg:#f4f5ef;--card:#fff;--text:#142016;--muted:#657064;--red:#b91c1c;--yellow:#b7791f}
+:root{--green:#0f3d22;--green2:#176b32;--gold:#d6b45a;--bg:#f4f5ef;--card:#fff;--text:#142016;--muted:#657064;--red:#b91c1c;--yellow:#b7791f;--blue:#2563eb}
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
 header{background:linear-gradient(145deg,var(--green),var(--green2));color:white;padding:22px 16px}
@@ -18,6 +18,7 @@ nav{background:white;border-bottom:1px solid #ddd;position:sticky;top:0;z-index:
 .nav button.active{background:var(--green);color:white}
 main{max-width:1150px;margin:auto;padding:18px 14px 40px}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
 .card{background:var(--card);border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.08);border:1px solid #e5e7df;margin-bottom:16px}
 .stat{border-left:5px solid var(--gold)}.stat strong{display:block;font-size:30px;color:var(--green);margin-top:8px}
 h2{margin:0 0 14px;color:var(--green)}
@@ -36,9 +37,16 @@ textarea{min-height:90px}
 .badge.yellow{background:#fff3cd;color:var(--yellow)}
 .badge.red{background:#fee2e2;color:var(--red)}
 .badge.green{background:#dcfce7;color:#166534}
+.badge.blue{background:#dbeafe;color:var(--blue)}
 .code{font-family:monospace;background:#eef3eb;padding:3px 6px;border-radius:6px}
+.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.day{min-height:88px;background:#fbfcf8;border:1px solid #e4e8df;border-radius:12px;padding:8px;font-size:13px}
+.day strong{display:block;color:var(--green);margin-bottom:6px}
+.day .event{background:#eaf3e7;border-radius:8px;padding:5px;margin-top:5px;font-size:12px}
+.weatherBox{background:linear-gradient(145deg,#eaf7ee,#fff);border-left:6px solid var(--gold)}
+.weatherBig{font-size:36px;font-weight:900;color:var(--green)}
 footer{text-align:center;color:var(--muted);padding:20px}
-@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.row,.row3{grid-template-columns:1fr}.top{align-items:flex-start}.logo{width:62px;height:62px}h1{font-size:22px}}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.grid2,.row,.row3{grid-template-columns:1fr}.top{align-items:flex-start}.logo{width:62px;height:62px}h1{font-size:22px}.calendar{grid-template-columns:1fr}}
 @media(max-width:520px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -48,7 +56,7 @@ footer{text-align:center;color:var(--muted);padding:20px}
     <img class="logo" src="logo.png" alt="Logo">
     <div>
       <h1>NHANLÆG</h1>
-      <div class="small">Driftssystem · kunder · intervaller · opgaver · faktura</div>
+      <div class="small">Driftssystem · kalender · vejr · klippeplan · opgaver</div>
     </div>
   </div>
 </header>
@@ -60,6 +68,8 @@ footer{text-align:center;color:var(--muted);padding:20px}
     <button onclick="show('services',this)">🌿 Ydelser</button>
     <button onclick="show('jobs',this)">🚚 Opgaver</button>
     <button onclick="show('schedule',this)">📅 Klippeplan</button>
+    <button onclick="show('calendarPage',this)">🗓️ Kalender</button>
+    <button onclick="show('weatherPage',this)">🌦️ Vejr</button>
     <button onclick="show('calculator',this)">💰 Pris</button>
     <button onclick="show('invoices',this)">🧾 Faktura</button>
   </div>
@@ -73,9 +83,18 @@ footer{text-align:center;color:var(--muted);padding:20px}
     <div class="card stat">Klar til faktura<strong id="statInvoices">0</strong></div>
     <div class="card stat">Rød klippeplan<strong id="statRed">0</strong></div>
   </div>
-  <div class="card">
-    <h2>Dagens overblik</h2>
-    <p>Version 3 har automatisk kundenummer, kundetype, ydelseskoder og klippeintervaller med ± 2 dage.</p>
+  <div class="grid2">
+    <div class="card">
+      <h2>Dagens overblik</h2>
+      <p>Version 4 har kalender og vejrmodul med anbefalinger til græs, hækklipning og regnvejrsarbejde.</p>
+      <div class="list" id="todayJobs"></div>
+    </div>
+    <div class="card weatherBox">
+      <h2>🌦️ Vejrstatus</h2>
+      <div class="weatherBig" id="dashWeatherTemp">--°</div>
+      <p id="dashWeatherText">Tryk “Opdater vejr” under Vejr.</p>
+      <span class="badge blue" id="dashWeatherAdvice">Afventer vejrdata</span>
+    </div>
   </div>
 </section>
 
@@ -111,7 +130,8 @@ footer{text-align:center;color:var(--muted);padding:20px}
       <div><label>Kunde</label><select id="jobCustomer"></select></div>
       <div><label>Ydelse</label><select id="jobService"></select></div>
     </div>
-    <div class="row">
+    <div class="row3">
+      <div><label>Dato</label><input id="jobDate" type="date"></div>
       <div><label>Status</label><select id="jobStatus"><option>Planlagt</option><option>I gang</option><option>Udført</option><option>Klar til faktura</option></select></div>
       <div><label>Pris</label><input id="jobPrice" type="number" placeholder="DKK"></div>
     </div>
@@ -136,6 +156,43 @@ footer{text-align:center;color:var(--muted);padding:20px}
     </div>
     <button class="btn" onclick="addSchedule()">Gem klippeaftale</button>
     <div class="list" id="scheduleList"></div>
+  </div>
+</section>
+
+<section id="calendarPage" class="hidden">
+  <div class="card">
+    <h2>🗓️ Kalender</h2>
+    <div class="row3">
+      <div><label>Dato</label><input id="eventDate" type="date"></div>
+      <div><label>Kunde</label><select id="eventCustomer"></select></div>
+      <div><label>Ydelse</label><select id="eventService"></select></div>
+    </div>
+    <label>Kalendernote</label><input id="eventNote" placeholder="F.eks. formiddag, adgang via port, husk buskrydder">
+    <button class="btn" onclick="addEvent()">Tilføj til kalender</button>
+  </div>
+  <div class="card">
+    <h2>Kommende 7 dage</h2>
+    <div class="calendar" id="calendarGrid"></div>
+  </div>
+</section>
+
+<section id="weatherPage" class="hidden">
+  <div class="card weatherBox">
+    <h2>🌦️ Vejr og arbejdsanbefaling</h2>
+    <p>Systemet henter vejret og vurderer om det er godt til græs, hækklipning, fliserens eller om regnvejr bør flytte opgaver.</p>
+    <div class="row">
+      <div><label>Latitude</label><input id="lat" value="55.489"></div>
+      <div><label>Longitude</label><input id="lon" value="10.394"></div>
+    </div>
+    <button class="btn" onclick="loadWeather()">Opdater vejr</button>
+    <div class="list">
+      <div class="item">
+        <b>Temperatur:</b> <span id="weatherTemp">--</span><br>
+        <b>Regn:</b> <span id="weatherRain">--</span><br>
+        <b>Vind:</b> <span id="weatherWind">--</span><br>
+        <b>Anbefaling:</b><br><span id="weatherAdvice">Afventer data.</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -178,9 +235,10 @@ const services=[
 const store={
  customers:JSON.parse(localStorage.getItem('customers')||'[]'),
  jobs:JSON.parse(localStorage.getItem('jobs')||'[]'),
- schedules:JSON.parse(localStorage.getItem('schedules')||'[]')
+ schedules:JSON.parse(localStorage.getItem('schedules')||'[]'),
+ events:JSON.parse(localStorage.getItem('events')||'[]')
 };
-function save(){localStorage.setItem('customers',JSON.stringify(store.customers));localStorage.setItem('jobs',JSON.stringify(store.jobs));localStorage.setItem('schedules',JSON.stringify(store.schedules));render();}
+function save(){localStorage.setItem('customers',JSON.stringify(store.customers));localStorage.setItem('jobs',JSON.stringify(store.jobs));localStorage.setItem('schedules',JSON.stringify(store.schedules));localStorage.setItem('events',JSON.stringify(store.events));render();}
 function show(id,btn){document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}
 function nextCustomerNo(type){return 'NH-'+String(store.customers.length+1).padStart(3,'0')+'-'+type;}
 function nextJobNo(customerNo,serviceCode){let count=store.jobs.filter(j=>j.customerNo===customerNo && j.serviceCode===serviceCode).length+1;return customerNo+'-'+serviceCode+'-'+String(count).padStart(3,'0');}
@@ -196,13 +254,14 @@ function addCustomer(){
 function addJob(){
  const c=store.customers.find(x=>x.no===jobCustomer.value); if(!c)return;
  const sc=jobService.value; const no=nextJobNo(c.no,sc);
- store.jobs.push({no,customerNo:c.no,customer:c.name,serviceCode:sc,service:serviceName(sc),status:jobStatus.value,price:jobPrice.value,note:jobNote.value});
- jobPrice.value=jobNote.value='';
+ store.jobs.push({no,customerNo:c.no,customer:c.name,serviceCode:sc,service:serviceName(sc),status:jobStatus.value,price:jobPrice.value,note:jobNote.value,date:jobDate.value});
+ jobPrice.value=jobNote.value=jobDate.value='';
  save();
 }
 function addDays(date,days){let d=new Date(date);d.setDate(d.getDate()+Number(days));return d.toISOString().slice(0,10);}
 function scheduleStatus(toDate){
- const today=new Date(); const end=new Date(toDate);
+ const today=new Date(); today.setHours(0,0,0,0);
+ const end=new Date(toDate); end.setHours(0,0,0,0);
  if(today>end)return 'red';
  const diff=Math.ceil((end-today)/(1000*60*60*24));
  if(diff<=2)return 'yellow';
@@ -216,18 +275,76 @@ function addSchedule(){
  store.schedules.push({customerNo:c.no,customer:c.name,serviceCode:service,service:serviceName(service),interval,tolerance:tol,last:lastDone.value,next,from,to});
  save();
 }
+function addEvent(){
+ const c=store.customers.find(x=>x.no===eventCustomer.value);
+ if(!eventDate.value || !c)return;
+ store.events.push({date:eventDate.value,customerNo:c.no,customer:c.name,serviceCode:eventService.value,service:serviceName(eventService.value),note:eventNote.value});
+ eventNote.value=''; eventDate.value='';
+ save();
+}
 function calc(){const total=(+hours.value||0)*(+rate.value||0)+(+materials.value||0)+(+machine.value||0);priceResult.textContent=total.toLocaleString('da-DK')+' kr.';}
+function weatherCodeText(code){
+ const map={0:'Sol/klart',1:'Mest klart',2:'Delvist skyet',3:'Overskyet',45:'Tåge',48:'Rimtåge',51:'Let støvregn',53:'Støvregn',55:'Kraftig støvregn',61:'Let regn',63:'Regn',65:'Kraftig regn',71:'Let sne',73:'Sne',75:'Kraftig sne',80:'Byger',81:'Regnbyger',82:'Kraftige byger',95:'Torden'};
+ return map[code]||'Ukendt';
+}
+function makeAdvice(temp,rain,wind,code){
+ if(rain>0.5 || [61,63,65,80,81,82,95].includes(code)) return 'Regnvejr: undgå græsslåning og hækklipning hvis muligt. Prioritér tagrenderens, planlægning, tilbud, service på maskiner eller indendørs opgaver.';
+ if(wind>12) return 'Meget vind: vær forsigtig med hækklipning, stiger og tagrenderens. Græs kan udføres hvis forholdene er sikre.';
+ if(code===2 || code===3) return 'Skyet/tørt vejr: rigtig godt til hækklipning, græsslåning, ukrudt og skråningsklipning.';
+ if(code===0 || code===1) return 'Sol/tørt vejr: godt til græs, skråningsklipning og fliserens. Husk pauser og væske ved varme.';
+ if(temp<3) return 'Koldt vejr: overvej vinterservice, beskæring og planlægning frem for græs.';
+ return 'Vejret ser brugbart ud til almindelige have- og anlægsopgaver.';
+}
+async function loadWeather(){
+ try{
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat.value}&longitude=${lon.value}&current=temperature_2m,precipitation,weather_code,wind_speed_10m`;
+  const res=await fetch(url);
+  const data=await res.json();
+  const c=data.current;
+  const text=weatherCodeText(c.weather_code);
+  const advice=makeAdvice(c.temperature_2m,c.precipitation,c.wind_speed_10m,c.weather_code);
+  weatherTemp.textContent=c.temperature_2m+' °C ('+text+')';
+  weatherRain.textContent=c.precipitation+' mm';
+  weatherWind.textContent=c.wind_speed_10m+' km/t';
+  weatherAdvice.textContent=advice;
+  dashWeatherTemp.textContent=Math.round(c.temperature_2m)+'°';
+  dashWeatherText.textContent=text+' · Regn '+c.precipitation+' mm · Vind '+c.wind_speed_10m+' km/t';
+  dashWeatherAdvice.textContent=advice;
+ }catch(e){
+  weatherAdvice.textContent='Kunne ikke hente vejret. Prøv igen senere.';
+ }
+}
+function renderCalendar(){
+ const today=new Date(); today.setHours(0,0,0,0);
+ let html='';
+ for(let i=0;i<7;i++){
+  let d=new Date(today); d.setDate(today.getDate()+i);
+  let ds=d.toISOString().slice(0,10);
+  const dayEvents=[
+    ...store.events.filter(e=>e.date===ds),
+    ...store.jobs.filter(j=>j.date===ds).map(j=>({customer:j.customer,service:j.service,note:j.no}))
+  ];
+  html+=`<div class="day"><strong>${d.toLocaleDateString('da-DK',{weekday:'short',day:'numeric',month:'numeric'})}</strong>`;
+  html+=dayEvents.map(e=>`<div class="event">${e.customer}<br>${e.service}<br>${e.note||''}</div>`).join('');
+  html+='</div>';
+ }
+ calendarGrid.innerHTML=html;
+}
 function render(){
  customerType.innerHTML=customerTypes.map(t=>`<option value="${t[0]}">${t[1]} (${t[0]})</option>`).join('');
- jobCustomer.innerHTML=scheduleCustomer.innerHTML=store.customers.map(c=>`<option value="${c.no}">${c.no} · ${c.name}</option>`).join('');
- jobService.innerHTML=services.map(s=>`<option value="${s[0]}">${s[1]} (${s[0]})</option>`).join('');
+ const customerOpts=store.customers.map(c=>`<option value="${c.no}">${c.no} · ${c.name}</option>`).join('');
+ jobCustomer.innerHTML=scheduleCustomer.innerHTML=eventCustomer.innerHTML=customerOpts;
+ const serviceOpts=services.map(s=>`<option value="${s[0]}">${s[1]} (${s[0]})</option>`).join('');
+ jobService.innerHTML=eventService.innerHTML=serviceOpts;
  statCustomers.textContent=store.customers.length;statJobs.textContent=store.jobs.length;statInvoices.textContent=store.jobs.filter(j=>j.status==='Klar til faktura').length;
  statRed.textContent=store.schedules.filter(s=>scheduleStatus(s.to)==='red').length;
+ todayJobs.innerHTML=store.jobs.filter(j=>j.date===new Date().toISOString().slice(0,10)).map(j=>`<div class="item"><b>${j.no}</b><br>${j.customer}<br>${j.service}</div>`).join('')||'<div class="item">Ingen opgaver på dagens dato.</div>';
  customerList.innerHTML=store.customers.map(c=>`<div class="item"><b>${c.no}</b> <span class="badge">${typeName(c.type)}</span><br>${c.name}<br>${c.contact||''} ${c.phone||''}<br>${c.address||''}</div>`).join('');
  serviceList.innerHTML=services.map(s=>`<div class="item"><b>${s[0]}</b> · ${s[1]}</div>`).join('');
- jobList.innerHTML=store.jobs.map(j=>`<div class="item"><b>${j.no}</b> <span class="badge">${j.status}</span><br>${j.customer}<br>${j.service} · ${j.price||0} kr.<br>${j.note||''}</div>`).join('');
+ jobList.innerHTML=store.jobs.map(j=>`<div class="item"><b>${j.no}</b> <span class="badge">${j.status}</span><br>${j.date||'Ingen dato'} · ${j.customer}<br>${j.service} · ${j.price||0} kr.<br>${j.note||''}</div>`).join('');
  scheduleList.innerHTML=store.schedules.map(s=>{const st=scheduleStatus(s.to);return `<div class="item"><b>${s.customerNo}-${s.serviceCode}</b> <span class="badge ${st}">${st==='red'?'Overskredet':st==='yellow'?'Snart':'OK'}</span><br>${s.customer}<br>${s.service}: hver ${s.interval} dage ± ${s.tolerance} dage<br>Sidst: ${s.last}<br>Næste periode: ${s.from} til ${s.to}</div>`}).join('');
  invoiceList.innerHTML=store.jobs.filter(j=>j.status==='Klar til faktura').map(j=>`<div class="item"><b>${j.no}</b><br>${j.customer}<br>${j.service} · ${j.price||0} kr.</div>`).join('')||'<div class="item">Ingen opgaver klar til faktura.</div>';
+ renderCalendar();
 }
 render();
 </script>

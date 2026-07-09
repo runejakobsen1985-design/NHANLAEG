@@ -1,3 +1,3 @@
-# NHANLAEG Version 3
+# NHANLAEG Version 4
 
-Automatisk kundenummer, ydelseskoder, opgavenummer og klippeintervaller.
+Kalender og vejrmodul med arbejdsanbefalinger.
