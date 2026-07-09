@@ -1,17 +1,16 @@
-# NHANLÆG Android PWA
+# Nordisk Have & Anlæg Driftsystem
 
-Denne version kan lægges på Android-startskærmen som en app.
+Professionel version med:
+- Større logo
+- Transparent logo uden sort baggrund
+- Renere professionelt header-design
+- Android PWA-filer
+- Alle tidligere moduler samlet
 
 Upload/erstat alle filer i GitHub:
 - index.html
 - logo.png
 - manifest.json
 - sw.js
-- icons-mappen
+- icons/
 - README.md
-
-Efter Vercel er opdateret:
-1. Åbn nhanlaeg.vercel.app i Chrome på Android.
-2. Tryk på ⋮.
-3. Tryk "Føj til startskærm" eller "Installer app".
-4. Vælg NHANLÆG.
