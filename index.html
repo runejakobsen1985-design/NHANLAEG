@@ -3,37 +3,217 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Nordisk Have & Anlæg</title>
+<title>Nordisk Have & Anlæg - Driftssystem</title>
 <style>
-body{margin:0;font-family:Arial;background:#f4f4f4}
-header{background:#155b28;color:#fff;text-align:center;padding:40px 20px}
-header img{width:170px;border-radius:50%;background:#0d2d18;box-shadow:0 10px 25px rgba(0,0,0,.3)}
-main{max-width:900px;margin:20px auto;background:#fff;border-radius:20px;padding:25px;box-shadow:0 6px 20px rgba(0,0,0,.15)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px}
-.card{background:#f7fbf7;border:1px solid #ddd;border-radius:12px;padding:18px;font-weight:bold}
-.btn{display:inline-block;margin-top:20px;background:#155b28;color:#fff;padding:14px 22px;border-radius:10px;text-decoration:none}
+:root{
+  --green:#0f3d22;
+  --green2:#176b32;
+  --gold:#d6b45a;
+  --bg:#f4f5ef;
+  --card:#ffffff;
+  --text:#142016;
+  --muted:#657064;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(145deg,var(--green),var(--green2));color:white;padding:22px 16px}
+.top{max-width:1150px;margin:auto;display:flex;gap:16px;align-items:center}
+.logo{width:74px;height:74px;border-radius:50%;object-fit:cover;background:#092615;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+h1{margin:0;font-size:26px}
+.small{color:rgba(255,255,255,.8);margin-top:4px}
+nav{background:white;border-bottom:1px solid #ddd;position:sticky;top:0;z-index:5}
+.nav{max-width:1150px;margin:auto;display:flex;gap:8px;overflow-x:auto;padding:10px}
+.nav button{border:0;background:#eef3eb;color:var(--green);padding:11px 15px;border-radius:999px;font-weight:700;white-space:nowrap}
+.nav button.active{background:var(--green);color:white}
+main{max-width:1150px;margin:auto;padding:18px 14px 40px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{background:var(--card);border-radius:18px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,.08);border:1px solid #e5e7df}
+.stat{border-left:5px solid var(--gold)}
+.stat strong{display:block;font-size:30px;color:var(--green);margin-top:8px}
+h2{margin:0 0 14px;color:var(--green)}
+label{display:block;font-weight:700;margin-top:12px}
+input,select,textarea{width:100%;padding:13px;border-radius:12px;border:1px solid #ccd3c8;margin-top:6px;font-size:16px;background:white}
+textarea{min-height:90px}
+.btn{background:var(--green2);color:white;border:0;border-radius:12px;padding:13px 18px;font-weight:800;margin-top:14px}
+.btn2{background:#eef3eb;color:var(--green);border:0;border-radius:12px;padding:10px 14px;font-weight:800}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.list{display:grid;gap:10px;margin-top:12px}
+.item{background:#fbfcf8;border:1px solid #e4e8df;border-radius:14px;padding:13px}
+.item b{color:var(--green)}
+.hidden{display:none}
+.badge{display:inline-block;background:#eaf3e7;color:var(--green);border-radius:999px;padding:5px 9px;font-size:12px;font-weight:700}
+footer{text-align:center;color:var(--muted);padding:20px}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:1fr}.top{align-items:flex-start}.logo{width:62px;height:62px}h1{font-size:22px}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header>
-<img src="logo.png" alt="Logo">
-<h1>Nordisk Have & Anlæg</h1>
-<p>Driftssystem</p>
+  <div class="top">
+    <img class="logo" src="logo.png" alt="Logo">
+    <div>
+      <h1>Nordisk Have & Anlæg</h1>
+      <div class="small">Driftssystem · kunder · tilbud · opgaver · faktura</div>
+    </div>
+  </div>
 </header>
+
+<nav>
+  <div class="nav">
+    <button class="active" onclick="show('dashboard',this)">🏠 Dashboard</button>
+    <button onclick="show('customers',this)">👥 Kunder</button>
+    <button onclick="show('offers',this)">📋 Tilbud</button>
+    <button onclick="show('jobs',this)">🚚 Opgaver</button>
+    <button onclick="show('calculator',this)">💰 Prisberegner</button>
+    <button onclick="show('calendar',this)">📅 Kalender</button>
+    <button onclick="show('invoices',this)">🧾 Faktura</button>
+  </div>
+</nav>
+
 <main>
-<h2>Velkommen</h2>
-<p>Systemet er online.</p>
-<div class="grid">
-<div class="card">👥 Kunder</div>
-<div class="card">📋 Tilbud</div>
-<div class="card">🚚 Ordrestyring</div>
-<div class="card">💰 Prisberegner</div>
-<div class="card">📅 Kalender</div>
-<div class="card">🧾 Faktura</div>
-<div class="card">📷 Dokumentation</div>
-<div class="card">👷 Medarbejdere</div>
-</div>
-<a class="btn" href="#">Kom i gang</a>
+<section id="dashboard">
+  <div class="grid">
+    <div class="card stat">Kunder<strong id="statCustomers">0</strong></div>
+    <div class="card stat">Tilbud<strong id="statOffers">0</strong></div>
+    <div class="card stat">Opgaver<strong id="statJobs">0</strong></div>
+    <div class="card stat">Klar til faktura<strong id="statInvoices">0</strong></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2>Dagens overblik</h2>
+    <p>Her samles dagens kunder, tilbud, opgaver og fakturagrundlag.</p>
+    <span class="badge">Version 2 online</span>
+  </div>
+</section>
+
+<section id="customers" class="hidden">
+  <div class="card">
+    <h2>👥 Kundekartotek</h2>
+    <div class="row">
+      <div><label>Kundenavn</label><input id="customerName" placeholder="F.eks. Jensen Ejendomme"></div>
+      <div><label>Telefon</label><input id="customerPhone" placeholder="Telefonnummer"></div>
+    </div>
+    <label>Adresse</label><input id="customerAddress" placeholder="Adresse">
+    <button class="btn" onclick="addCustomer()">Gem kunde</button>
+    <div class="list" id="customerList"></div>
+  </div>
+</section>
+
+<section id="offers" class="hidden">
+  <div class="card">
+    <h2>📋 Tilbud</h2>
+    <div class="row">
+      <div><label>Kunde</label><input id="offerCustomer" placeholder="Kunde"></div>
+      <div><label>Beløb</label><input id="offerPrice" type="number" placeholder="DKK"></div>
+    </div>
+    <label>Beskrivelse</label><textarea id="offerText" placeholder="Beskriv tilbuddet"></textarea>
+    <button class="btn" onclick="addOffer()">Gem tilbud</button>
+    <div class="list" id="offerList"></div>
+  </div>
+</section>
+
+<section id="jobs" class="hidden">
+  <div class="card">
+    <h2>🚚 Opgaver</h2>
+    <div class="row">
+      <div><label>Opgave</label><input id="jobTitle" placeholder="F.eks. Hækklipning"></div>
+      <div><label>Status</label><select id="jobStatus"><option>Planlagt</option><option>I gang</option><option>Udført</option><option>Klar til faktura</option></select></div>
+    </div>
+    <label>Note</label><textarea id="jobNote" placeholder="Materialer, tid, adresse osv."></textarea>
+    <button class="btn" onclick="addJob()">Gem opgave</button>
+    <div class="list" id="jobList"></div>
+  </div>
+</section>
+
+<section id="calculator" class="hidden">
+  <div class="card">
+    <h2>💰 Prisberegner</h2>
+    <div class="row">
+      <div><label>Timer</label><input id="hours" type="number" value="1"></div>
+      <div><label>Timepris</label><input id="rate" type="number" value="495"></div>
+      <div><label>Materialer</label><input id="materials" type="number" value="0"></div>
+      <div><label>Maskiner/transport</label><input id="machine" type="number" value="0"></div>
+    </div>
+    <button class="btn" onclick="calc()">Beregn pris</button>
+    <h2 style="margin-top:18px">Pris: <span id="priceResult">495 kr.</span></h2>
+  </div>
+</section>
+
+<section id="calendar" class="hidden">
+  <div class="card">
+    <h2>📅 Kalender</h2>
+    <label>Dato</label><input id="date" type="date">
+    <label>Aftale</label><input id="eventText" placeholder="F.eks. Besigtigelse hos kunde">
+    <button class="btn" onclick="addEvent()">Gem aftale</button>
+    <div class="list" id="eventList"></div>
+  </div>
+</section>
+
+<section id="invoices" class="hidden">
+  <div class="card">
+    <h2>🧾 Fakturagrundlag</h2>
+    <p>Opgaver med status <b>Klar til faktura</b> vises her.</p>
+    <div class="list" id="invoiceList"></div>
+  </div>
+</section>
 </main>
+
+<footer>© Nordisk Have & Anlæg</footer>
+
+<script>
+const store = {
+ customers: JSON.parse(localStorage.getItem('customers')||'[]'),
+ offers: JSON.parse(localStorage.getItem('offers')||'[]'),
+ jobs: JSON.parse(localStorage.getItem('jobs')||'[]'),
+ events: JSON.parse(localStorage.getItem('events')||'[]')
+};
+function save(){ for(const k in store)localStorage.setItem(k,JSON.stringify(store[k])); render(); }
+function show(id,btn){
+ document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+ btn.classList.add('active');
+ render();
+}
+function addCustomer(){
+ const name=customerName.value.trim(); if(!name)return;
+ store.customers.push({name,phone:customerPhone.value,address:customerAddress.value});
+ customerName.value=customerPhone.value=customerAddress.value='';
+ save();
+}
+function addOffer(){
+ const customer=offerCustomer.value.trim(); if(!customer)return;
+ store.offers.push({customer,price:offerPrice.value,text:offerText.value});
+ offerCustomer.value=offerPrice.value=offerText.value='';
+ save();
+}
+function addJob(){
+ const title=jobTitle.value.trim(); if(!title)return;
+ store.jobs.push({title,status:jobStatus.value,note:jobNote.value});
+ jobTitle.value=jobNote.value='';
+ save();
+}
+function addEvent(){
+ if(!date.value || !eventText.value.trim())return;
+ store.events.push({date:date.value,text:eventText.value});
+ eventText.value='';
+ save();
+}
+function calc(){
+ const total=(+hours.value||0)*(+rate.value||0)+(+materials.value||0)+(+machine.value||0);
+ priceResult.textContent=total.toLocaleString('da-DK')+' kr.';
+}
+function render(){
+ statCustomers.textContent=store.customers.length;
+ statOffers.textContent=store.offers.length;
+ statJobs.textContent=store.jobs.length;
+ statInvoices.textContent=store.jobs.filter(j=>j.status==='Klar til faktura').length;
+ customerList.innerHTML=store.customers.map(c=>`<div class="item"><b>${c.name}</b><br>${c.phone||''}<br>${c.address||''}</div>`).join('');
+ offerList.innerHTML=store.offers.map(o=>`<div class="item"><b>${o.customer}</b> · ${Number(o.price||0).toLocaleString('da-DK')} kr.<br>${o.text||''}</div>`).join('');
+ jobList.innerHTML=store.jobs.map(j=>`<div class="item"><b>${j.title}</b> <span class="badge">${j.status}</span><br>${j.note||''}</div>`).join('');
+ eventList.innerHTML=store.events.map(e=>`<div class="item"><b>${e.date}</b><br>${e.text}</div>`).join('');
+ invoiceList.innerHTML=store.jobs.filter(j=>j.status==='Klar til faktura').map(j=>`<div class="item"><b>${j.title}</b><br>${j.note||''}</div>`).join('') || '<div class="item">Ingen opgaver klar til faktura endnu.</div>';
+}
+render();
+</script>
 </body>
 </html>

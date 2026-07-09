@@ -1,3 +1,3 @@
-# NHANLAEG
+# NHANLAEG Version 2
 
-Version med logo på forsiden.
+Interaktiv HTML-version med dashboard, kunder, tilbud, opgaver, prisberegner, kalender og fakturagrundlag.
