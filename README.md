@@ -1,3 +1,3 @@
-# NHANLAEG Version 4
+# NHANLÆG KLAR
 
-Kalender og vejrmodul med arbejdsanbefalinger.
+Stabil single-file version klar til drift om få timer.
