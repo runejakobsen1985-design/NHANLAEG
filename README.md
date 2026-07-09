@@ -1,3 +1,3 @@
-# NHANLÆG PRO PRINT
+# NHANLÆG FINAL V1
 
-Professionel printklar version med aftaler, opgaver, driftsplan og fakturagrundlag.
+Færdig stabil version med print, aftaler, tilbud, materialer og medarbejdere.
