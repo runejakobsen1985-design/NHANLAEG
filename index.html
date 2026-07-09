@@ -32,15 +32,33 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 <div class="app noPrint">
 <aside class="sidebar" id="side"><div class="brand"><img src="logo.png" class="logo"><div><h1>NHANLÆG FINAL</h1><p>Nordisk Have & Anlæg</p></div></div>
 <div class="nav">
-<button class="active" onclick="show('dash',this,'Dashboard')">🏠 Dashboard</button><button onclick="show('cust',this,'Kunder')">👥 Kunder</button><button onclick="show('profile',this,'Ejendomsprofil')">🏡 Ejendomsprofil</button><button onclick="show('job',this,'Arbejdsordrer')">🚚 Arbejdsordrer</button><button onclick="show('work',this,'Udfør opgave')">▶️ Udfør</button><button onclick="show('plan',this,'Klippeplan')">📅 Klippeplan</button><button onclick="show('cal',this,'Kalender')">🗓️ Kalender</button><button onclick="show('agreements',this,'Aftaler')">📄 Aftaler</button><button onclick="show('offers',this,'Tilbud')">📋 Tilbud</button><button onclick="show('materials',this,'Materialer')">📦 Materialer</button><button onclick="show('employees',this,'Medarbejdere')">👷 Medarbejdere</button><button onclick="show('weather',this,'Vejr')">🌦️ Vejr</button><button onclick="show('machines',this,'Maskiner')">🚜 Maskiner</button><button onclick="show('invoice',this,'Faktura')">🧾 Faktura</button><button onclick="show('backup',this,'Backup')">💾 Backup</button>
+<button class="active" onclick="show('dash',this,'Dashboard')">🏠 Dashboard</button><button onclick="show('daily',this,'Daglig tjekliste')">✅ Daglig tjekliste</button><button onclick="show('cust',this,'Kunder')">👥 Kunder</button><button onclick="show('history',this,'Kundehistorik')">📚 Historik</button><button onclick="show('profile',this,'Ejendomsprofil')">🏡 Ejendomsprofil</button><button onclick="show('job',this,'Arbejdsordrer')">🚚 Arbejdsordrer</button><button onclick="show('work',this,'Udfør opgave')">▶️ Udfør</button><button onclick="show('plan',this,'Klippeplan')">📅 Klippeplan</button><button onclick="show('cal',this,'Kalender')">🗓️ Kalender</button><button onclick="show('agreements',this,'Aftaler')">📄 Aftaler</button><button onclick="show('offers',this,'Tilbud')">📋 Tilbud</button><button onclick="show('materials',this,'Materialer')">📦 Materialer</button><button onclick="show('employees',this,'Medarbejdere')">👷 Medarbejdere</button><button onclick="show('weather',this,'Vejr')">🌦️ Vejr</button><button onclick="show('machines',this,'Maskiner')">🚜 Maskiner</button><button onclick="show('invoice',this,'Faktura')">🧾 Faktura</button><button onclick="show('risk',this,'Risiko / vigtige noter')">⚠️ Risiko</button><button onclick="show('deviation',this,'Afvigelser')">🚨 Afvigelser</button><button onclick="show('route',this,'Rute / kørsel')">🗺️ Rute</button><button onclick="show('backup',this,'Backup')">💾 Backup</button>
 </div></aside>
 <div class="main">
-<header class="topbar"><div class="title"><h2 id="pageTitle">Dashboard</h2><p id="pageSub">Færdig stabil version til drift.</p></div><div class="toolbar"><button class="btn secondary" onclick="printAllJobs()">Print opgaver</button><button class="btn secondary" onclick="printAgreements()">Print aftaler</button><button class="btn" onclick="showById('job','Arbejdsordrer')">+ Opgave</button></div></header>
+<header class="topbar"><div class="title"><h2 id="pageTitle">Dashboard</h2><p id="pageSub">Færdig stabil version til drift.</p></div><div class="toolbar"><button class="btn secondary" onclick="printAllJobs()">Print opgaver</button><button class="btn secondary" onclick="printAnonJobs()">Print anonymt</button><button class="btn secondary" onclick="printAgreements()">Print aftaler</button><button class="btn" onclick="showById('job','Arbejdsordrer')">+ Opgave</button></div></header>
 <div class="content">
 
-<section id="dash"><div class="grid4"><div class="card stat"><span>Kunder</span><b id="sC">0</b></div><div class="card stat"><span>Opgaver</span><b id="sJ">0</b></div><div class="card stat"><span>Klar faktura</span><b id="sF">0</b></div><div class="card stat"><span>Tilbud</span><b id="sO">0</b></div></div><div class="grid2"><div class="card"><h2>Dagens drift</h2><div class="list" id="today"></div></div><div class="card weather"><h2>🌦️ Vejr-råd</h2><div class="big" id="wTemp">--°</div><p id="wText">Åbn Vejr og tryk “Hent vejr”.</p><span class="badge blue" id="wAdviceShort">Afventer data</span></div></div></section>
+<section id="dash"><div class="grid4"><div class="card stat"><span>Kunder</span><b id="sC">0</b></div><div class="card stat"><span>Opgaver</span><b id="sJ">0</b></div><div class="card stat"><span>Klar faktura</span><b id="sF">0</b></div><div class="card stat"><span>Uge 1 / Uge 2</span><b><span id="sW1">0</span>/<span id="sW2">0</span></b></div></div><div class="grid2"><div class="card"><h2>Dagens drift</h2><div class="list" id="today"></div></div><div class="card weather"><h2>🌦️ Vejr-råd</h2><div class="big" id="wTemp">--°</div><p id="wText">Åbn Vejr og tryk “Hent vejr”.</p><span class="badge blue" id="wAdviceShort">Afventer data</span></div></div>
+<div class="card"><h2>📅 Ugens opgaver</h2><p class="muted">Denne uge fra mandag til søndag.</p><div class="list" id="weekOne"></div></div>
+<div class="card"><h2>📅 Uge nr. 2</h2><p class="muted">Næste uge fra mandag til søndag.</p><div class="list" id="weekTwo"></div></div></section>
 
 <section id="cust" class="hidden"><div class="card"><h2>Ny kunde</h2><div class="grid2"><div><label>Kundenavn</label><input id="cName"></div><div><label>Kundetype</label><select id="cType"></select></div></div><div class="grid2"><div><label>Kontaktperson</label><input id="cContact"></div><div><label>Telefon</label><input id="cPhone"></div></div><label>Adresse</label><input id="cAddr"><button class="btn" onclick="addCustomer()">Gem kunde</button></div><div class="card"><h2>Kundeliste</h2><div class="list" id="cList"></div></div></section>
+
+
+<section id="history" class="hidden"><div class="card"><h2>Kundehistorik</h2>
+<p class="muted">Samler alle opgaver, tilbud, aftaler, noter og dokumentation på kunden.</p>
+<div class="grid2"><div><label>Kunde</label><select id="hCustomer" onchange="renderHistory()"></select></div><div><label>Historiktype</label><select id="hType"><option>Note</option><option>Besøg</option><option>Telefon</option><option>Mail</option><option>Afvigelse</option><option>Klage</option><option>Aftale</option></select></div></div>
+<label>Historiknote</label><textarea id="hNote" placeholder="Skriv hvad der er aftalt, udført eller vigtigt at huske"></textarea>
+<label>Billede / kort / markering af område</label><input id="hImage" type="file" accept="image/*">
+<button class="btn" onclick="addHistory()">Gem historik</button>
+<button class="btn secondary" onclick="printCustomerHistory()">Print kundehistorik</button>
+<div class="list" id="hList"></div></div></section>
+
+<section id="anonymous" class="hidden"><div class="card"><h2>Anonym arbejdsprint</h2>
+<p class="muted">Brug denne til medarbejdere eller samarbejdspartnere. Kundenavn, adresse, telefon, CVR og kontaktperson skjules.</p>
+<label>Vælg opgave</label><select id="anonJob"></select>
+<button class="btn" onclick="printAnonSelected()">Print anonym arbejdsordre</button>
+<div class="note">Printet viser kun arbejdsnummer, ydelse, dato, tjekliste, note og evt. område-/kortbeskrivelse.</div></div></section>
 
 <section id="profile" class="hidden"><div class="card"><h2>Ejendomsprofil</h2><div class="grid2"><div><label>Kunde</label><select id="prCustomer"></select></div><div><label>GPS / kort-link</label><input id="prGps"></div></div><div class="grid3"><div><label>Græsareal m²</label><input id="prGrass" type="number"></div><div><label>Skråninger m²</label><input id="prSlope" type="number"></div><div><label>Hæk meter</label><input id="prHedge" type="number"></div><div><label>Fliser m²</label><input id="prTiles" type="number"></div><div><label>Tagrender meter</label><input id="prGutters" type="number"></div><div><label>Legeplads/grønne områder</label><input id="prPlayground"></div></div><label>Noter</label><textarea id="prNotes"></textarea><button class="btn" onclick="saveProfile()">Gem ejendomsprofil</button><button class="btn secondary" onclick="printProfiles()">Print ejendomsprofiler</button><div class="list" id="profileList"></div></div></section>
 
@@ -65,13 +83,59 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 <section id="machines" class="hidden"><div class="card"><h2>Maskinregister</h2><div class="grid3"><div><label>Maskine</label><input id="mName"></div><div><label>Timer</label><input id="mHours" type="number"></div><div><label>Næste service</label><input id="mService" type="date"></div></div><label>Note</label><textarea id="mNote"></textarea><button class="btn" onclick="addMachine()">Gem maskine</button><div class="list" id="mList"></div></div></section>
 
 <section id="invoice" class="hidden"><div class="card"><h2>Fakturagrundlag</h2><button class="btn secondary" onclick="printInvoices()">Print fakturagrundlag</button><div class="list" id="fList"></div></div></section>
+
+<section id="daily" class="hidden"><div class="card"><h2>Daglig tjekliste</h2>
+<p class="muted">Bruges om morgenen før bilen kører.</p>
+<div class="checks">
+<label><input type="checkbox"> Dagens opgaver gennemgået</label>
+<label><input type="checkbox"> Vejr kontrolleret</label>
+<label><input type="checkbox"> Maskiner kontrolleret</label>
+<label><input type="checkbox"> Brændstof / batterier klar</label>
+<label><input type="checkbox"> Materialer pakket</label>
+<label><input type="checkbox"> Print / anonym arbejdsordre klar</label>
+<label><input type="checkbox"> Særlige kundenoter kontrolleret</label>
+</div>
+<button class="btn secondary" onclick="printDaily()">Print daglig tjekliste</button>
+<div class="card" style="margin-top:14px"><h2>Dagens opgaver</h2><div class="list" id="dailyJobs"></div></div>
+</div></section>
+
+<section id="risk" class="hidden"><div class="card"><h2>Risiko / vigtige kundenoter</h2>
+<p class="muted">Ting medarbejdere skal vide, før de kører til kunden.</p>
+<div class="grid2"><div><label>Kunde</label><select id="rCustomer"></select></div><div><label>Type</label><select id="rType"><option>Hund på grunden</option><option>Låst port</option><option>Ring før ankomst</option><option>Må kun komme bestemte tider</option><option>Nabo klager</option><option>Særligt område</option><option>Andet</option></select></div></div>
+<label>Note</label><textarea id="rNote"></textarea>
+<button class="btn" onclick="addRisk()">Gem vigtig note</button>
+<button class="btn secondary" onclick="printRisks()">Print vigtige noter</button>
+<div class="list" id="rList"></div>
+</div></section>
+
+<section id="deviation" class="hidden"><div class="card"><h2>Afvigelsesrapport</h2>
+<p class="muted">Bruges hvis noget ikke kan udføres, der sker skade, vejret stopper arbejdet eller ekstraarbejde kræves.</p>
+<div class="grid3"><div><label>Kunde</label><select id="dCustomer"></select></div><div><label>Opgave</label><select id="dJob"></select></div><div><label>Type</label><select id="dType"><option>Kan ikke udføres</option><option>Vejr</option><option>Skade</option><option>Ekstraarbejde</option><option>Kunde ikke hjemme</option><option>Adgang blokeret</option><option>Andet</option></select></div></div>
+<label>Beskrivelse</label><textarea id="dNote"></textarea>
+<label>Billede</label><input id="dImage" type="file" accept="image/*">
+<button class="btn" onclick="addDeviation()">Gem afvigelse</button>
+<button class="btn secondary" onclick="printDeviations()">Print afvigelser</button>
+<div class="list" id="dList"></div>
+</div></section>
+
+<section id="route" class="hidden"><div class="card"><h2>Rute / kørsel</h2>
+<p class="muted">Lav dagens rute og åbn den i Google Maps. Kilometer kan noteres og bruges til faktura.</p>
+<label>Startadresse</label><input id="routeStart" placeholder="F.eks. firmaadresse">
+<label>Vælg dagens kunder/opgaver</label>
+<div class="list" id="routeJobs"></div>
+<div class="grid2"><div><label>Kilometer i alt</label><input id="routeKm" type="number"></div><div><label>Kørselspris pr. km</label><input id="routeRate" type="number" value="4"></div></div>
+<button class="btn" onclick="openRoute()">Åbn rute i Google Maps</button>
+<button class="btn secondary" onclick="printRoute()">Print rute</button>
+<h2>Kørsel: <span id="routePrice">0 kr.</span></h2>
+</div></section>
+
 <section id="backup" class="hidden"><div class="card"><h2>Backup</h2><button class="btn" onclick="exportData()">Eksporter backup</button><label>Importer backup</label><input type="file" accept=".json" onchange="importData(event)"><button class="btn danger" onclick="clearAll()">Ryd lokale data</button></div></section>
 </div></div></div>
 <script>
 const types=[['PRI','Privat'],['SOM','Sommerhus'],['GF','Grundejerforening'],['BF','Boligforening'],['AB','Andelsboligforening'],['ERH','Erhverv'],['OFF','Offentlig'],['FOR','Forening'],['LAN','Landbrug'],['EJD','Ejendomsselskab']];
 const serv=[['G','Græsslåning'],['SK','Skråningsklipning'],['HK','Hækklipning'],['KB','Kantbeskæring'],['UK','Ukrudt'],['FR','Fliserens'],['FI','Fliseimprægnering'],['TR','Tagrenderens'],['TT','Tagrens'],['TF','Træfældning'],['SF','Stubfræsning'],['PL','Plantning'],['EJ','Ejendomsservice'],['VS','Vinterservice'],['SN','Snerydning'],['SA','Saltning']];
 const templates={G:['Klip alle græsarealer','Trim kanter','Blæs stier rene','Kontroller skader/sten'],SK:['Kontroller hældning og sikkerhed','Klip skråning','Ryd synlige sten/grene'],HK:['Kontroller fuglereder','Klip hæk','Ryd afklip','Blæs rent'],TR:['Opsæt stige sikkert','Rens tagrender','Rens nedløb','Fjern affald','Tag billede før/efter'],default:['Arbejde udført','Område ryddet','Kunde orienteret']};
-const store={c:JSON.parse(localStorage.c||'[]'),j:JSON.parse(localStorage.j||'[]'),p:JSON.parse(localStorage.p||'[]'),e:JSON.parse(localStorage.e||'[]'),profiles:JSON.parse(localStorage.profiles||'[]'),machines:JSON.parse(localStorage.machines||'[]'),work:JSON.parse(localStorage.work||'[]'),agreements:JSON.parse(localStorage.agreements||'[]'),offers:JSON.parse(localStorage.offers||'[]'),materials:JSON.parse(localStorage.materials||'[]'),employees:JSON.parse(localStorage.employees||'[]')};
+const store={c:JSON.parse(localStorage.c||'[]'),j:JSON.parse(localStorage.j||'[]'),p:JSON.parse(localStorage.p||'[]'),e:JSON.parse(localStorage.e||'[]'),profiles:JSON.parse(localStorage.profiles||'[]'),machines:JSON.parse(localStorage.machines||'[]'),work:JSON.parse(localStorage.work||'[]'),agreements:JSON.parse(localStorage.agreements||'[]'),offers:JSON.parse(localStorage.offers||'[]'),materials:JSON.parse(localStorage.materials||'[]'),employees:JSON.parse(localStorage.employees||'[]'),history:JSON.parse(localStorage.history||'[]'),risks:JSON.parse(localStorage.risks||'[]'),deviations:JSON.parse(localStorage.deviations||'[]')};
 function persist(){for(let k in store)localStorage[k]=JSON.stringify(store[k]);render()}
 function toggleMenu(){side.classList.toggle('open')} function show(id,b,title){document.querySelectorAll('.content section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(b)b.classList.add('active');pageTitle.textContent=title||'NHANLÆG';side.classList.remove('open');render()} function showById(id,title){show(id,null,title)}
 function sname(c){return (serv.find(x=>x[0]==c)||[])[1]||c} function tname(c){return (types.find(x=>x[0]==c)||[])[1]||c} function cno(t){return 'NH-'+String(store.c.length+1).padStart(3,'0')+'-'+t} function jno(c,s){return c+'-'+s+'-'+String(store.j.filter(x=>x.cno==c&&x.sc==s).length+1).padStart(3,'0')} function intervalText(days,tol){return Number(days)===30?'1 gang pr. måned ± '+tol+' dage':'hver '+days+'. dag ± '+tol+' dage'}
@@ -88,6 +152,54 @@ function addPlan(){let c=store.c.find(x=>x.no==pCustomer.value);if(!c||!pLast.va
 function addMachine(){if(!mName.value.trim())return;store.machines.push({name:mName.value,hours:mHours.value,service:mService.value,note:mNote.value});mName.value=mHours.value=mService.value=mNote.value='';persist()}
 function renderChecklist(){let j=store.j.find(x=>x.no==workJob.value); if(!j){checklist.innerHTML='';return} let arr=templates[j.sc]||templates.default; checklist.innerHTML=arr.map((t,i)=>`<label><input type="checkbox">${t}</label>`).join('')}
 function finishWork(){let j=store.j.find(x=>x.no==workJob.value); if(!j)return; j.status='Klar til faktura'; store.work.push({job:j.no,start:workStart.value,end:workEnd.value,note:workNote.value,date:new Date().toISOString()}); workMsg.innerHTML='<div class="item"><b>Opgaven er afsluttet og klar til faktura.</b></div>'; workNote.value=''; persist()}
+
+function fileToDataURL(file, cb){ if(!file){cb('');return} let r=new FileReader(); r.onload=()=>cb(r.result); r.readAsDataURL(file); }
+function addHistory(){
+ let c=store.c.find(x=>x.no==hCustomer.value); if(!c)return;
+ let file=hImage.files[0];
+ fileToDataURL(file, img=>{
+   store.history.push({id:Date.now(),cno:c.no,c:c.name,type:hType.value,note:hNote.value,date:new Date().toISOString().slice(0,10),img});
+   hNote.value=''; hImage.value=''; persist(); renderHistory();
+ });
+}
+function renderHistory(){
+ let cno=hCustomer.value;
+ let rows=[
+   ...store.history.filter(x=>x.cno==cno).map(x=>({date:x.date,type:x.type,title:x.note||'',img:x.img||''})),
+   ...store.j.filter(x=>x.cno==cno).map(x=>({date:x.date||'',type:'Opgave',title:x.no+' · '+x.s+' · '+x.status,img:''})),
+   ...store.offers.filter(x=>x.cno==cno).map(x=>({date:x.date||'',type:'Tilbud',title:x.no+' · '+(x.price||0)+' kr. · '+(x.text||''),img:''})),
+   ...store.agreements.filter(x=>x.cno==cno).map(x=>({date:x.date||'',type:'Aftale',title:x.no+' · '+x.type,img:''}))
+ ].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+ hList.innerHTML=rows.map(x=>`<div class="item"><b>${x.date||''}</b> <span class="badge">${x.type}</span><br>${x.title||''}${x.img?`<br><img src="${x.img}" style="max-width:100%;border-radius:12px;margin-top:10px">`:''}</div>`).join('')||'<div class="item">Ingen historik endnu.</div>';
+}
+function printCustomerHistory(){
+ let c=store.c.find(x=>x.no==hCustomer.value); if(!c)return;
+ let rows=[
+   ...store.history.filter(x=>x.cno==c.no).map(x=>`<tr><td>${x.date}</td><td>${x.type}</td><td>${x.note||''}</td></tr>`),
+   ...store.j.filter(x=>x.cno==c.no).map(x=>`<tr><td>${x.date||''}</td><td>Opgave</td><td>${x.no} · ${x.s} · ${x.status}</td></tr>`),
+   ...store.offers.filter(x=>x.cno==c.no).map(x=>`<tr><td>${x.date||''}</td><td>Tilbud</td><td>${x.no} · ${x.price||0} kr.</td></tr>`),
+   ...store.agreements.filter(x=>x.cno==c.no).map(x=>`<tr><td>${x.date||''}</td><td>Aftale</td><td>${x.no} · ${x.type}</td></tr>`)
+ ].join('');
+ printShell('Kundehistorik', c.no+' · '+c.name, `<div class="printBlock"><p><b>Adresse:</b> ${c.addr||''}<br><b>Kontakt:</b> ${c.contact||''} · ${c.phone||''}</p></div>`+table(['Dato','Type','Beskrivelse'],rows));
+}
+function anonJobBody(j){
+ let checks=(templates[j.sc]||templates.default).map(x=>`<li>${x}</li>`).join('');
+ return `<div class="printBlock"><h2>Arbejdsordre ${j.no}</h2><p><b>Dato:</b> ${j.date||''}<br><b>Ydelse:</b> ${j.s}<br><b>Status:</b> ${j.status}</p><p><b>Note:</b><br>${j.note||''}</p><h3>Tjekliste</h3><ul>${checks}</ul><p><b>Vigtigt:</b> Kundeoplysninger er skjult på dette print.</p></div>`;
+}
+function printAnonSelected(){ let j=store.j.find(x=>x.no==anonJob.value); if(!j)return; printShell('Anonym arbejdsordre','Til medarbejder/samarbejdspartner',anonJobBody(j)); }
+function printAnonJobs(){ let body=store.j.map(anonJobBody).join('')||'<div class="printBlock">Ingen opgaver.</div>'; printShell('Anonyme arbejdsordrer','Uden kundeoplysninger',body); }
+
+
+function addRisk(){let c=store.c.find(x=>x.no==rCustomer.value); if(!c||!rNote.value.trim())return; store.risks.push({id:Date.now(),cno:c.no,c:c.name,type:rType.value,note:rNote.value,date:new Date().toISOString().slice(0,10)}); rNote.value=''; persist();}
+function addDeviation(){let c=store.c.find(x=>x.no==dCustomer.value); let j=store.j.find(x=>x.no==dJob.value); if(!c||!dNote.value.trim())return; let file=dImage.files[0]; fileToDataURL(file,img=>{store.deviations.push({id:Date.now(),cno:c.no,c:c.name,job:j?j.no:'',type:dType.value,note:dNote.value,date:new Date().toISOString().slice(0,10),img}); dNote.value=''; dImage.value=''; persist();});}
+function selectedRouteJobs(){return Array.from(document.querySelectorAll('.routeChk:checked')).map(x=>store.j.find(j=>j.no==x.value)).filter(Boolean)}
+function openRoute(){let jobs=selectedRouteJobs(); let parts=[]; if(routeStart.value.trim())parts.push(routeStart.value.trim()); jobs.forEach(j=>{let c=store.c.find(x=>x.no==j.cno); if(c && c.addr)parts.push(c.addr)}); if(!parts.length)return alert('Vælg mindst én opgave med adresse'); window.open('https://www.google.com/maps/dir/'+parts.map(encodeURIComponent).join('/'),'_blank');}
+function calcRoute(){routePrice.textContent=((+routeKm.value||0)*(+routeRate.value||0)).toLocaleString('da-DK')+' kr.'}
+function printDaily(){let jobs=store.j.filter(x=>x.date==new Date().toISOString().slice(0,10)).map(x=>`<tr><td>${x.no}</td><td>${x.c}</td><td>${x.s}</td><td>${x.note||''}</td></tr>`).join('');printShell('Daglig tjekliste','Morgenkontrol og dagens opgaver',`<div class="printBlock"><ul><li>Dagens opgaver gennemgået</li><li>Vejr kontrolleret</li><li>Maskiner kontrolleret</li><li>Materialer pakket</li><li>Særlige noter kontrolleret</li></ul></div>`+table(['Opgave','Kunde','Ydelse','Note'],jobs));}
+function printRisks(){let rows=store.risks.map(x=>`<tr><td>${x.cno}</td><td>${x.c}</td><td>${x.type}</td><td>${x.note}</td></tr>`).join('');printShell('Vigtige kundenoter','Risiko / adgang / særlige forhold',table(['Kunde nr.','Kunde','Type','Note'],rows));}
+function printDeviations(){let rows=store.deviations.map(x=>`<tr><td>${x.date}</td><td>${x.c}</td><td>${x.job}</td><td>${x.type}</td><td>${x.note}</td></tr>`).join('');printShell('Afvigelsesrapporter','Skader, vejr, adgang og ekstraarbejde',table(['Dato','Kunde','Opgave','Type','Beskrivelse'],rows));}
+function printRoute(){let jobs=selectedRouteJobs();let rows=jobs.map(j=>{let c=store.c.find(x=>x.no==j.cno)||{};return `<tr><td>${j.no}</td><td>${j.s}</td><td>${c.addr||''}</td><td>${j.note||''}</td></tr>`}).join('');printShell('Dagens rute','Kørsel og arbejdsrækkefølge',`<div class="printBlock"><p><b>Start:</b> ${routeStart.value||''}<br><b>Kilometer:</b> ${routeKm.value||0}<br><b>Kørsel:</b> ${((+routeKm.value||0)*(+routeRate.value||0)).toLocaleString('da-DK')} kr.</p></div>`+table(['Opgave','Ydelse','Adresse','Note'],rows));}
+
 function printShell(title, subtitle, body){printArea.innerHTML=`<div class="printHeader"><img src="logo.png"><div class="printTitle"><h1>${title}</h1><p>${subtitle}</p><p>Nordisk Have & Anlæg · Udskrevet ${new Date().toLocaleDateString('da-DK')}</p></div></div>${body}<div class="printFooter">NHANLÆG · Side udskrevet fra driftssystemet</div>`; setTimeout(()=>window.print(),100)}
 function table(headers, rows){return `<div class="printBlock"><table class="printTable"><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr>${rows}</table></div>`}
 function printAllJobs(){printShell('Arbejdsordrer','Alle opgaver',table(['Nr.','Dato','Kunde','Ydelse','Status','Note'],store.j.map(j=>`<tr><td>${j.no}</td><td>${j.date||''}</td><td>${j.c}</td><td>${j.s}</td><td>${j.status}</td><td>${j.note||''}</td></tr>`).join('')))}
@@ -101,9 +213,44 @@ function codeText(c){return {0:'Sol',1:'Mest klart',2:'Delvist skyet',3:'Oversky
 async function loadWeather(){try{let u=`https://api.open-meteo.com/v1/forecast?latitude=${lat.value}&longitude=${lon.value}&current=temperature_2m,precipitation,weather_code,wind_speed_10m`;let d=await (await fetch(u)).json();let c=d.current,a=advice(c.temperature_2m,c.precipitation,c.wind_speed_10m,c.weather_code);temp.textContent=c.temperature_2m+' °C ('+codeText(c.weather_code)+')';rain.textContent=c.precipitation+' mm';wind.textContent=c.wind_speed_10m+' km/t';advice.textContent=a;wTemp.textContent=Math.round(c.temperature_2m)+'°';wText.textContent=codeText(c.weather_code)+' · Regn '+c.precipitation+' mm · Vind '+c.wind_speed_10m+' km/t';wAdviceShort.textContent=a}catch(e){advice.textContent='Kunne ikke hente vejret.'}} function useGPS(){navigator.geolocation.getCurrentPosition(p=>{lat.value=p.coords.latitude.toFixed(5);lon.value=p.coords.longitude.toFixed(5);loadWeather()},()=>alert('GPS kunne ikke bruges'))}
 function renderCal(){let todayD=new Date();todayD.setHours(0,0,0,0);let out='';for(let i=0;i<7;i++){let d=new Date(todayD);d.setDate(todayD.getDate()+i);let ds=d.toISOString().slice(0,10);let ev=[...store.e.filter(x=>x.date==ds),...store.j.filter(x=>x.date==ds).map(x=>({c:x.c,s:x.s,note:x.no}))];out+=`<div class="day"><b>${d.toLocaleDateString('da-DK',{weekday:'short',day:'numeric',month:'numeric'})}</b>${ev.map(x=>`<div class="event">${x.c}<br>${x.s}<br>${x.note||''}</div>`).join('')}</div>`}calGrid.innerHTML=out}
 function exportData(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(store,null,2)],{type:'application/json'}));a.download='NHANLAEG_backup.json';a.click()} function importData(e){let f=e.target.files[0]; if(!f)return; let r=new FileReader(); r.onload=()=>{let d=JSON.parse(r.result); Object.assign(store,d); persist()}; r.readAsText(f)} function clearAll(){if(confirm('Ryd alle lokale data?')){localStorage.clear();location.reload()}}
-function render(){let co=store.c.map(x=>`<option value="${x.no}">${x.no} · ${x.name}</option>`).join('');cType.innerHTML=types.map(x=>`<option value="${x[0]}">${x[1]} (${x[0]})</option>`).join('');jCustomer.innerHTML=pCustomer.innerHTML=eCustomer.innerHTML=prCustomer.innerHTML=aCustomer.innerHTML=oCustomer.innerHTML=co;let so=serv.map(x=>`<option value="${x[0]}">${x[1]} (${x[0]})</option>`).join('');jService.innerHTML=eService.innerHTML=so;workJob.innerHTML=store.j.map(x=>`<option value="${x.no}">${x.no} · ${x.c} · ${x.s}</option>`).join('');sC.textContent=store.c.length;sJ.textContent=store.j.length;sF.textContent=store.j.filter(x=>x.status=='Klar til faktura').length;sO.textContent=store.offers.length;
+
+function dateOnly(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
+function weekRange(offset){
+  let now=dateOnly(new Date());
+  let day=now.getDay(); // 0 søndag
+  let monday=new Date(now);
+  let diff=(day===0?-6:1-day) + (offset*7);
+  monday.setDate(now.getDate()+diff);
+  let sunday=new Date(monday); sunday.setDate(monday.getDate()+6);
+  return {from:monday,to:sunday};
+}
+function inRange(dateStr,from,to){
+  if(!dateStr)return false;
+  let d=dateOnly(new Date(dateStr));
+  return d>=from && d<=to;
+}
+function fmtDate(d){return d.toLocaleDateString('da-DK',{weekday:'short',day:'numeric',month:'numeric'})}
+function weekJobs(offset){
+  let r=weekRange(offset);
+  return store.j.filter(x=>inRange(x.date,r.from,r.to)).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+}
+function renderWeek(targetId, offset){
+  let jobs=weekJobs(offset);
+  let r=weekRange(offset);
+  let title=`${fmtDate(r.from)} - ${fmtDate(r.to)}`;
+  document.getElementById(targetId).innerHTML = `<div class="item"><b>${title}</b></div>` + (jobs.map(x=>`<div class="item"><b>${x.date||''}</b> · <span class="code">${x.no}</span><br>${x.c}<br>${x.s} · ${x.status}</div>`).join('') || '<div class="item">Ingen opgaver i denne uge.</div>');
+}
+
+function render(){let co=store.c.map(x=>`<option value="${x.no}">${x.no} · ${x.name}</option>`).join('');cType.innerHTML=types.map(x=>`<option value="${x[0]}">${x[1]} (${x[0]})</option>`).join('');jCustomer.innerHTML=pCustomer.innerHTML=eCustomer.innerHTML=prCustomer.innerHTML=aCustomer.innerHTML=oCustomer.innerHTML=hCustomer.innerHTML=rCustomer.innerHTML=dCustomer.innerHTML=co;let so=serv.map(x=>`<option value="${x[0]}">${x[1]} (${x[0]})</option>`).join('');jService.innerHTML=eService.innerHTML=so;workJob.innerHTML=anonJob.innerHTML=dJob.innerHTML=store.j.map(x=>`<option value="${x.no}">${x.no} · ${x.c} · ${x.s}</option>`).join('');sC.textContent=store.c.length;sJ.textContent=store.j.length;sF.textContent=store.j.filter(x=>x.status=='Klar til faktura').length;sO.textContent=store.offers.length;sW1.textContent=weekJobs(0).length;sW2.textContent=weekJobs(1).length;
 today.innerHTML=store.j.filter(x=>x.date==new Date().toISOString().slice(0,10)).map(x=>`<div class="item"><b>${x.no}</b><br>${x.c}<br>${x.s}</div>`).join('')||'<div class="item">Ingen opgaver i dag.</div>';
-cList.innerHTML=store.c.map(x=>`<div class="item"><b>${x.no}</b> <span class="badge">${tname(x.type)}</span><br>${x.name}<br>${x.contact||''} ${x.phone||''}<br>${x.addr||''}</div>`).join('');profileList.innerHTML=store.profiles.map(x=>`<div class="item"><b>${x.cno}</b> · ${x.c}<br>Græs: ${x.grass||0} m² · Skråning: ${x.slope||0} m² · Hæk: ${x.hedge||0} m<br>Fliser: ${x.tiles||0} m² · Tagrender: ${x.gutters||0} m<br>${x.notes||''}</div>`).join('');jList.innerHTML=store.j.map(x=>`<div class="item"><b>${x.no}</b> <span class="badge">${x.status}</span><br>${x.date||'Ingen dato'} · ${x.c}<br>${x.s} · ${x.price||0} kr.<br>${x.note||''}</div>`).join('');pList.innerHTML=store.p.map(x=>{let st=pstat(x.to);return`<div class="item"><b>${x.cno}-${x.sc}</b> <span class="badge ${st}">${st=='red'?'Overskredet':st=='yellow'?'Snart':'OK'}</span><br>${x.c}<br>${x.s}: ${intervalText(x.i,x.t)}<br>Sidst: ${x.last}<br>Næste ønskede dato: ${x.next}<br>Kan udføres: ${x.from} til ${x.to}</div>`}).join('');aList.innerHTML=store.agreements.map(x=>`<div class="item"><b>${x.no}</b> <span class="badge">${x.type}</span><br>${x.cno} · ${x.c}<br>${x.scope||''}<br>${x.price||''} · ${x.payment}</div>`).join('');oList.innerHTML=store.offers.map(x=>`<div class="item"><b>${x.no}</b><br>${x.cno} · ${x.c}<br>${x.text||''}<br><b>${x.price||0} kr.</b></div>`).join('');matList.innerHTML=store.materials.map(x=>`<div class="item"><b>${x.name}</b><br>Antal: ${x.qty||0} · Pris: ${x.price||0} kr.</div>`).join('');empList.innerHTML=store.employees.map(x=>`<div class="item"><b>${x.name}</b><br>${x.role||''}<br>${x.phone||''}</div>`).join('');mList.innerHTML=store.machines.map(x=>`<div class="item"><b>${x.name}</b><br>Timer: ${x.hours||0}<br>Næste service: ${x.service||'Ikke sat'}<br>${x.note||''}</div>`).join('');fList.innerHTML=store.j.filter(x=>x.status=='Klar til faktura').map(x=>`<div class="item"><b>${x.no}</b><br>${x.c}<br>${x.s} · ${x.price||0} kr.</div>`).join('')||'<div class="item">Ingen klar til faktura.</div>';renderCal();renderChecklist()}
+cList.innerHTML=store.c.map(x=>`<div class="item"><b>${x.no}</b> <span class="badge">${tname(x.type)}</span><br>${x.name}<br>${x.contact||''} ${x.phone||''}<br>${x.addr||''}</div>`).join('');profileList.innerHTML=store.profiles.map(x=>`<div class="item"><b>${x.cno}</b> · ${x.c}<br>Græs: ${x.grass||0} m² · Skråning: ${x.slope||0} m² · Hæk: ${x.hedge||0} m<br>Fliser: ${x.tiles||0} m² · Tagrender: ${x.gutters||0} m<br>${x.notes||''}</div>`).join('');jList.innerHTML=store.j.map(x=>`<div class="item"><b>${x.no}</b> <span class="badge">${x.status}</span><br>${x.date||'Ingen dato'} · ${x.c}<br>${x.s} · ${x.price||0} kr.<br>${x.note||''}</div>`).join('');pList.innerHTML=store.p.map(x=>{let st=pstat(x.to);return`<div class="item"><b>${x.cno}-${x.sc}</b> <span class="badge ${st}">${st=='red'?'Overskredet':st=='yellow'?'Snart':'OK'}</span><br>${x.c}<br>${x.s}: ${intervalText(x.i,x.t)}<br>Sidst: ${x.last}<br>Næste ønskede dato: ${x.next}<br>Kan udføres: ${x.from} til ${x.to}</div>`}).join('');aList.innerHTML=store.agreements.map(x=>`<div class="item"><b>${x.no}</b> <span class="badge">${x.type}</span><br>${x.cno} · ${x.c}<br>${x.scope||''}<br>${x.price||''} · ${x.payment}</div>`).join('');oList.innerHTML=store.offers.map(x=>`<div class="item"><b>${x.no}</b><br>${x.cno} · ${x.c}<br>${x.text||''}<br><b>${x.price||0} kr.</b></div>`).join('');matList.innerHTML=store.materials.map(x=>`<div class="item"><b>${x.name}</b><br>Antal: ${x.qty||0} · Pris: ${x.price||0} kr.</div>`).join('');empList.innerHTML=store.employees.map(x=>`<div class="item"><b>${x.name}</b><br>${x.role||''}<br>${x.phone||''}</div>`).join('');mList.innerHTML=store.machines.map(x=>`<div class="item"><b>${x.name}</b><br>Timer: ${x.hours||0}<br>Næste service: ${x.service||'Ikke sat'}<br>${x.note||''}</div>`).join('');fList.innerHTML=store.j.filter(x=>x.status=='Klar til faktura').map(x=>`<div class="item"><b>${x.no}</b><br>${x.c}<br>${x.s} · ${x.price||0} kr.</div>`).join('')||'<div class="item">Ingen klar til faktura.</div>';renderWeek('weekOne',0);renderWeek('weekTwo',1);
+dailyJobs.innerHTML=today.innerHTML;
+rList.innerHTML=store.risks.map(x=>`<div class="item"><b>${x.cno}</b> · ${x.c}<br><span class="badge red">${x.type}</span><br>${x.note}</div>`).join('')||'<div class="item">Ingen vigtige noter endnu.</div>';
+dList.innerHTML=store.deviations.map(x=>`<div class="item"><b>${x.date}</b> <span class="badge red">${x.type}</span><br>${x.c} · ${x.job||''}<br>${x.note}${x.img?`<br><img src="${x.img}" style="max-width:100%;border-radius:12px;margin-top:10px">`:''}</div>`).join('')||'<div class="item">Ingen afvigelser endnu.</div>';
+routeJobs.innerHTML=store.j.filter(x=>x.date==new Date().toISOString().slice(0,10)).map(x=>`<label class="item"><input class="routeChk" type="checkbox" value="${x.no}"> <b>${x.no}</b><br>${x.c}<br>${x.s}</label>`).join('')||'<div class="item">Ingen opgaver i dag.</div>';
+routeKm.oninput=calcRoute; routeRate.oninput=calcRoute; calcRoute();
+
+renderCal();renderChecklist(); if(document.getElementById('hCustomer')) renderHistory()}
 render()
 </script>
 </body></html>

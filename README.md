@@ -1,3 +1,3 @@
-# NHANLÆG FINAL V1
+# NHANLÆG FINAL V4
 
-Færdig stabil version med print, aftaler, tilbud, materialer og medarbejdere.
+Alt samlet: daglig tjekliste, risiko, afvigelser, rute/kørsel, historik og anonym print.
