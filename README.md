@@ -1,3 +1,3 @@
-# NHANLÆG PRO V7
+# NHANLÆG PRO PRINT
 
-Mere professionel udgave med sidebar, dashboard og forbedret UX.
+Professionel printklar version med aftaler, opgaver, driftsplan og fakturagrundlag.
