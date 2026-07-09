@@ -1,3 +1,3 @@
-# NHANLAEG Version 2
+# NHANLAEG Version 3
 
-Interaktiv HTML-version med dashboard, kunder, tilbud, opgaver, prisberegner, kalender og fakturagrundlag.
+Automatisk kundenummer, ydelseskoder, opgavenummer og klippeintervaller.
