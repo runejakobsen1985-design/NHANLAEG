@@ -1,11 +1,16 @@
-# Nordisk Have & Anlæg Driftsystem
+# Nordisk Have & Anlæg Driftsystem - Clean UI
 
-Professionel version med:
-- Større logo
-- Transparent logo uden sort baggrund
-- Renere professionelt header-design
-- Android PWA-filer
-- Alle tidligere moduler samlet
+Denne version fjerner den låste øverste knapbjælke og flytter printfunktioner ind under de relevante faner.
+
+Ændret:
+- Øverste knapbjælke skjult
+- Header er ikke længere sticky/låst
+- Print opgaver ligger under Arbejdsordrer
+- Print anonymt ligger under Arbejdsordrer/Kunder/Daglig tjekliste
+- Print aftaler ligger under Aftaler
+- Print rute ligger under Rute
+- Print risiko ligger under Risiko
+- Print afvigelser ligger under Afvigelser
 
 Upload/erstat alle filer i GitHub:
 - index.html

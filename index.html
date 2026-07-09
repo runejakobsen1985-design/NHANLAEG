@@ -10,7 +10,7 @@
 .app{display:grid;grid-template-columns:285px 1fr;min-height:100vh}.sidebar{background:linear-gradient(180deg,var(--forest),#071b12);color:white;padding:20px;position:sticky;top:0;height:100vh;overflow:auto}
 .brand{display:flex;gap:16px;align-items:center;margin-bottom:26px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.14)}.logo{width:92px;height:92px;border-radius:50%;object-fit:contain;background:transparent;box-shadow:none}.brand h1{font-size:21px;margin:0;line-height:1.12}.brand p{margin:6px 0 0;color:#dce9dd;font-size:14px;font-weight:700}
 .nav{display:grid;gap:7px}.nav button{width:100%;text-align:left;border:0;border-radius:14px;padding:13px 14px;font-weight:800;background:rgba(255,255,255,.08);color:#edf7ef}.nav button.active,.nav button:hover{background:var(--gold);color:#132018}
-.main{min-width:0}.topbar{background:rgba(255,255,255,.9);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;padding:16px 22px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.main{min-width:0}.topbar{background:transparent;border-bottom:0;position:relative;top:auto;z-index:1;padding:20px 22px 8px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.topbar>.toolbar{display:none}
 .title h2{margin:0;color:var(--forest);font-size:25px}.title p{margin:3px 0 0;color:var(--muted)}.content{padding:22px;max-width:1260px;margin:auto}
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:0 10px 30px rgba(13,47,32,.07);margin-bottom:16px}.stat{position:relative;overflow:hidden}.stat:before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--gold),var(--leaf))}
@@ -22,8 +22,21 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 .hidden{display:none}.code{font-family:monospace;background:#eef3eb;border-radius:8px;padding:3px 7px}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:9px}.day{min-height:112px;background:#fbfcf8;border:1px solid var(--line);border-radius:16px;padding:10px;font-size:13px}.event{background:#e8f4e7;border-radius:10px;padding:7px;margin-top:6px}
 .weather{border-left:7px solid var(--gold);background:linear-gradient(145deg,#f2fbf1,#fff)}.big{font-size:42px;font-weight:950;color:var(--forest)}.checks label{font-weight:600;background:#fbfcf8;border:1px solid var(--line);border-radius:12px;padding:11px;margin-top:8px;color:var(--text)}.checks input{width:auto;margin-right:8px}
 .mobilebar{display:none;background:var(--forest);color:white;padding:12px;align-items:center;justify-content:space-between}.mobilebar img{width:50px;height:50px;border-radius:50%;object-fit:contain;background:transparent}.printDoc{display:none}
-@media(max-width:900px){.app{display:block}.sidebar{display:none;height:auto;position:relative}.sidebar.open{display:block}.mobilebar{display:flex;position:sticky;top:0;z-index:20}.topbar{top:66px}.content{padding:14px}.grid4,.grid3,.grid2{grid-template-columns:1fr}.calendar{grid-template-columns:1fr}}
+@media(max-width:900px){.app{display:block}.sidebar{display:none;height:auto;position:relative}.sidebar.open{display:block}.mobilebar{display:flex;position:relative;top:auto;z-index:20}.topbar{top:auto}.content{padding:14px}.grid4,.grid3,.grid2{grid-template-columns:1fr}.calendar{grid-template-columns:1fr}}
 @media print{@page{size:A4;margin:14mm}html,body{background:white;color:#000}body *{visibility:hidden!important}.printDoc,.printDoc *{visibility:visible!important}.printDoc{display:block!important;position:absolute;left:0;top:0;width:100%;background:white;color:#000;font-family:Arial,sans-serif}.printHeader{display:flex;align-items:center;gap:14px;border-bottom:2px solid #0d2f20;padding-bottom:12px;margin-bottom:18px}.printHeader img{width:82px;height:82px;border-radius:50%;object-fit:contain;background:transparent}.printTitle h1{margin:0;font-size:22pt;color:#0d2f20}.printTitle p{margin:4px 0 0;font-size:10pt;color:#333}.printBlock{border:1px solid #ddd;border-radius:8px;padding:10px;margin-bottom:10px;page-break-inside:avoid}.printGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.printTable{width:100%;border-collapse:collapse;margin-top:8px}.printTable th,.printTable td{border:1px solid #ccc;padding:7px;text-align:left;font-size:10pt}.printTable th{background:#eef3eb}.printFooter{position:fixed;bottom:0;left:0;right:0;border-top:1px solid #ccc;padding-top:6px;font-size:9pt;color:#555}.noPrint{display:none!important}}
+
+/* Clean UI update */
+.topbar .title h2{font-size:34px;line-height:1.05}
+.topbar .title p{max-width:420px}
+.content{padding-top:10px}
+.card h2{font-size:28px}
+@media(max-width:900px){
+  .topbar{padding:28px 22px 10px}
+  .topbar .title h2{font-size:44px;max-width:340px}
+  .topbar .title p{font-size:20px;line-height:1.25}
+  .toolbar .btn{width:auto}
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -52,7 +65,7 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 <div class="card"><h2>📅 Ugens opgaver</h2><p class="muted">Denne uge fra mandag til søndag.</p><div class="list" id="weekOne"></div></div>
 <div class="card"><h2>📅 Uge nr. 2</h2><p class="muted">Næste uge fra mandag til søndag.</p><div class="list" id="weekTwo"></div></div></section>
 
-<section id="cust" class="hidden"><div class="card"><h2>Ny kunde</h2><div class="grid2"><div><label>Kundenavn</label><input id="cName"></div><div><label>Kundetype</label><select id="cType"></select></div></div><div class="grid2"><div><label>Kontaktperson</label><input id="cContact"></div><div><label>Telefon</label><input id="cPhone"></div></div><label>Adresse</label><input id="cAddr"><button class="btn" onclick="addCustomer()">Gem kunde</button></div><div class="card"><h2>Kundeliste</h2><div class="list" id="cList"></div></div></section>
+<section id="cust" class="hidden"><div class="card"><h2>Ny kunde</h2><div class="grid2"><div><label>Kundenavn</label><input id="cName"></div><div><label>Kundetype</label><select id="cType"></select></div></div><div class="grid2"><div><label>Kontaktperson</label><input id="cContact"></div><div><label>Telefon</label><input id="cPhone"></div></div><label>Adresse</label><input id="cAddr"><button class="btn" onclick="addCustomer()">Gem kunde</button></div><div class="card"><h2>Kundeliste</h2><div class="toolbar"><button class="btn secondary" onclick="printCustomerCards()">Print kundekort</button><button class="btn secondary" onclick="printAnonJobs()">Print anonyme opgaver</button></div><div class="list" id="cList"></div></div></section>
 
 
 <section id="history" class="hidden"><div class="card"><h2>Kundehistorik</h2>
@@ -72,7 +85,7 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 
 <section id="profile" class="hidden"><div class="card"><h2>Ejendomsprofil</h2><div class="grid2"><div><label>Kunde</label><select id="prCustomer"></select></div><div><label>GPS / kort-link</label><input id="prGps"></div></div><div class="grid3"><div><label>Græsareal m²</label><input id="prGrass" type="number"></div><div><label>Skråninger m²</label><input id="prSlope" type="number"></div><div><label>Hæk meter</label><input id="prHedge" type="number"></div><div><label>Fliser m²</label><input id="prTiles" type="number"></div><div><label>Tagrender meter</label><input id="prGutters" type="number"></div><div><label>Legeplads/grønne områder</label><input id="prPlayground"></div></div><label>Noter</label><textarea id="prNotes"></textarea><button class="btn" onclick="saveProfile()">Gem ejendomsprofil</button><button class="btn secondary" onclick="printProfiles()">Print ejendomsprofiler</button><div class="list" id="profileList"></div></div></section>
 
-<section id="job" class="hidden"><div class="card"><h2>Ny arbejdsordre</h2><div class="grid2"><div><label>Kunde</label><select id="jCustomer"></select></div><div><label>Ydelse</label><select id="jService"></select></div></div><div class="grid3"><div><label>Dato</label><input id="jDate" type="date"></div><div><label>Status</label><select id="jStatus"><option>Planlagt</option><option>I gang</option><option>Udført</option><option>Klar til faktura</option></select></div><div><label>Pris</label><input id="jPrice" type="number"></div></div><label>Note</label><textarea id="jNote"></textarea><button class="btn" onclick="addJob()">Gem arbejdsordre</button><button class="btn secondary" onclick="printAllJobs()">Print alle opgaver</button></div><div class="card"><h2>Arbejdsordrer</h2><div class="list" id="jList"></div></div></section>
+<section id="job" class="hidden"><div class="card"><h2>Ny arbejdsordre</h2><div class="grid2"><div><label>Kunde</label><select id="jCustomer"></select></div><div><label>Ydelse</label><select id="jService"></select></div></div><div class="grid3"><div><label>Dato</label><input id="jDate" type="date"></div><div><label>Status</label><select id="jStatus"><option>Planlagt</option><option>I gang</option><option>Udført</option><option>Klar til faktura</option></select></div><div><label>Pris</label><input id="jPrice" type="number"></div></div><label>Note</label><textarea id="jNote"></textarea><button class="btn" onclick="addJob()">Gem arbejdsordre</button><button class="btn secondary" onclick="printAllJobs()">Print alle opgaver</button><button class="btn secondary" onclick="printAnonJobs()">Print anonymt</button></div><div class="card"><h2>Arbejdsordrer</h2><div class="list" id="jList"></div></div></section>
 
 <section id="work" class="hidden"><div class="card"><h2>Udfør opgave</h2><label>Vælg opgave</label><select id="workJob" onchange="renderChecklist()"></select><div class="checks" id="checklist"></div><div class="grid2"><div><label>Starttid</label><input id="workStart" type="time"></div><div><label>Sluttid</label><input id="workEnd" type="time"></div></div><label>Billede før</label><input id="beforePhoto" type="file" accept="image/*"><label>Billede efter</label><input id="afterPhoto" type="file" accept="image/*"><label>Afslutningsnote</label><textarea id="workNote"></textarea><button class="btn" onclick="finishWork()">Afslut og klar til faktura</button><div id="workMsg"></div></div></section>
 
@@ -105,7 +118,7 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 <label><input type="checkbox"> Print / anonym arbejdsordre klar</label>
 <label><input type="checkbox"> Særlige kundenoter kontrolleret</label>
 </div>
-<button class="btn secondary" onclick="printDaily()">Print daglig tjekliste</button>
+<div class="toolbar"><button class="btn secondary" onclick="printDaily()">Print daglig tjekliste</button><button class="btn secondary" onclick="printAnonJobs()">Print dagens opgaver anonymt</button></div>
 <div class="card" style="margin-top:14px"><h2>Dagens opgaver</h2><div class="list" id="dailyJobs"></div></div>
 </div></section>
 
@@ -209,6 +222,12 @@ function printDaily(){let jobs=store.j.filter(x=>x.date==new Date().toISOString(
 function printRisks(){let rows=store.risks.map(x=>`<tr><td>${x.cno}</td><td>${x.c}</td><td>${x.type}</td><td>${x.note}</td></tr>`).join('');printShell('Vigtige kundenoter','Risiko / adgang / særlige forhold',table(['Kunde nr.','Kunde','Type','Note'],rows));}
 function printDeviations(){let rows=store.deviations.map(x=>`<tr><td>${x.date}</td><td>${x.c}</td><td>${x.job}</td><td>${x.type}</td><td>${x.note}</td></tr>`).join('');printShell('Afvigelsesrapporter','Skader, vejr, adgang og ekstraarbejde',table(['Dato','Kunde','Opgave','Type','Beskrivelse'],rows));}
 function printRoute(){let jobs=selectedRouteJobs();let rows=jobs.map(j=>{let c=store.c.find(x=>x.no==j.cno)||{};return `<tr><td>${j.no}</td><td>${j.s}</td><td>${c.addr||''}</td><td>${j.note||''}</td></tr>`}).join('');printShell('Dagens rute','Kørsel og arbejdsrækkefølge',`<div class="printBlock"><p><b>Start:</b> ${routeStart.value||''}<br><b>Kilometer:</b> ${routeKm.value||0}<br><b>Kørsel:</b> ${((+routeKm.value||0)*(+routeRate.value||0)).toLocaleString('da-DK')} kr.</p></div>`+table(['Opgave','Ydelse','Adresse','Note'],rows));}
+
+
+function printCustomerCards(){
+ let rows=store.c.map(c=>`<tr><td>${c.no}</td><td>${c.name}</td><td>${c.addr||''}</td><td>${c.contact||''}</td><td>${c.phone||''}</td></tr>`).join('');
+ printShell('Kundekort','Kundeoversigt',table(['Kundenr.','Kunde','Adresse','Kontakt','Telefon'],rows));
+}
 
 function printShell(title, subtitle, body){printArea.innerHTML=`<div class="printHeader"><img src="logo.png"><div class="printTitle"><h1>${title}</h1><p>${subtitle}</p><p>Nordisk Have & Anlæg · Udskrevet ${new Date().toLocaleDateString('da-DK')}</p></div></div>${body}<div class="printFooter">Nordisk Have & Anlæg Driftsystem · Side udskrevet fra systemet</div>`; setTimeout(()=>window.print(),100)}
 function table(headers, rows){return `<div class="printBlock"><table class="printTable"><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr>${rows}</table></div>`}
