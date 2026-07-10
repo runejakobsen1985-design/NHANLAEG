@@ -1,14 +1,13 @@
-# Nordisk Have & Anlæg Driftsystem – Version 1.1
+# Nordisk Have & Anlæg Driftsystem – Version 1.2
 
-## Nyheder
-- Før- og efterbilleder på arbejdsordrer
-- Kundens underskrift direkte på telefonen
-- Timer, materialer og kilometer på udført arbejde
-- Dokumentationshistorik pr. arbejdsordre
-- Printbar arbejdsrapport med billeder og underskrift
-- Rediger, kopiér og slet arbejdsordrer
-- Dashboard med dagens omsætning, åbne opgaver, tilbud der afventer og klar til faktura
-- Version 1.0-kunder, tilbud, faktura og PWA er bevaret
+## Rettet og opdateret
+- Åbne opgaver vises nu direkte på dashboardet
+- Alle åbne opgaver har en synlig **Rediger**-knap
+- Du kan ændre kunde, ydelse, dato, status, pris og note
+- Hurtigknapper til **I gang**, **Udført**, **Kopiér** og **Slet**
+- Arbejdsordrelisten har fortsat redigeringsfunktioner
+- Version 1.0 og 1.1-funktionerne er bevaret
+- PWA-cache er opdateret til Version 1.2
 
 ## Upload til GitHub
 Erstat/upload:
@@ -19,4 +18,4 @@ Erstat/upload:
 - icons/
 
 Commit:
-Version 1.1 - billeder underskrift arbejdsrapport dashboard
+Version 1.2 - rediger åbne opgaver

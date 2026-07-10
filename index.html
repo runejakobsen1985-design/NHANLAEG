@@ -104,7 +104,7 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 @media(max-width:520px){.invoiceStats{grid-template-columns:1fr}.invoiceCheck{grid-template-columns:auto 1fr}.invoiceCheck .invoiceAmount{grid-column:2}}
 
 
-/* Version 1.1 */
+/* Version 1.2 */
 .workSummary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
 .workSummary div{background:#fbfcf8;border:1px solid var(--line);border-radius:14px;padding:12px}
 .workSummary span{display:block;color:var(--muted);font-size:12px;font-weight:900;text-transform:uppercase}
@@ -163,7 +163,19 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 <div class="card stat"><span>Åbne opgaver</span><b id="v11OpenJobs">0</b></div>
 <div class="card stat"><span>Tilbud afventer</span><b id="v11PendingOffers">0</b></div>
 <div class="card stat"><span>Klar til faktura</span><b id="v11ReadyInvoice">0</b></div>
-</div><div class="grid4"><div class="card stat"><span>Kunder</span><b id="sC">0</b></div><div class="card stat"><span>Opgaver</span><b id="sJ">0</b></div><div class="card stat"><span>Klar faktura</span><b id="sF">0</b></div><div class="card stat"><span>Uge 1 / Uge 2</span><b><span id="sW1">0</span>/<span id="sW2">0</span></b></div></div><div class="grid2"><div class="card"><h2>Dagens drift</h2><div class="list" id="today"></div></div><div class="card weather"><h2>🌦️ Vejr-råd</h2><div class="big" id="wTemp">--°</div><p id="wText">Åbn Vejr og tryk “Hent vejr”.</p><span class="badge blue" id="wAdviceShort">Afventer data</span></div></div>
+</div>
+<div class="card">
+  <div class="financeHeader">
+    <div>
+      <span class="sectionEyebrow">Drift</span>
+      <h2>Åbne opgaver</h2>
+      <p class="muted">Rediger dato, status, pris og note direkte fra dashboardet.</p>
+    </div>
+    <button class="miniBtn" onclick="showById('job','Arbejdsordrer')">Se alle arbejdsordrer</button>
+  </div>
+  <div class="list" id="openJobsDashboard"></div>
+</div>
+<div class="grid4"><div class="card stat"><span>Kunder</span><b id="sC">0</b></div><div class="card stat"><span>Opgaver</span><b id="sJ">0</b></div><div class="card stat"><span>Klar faktura</span><b id="sF">0</b></div><div class="card stat"><span>Uge 1 / Uge 2</span><b><span id="sW1">0</span>/<span id="sW2">0</span></b></div></div><div class="grid2"><div class="card"><h2>Dagens drift</h2><div class="list" id="today"></div></div><div class="card weather"><h2>🌦️ Vejr-råd</h2><div class="big" id="wTemp">--°</div><p id="wText">Åbn Vejr og tryk “Hent vejr”.</p><span class="badge blue" id="wAdviceShort">Afventer data</span></div></div>
 <div class="card"><h2>📅 Ugens opgaver</h2><p class="muted">Denne uge fra mandag til søndag.</p><div class="list" id="weekOne"></div></div>
 <div class="card"><h2>📅 Uge nr. 2</h2><p class="muted">Næste uge fra mandag til søndag.</p><div class="list" id="weekTwo"></div></div></section>
 
@@ -868,10 +880,10 @@ render=function(){originalRenderV1();renderVersion1();};
 renderVersion1();
 </script>
 <script>
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=1.1').catch(console.error));}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=1.2').catch(console.error));}
 </script>
 <script>
-// Version 1.1
+// Version 1.2
 function dataUrlFromFileV11(file){
   return new Promise(resolve=>{
     if(!file){resolve('');return;}
@@ -956,12 +968,38 @@ function printWorkReportV11(){
   printShell('Arbejdsrapport',job.no+' · '+job.c,`<div class="printBlock"><p><b>Ydelse:</b> ${job.s}<br><b>Dato:</b> ${job.date||''}<br><b>Timer:</b> ${x.hours||0}<br><b>Materialer:</b> ${moneyV1(x.materials||0)}<br><b>Kørsel:</b> ${x.km||0} km</p><p><b>Udført arbejde:</b><br>${x.note||''}</p></div>${photos}${sig}`);
 }
 function editJobV11(i){
-  const j=store.j[i];if(!j)return;
-  const date=prompt('Dato',j.date||'');if(date===null)return;
-  const status=prompt('Status',j.status||'Planlagt');if(status===null)return;
-  const price=prompt('Pris',j.price||0);if(price===null)return;
-  const note=prompt('Note',j.note||'');if(note===null)return;
-  Object.assign(j,{date,status,price:+price||0,note});persist();
+  const j=store.j[i];
+  if(!j)return;
+
+  const customerNo=prompt('Kundenummer',j.cno||'');
+  if(customerNo===null)return;
+  const customer=store.c.find(x=>x.no===customerNo.trim()) || store.c.find(x=>x.no===j.cno);
+
+  const serviceCode=prompt('Ydelseskode (fx G, HK, FR, EA)',j.sc||'EA');
+  if(serviceCode===null)return;
+
+  const date=prompt('Dato (ÅÅÅÅ-MM-DD)',j.date||'');
+  if(date===null)return;
+
+  const status=prompt('Status: Planlagt / I gang / Udført / Klar til faktura / Faktureret',j.status||'Planlagt');
+  if(status===null)return;
+
+  const price=prompt('Pris ekskl. moms',j.price||0);
+  if(price===null)return;
+
+  const note=prompt('Note',j.note||'');
+  if(note===null)return;
+
+  j.cno=customer ? customer.no : customerNo.trim();
+  j.c=customer ? customer.name : j.c;
+  j.sc=serviceCode.trim().toUpperCase()||j.sc;
+  j.s=sname(j.sc);
+  j.date=date.trim();
+  j.status=status.trim()||j.status;
+  j.price=Number(price)||0;
+  j.note=note;
+
+  persist();
 }
 function renderJobsV11(){
   const root=document.getElementById('jList');if(!root)return;
@@ -982,5 +1020,51 @@ const renderBeforeV11=render;
 render=function(){renderBeforeV11();renderJobsV11();renderDashboardV11();renderWorkHistoryV11();initWorkSignatureV11();};
 window.addEventListener('load',()=>{initWorkSignatureV11();renderDashboardV11();renderWorkHistoryV11();});
 render();
+</script>
+<script>
+function setJobStatusV12(i,status){
+  if(!store.j[i])return;
+  store.j[i].status=status;
+  persist();
+}
+
+function renderOpenJobsDashboardV12(){
+  const root=document.getElementById('openJobsDashboard');
+  if(!root)return;
+
+  const open=store.j
+    .map((x,i)=>({...x,_index:i}))
+    .filter(x=>!['Klar til faktura','Faktureret'].includes(x.status))
+    .sort((a,b)=>(a.date||'9999-12-31').localeCompare(b.date||'9999-12-31'));
+
+  root.innerHTML=open.map(x=>`
+    <div class="item">
+      <div class="offerTop">
+        <div>
+          <b>${x.no}</b>
+          <span class="badge ${x.status==='I gang'?'blue':'yellow'}">${x.status||'Planlagt'}</span><br>
+          ${x.c}<br>
+          ${x.s} · ${x.date||'Ingen dato'}
+        </div>
+        <b class="offerAmount">${moneyV1(x.price||0)}</b>
+      </div>
+      <p>${x.note||''}</p>
+      <div class="actionRow">
+        <button class="miniBtn" onclick="editJobV11(${x._index})">✏️ Rediger</button>
+        <button class="miniBtn" onclick="setJobStatusV12(${x._index},'I gang')">▶️ I gang</button>
+        <button class="miniBtn" onclick="setJobStatusV12(${x._index},'Udført')">✅ Udført</button>
+        <button class="miniBtn copy" onclick="copyJob(${x._index})">📋 Kopiér</button>
+        <button class="miniBtn danger" onclick="moveToTrash('j',${x._index},'${x.no}')">🗑️ Slet</button>
+      </div>
+    </div>
+  `).join('')||'<div class="item">Ingen åbne opgaver.</div>';
+}
+
+const renderBeforeV12=render;
+render=function(){
+  renderBeforeV12();
+  renderOpenJobsDashboardV12();
+};
+renderOpenJobsDashboardV12();
 </script>
 </body></html>
