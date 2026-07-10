@@ -9,3 +9,6 @@ Upload/erstat alle filer i GitHub:
 - README.md
 
 Denne version er klar til brug i morgen.
+## Test
+
+Redigeret fra GitSync på Android.
