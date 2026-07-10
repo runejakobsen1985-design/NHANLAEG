@@ -76,17 +76,47 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
   .dashboardHero h2{font-size:30px}.heroActions{width:100%}.heroActions .btn{flex:1;min-width:140px}
 }
 
+
+/* Version 1.0 */
+.searchBar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.searchBar input{margin:0;flex:1;min-width:220px}
+.quickLinks{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.quickLinks a,.quickLinks button{border:0;text-decoration:none;border-radius:10px;padding:8px 10px;font-weight:800;background:#eef5eb;color:#0d2f20}
+.quickLinks .map{background:#dbeafe;color:#1d4ed8}
+.quickLinks .call{background:#dcfce7;color:#166534}
+.quickLinks .mail{background:#fef3c7;color:#92400e}
+.financeHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.financeHeader h2{margin:0}
+.pricePreview{margin-top:18px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fbfcf8}
+.pricePreview>div{display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line)}
+.pricePreview>div:last-child{border-bottom:0}
+.pricePreview .total{background:var(--forest);color:white}
+.pricePreview .total span,.pricePreview .total b{color:white;font-size:18px}
+.invoiceStats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+.invoiceStats div{background:#fbfcf8;border:1px solid var(--line);border-radius:16px;padding:15px}
+.invoiceStats span{display:block;color:var(--muted);font-size:12px;font-weight:900;text-transform:uppercase}
+.invoiceStats b{display:block;color:var(--forest);font-size:22px;margin-top:6px}
+.invoiceCheck{display:grid!important;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.invoiceCheck input{width:22px;height:22px;margin:0}
+.offerTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.offerAmount{font-size:20px;color:var(--forest)}
+@media(max-width:900px){.invoiceStats{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.invoiceStats{grid-template-columns:1fr}.invoiceCheck{grid-template-columns:auto 1fr}.invoiceCheck .invoiceAmount{grid-column:2}}
+
 </style>
 
-<meta name="application-name" content="Nordisk Have & Anlæg">
-<link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0d2f20">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Nordisk Have & Anlæg">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="NH&A Drift">
-<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=2">
-<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=2">
+<meta name="apple-mobile-web-app-title" content="Nordisk Have & Anlæg">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0d2f20">
+<link rel="icon" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
 </head>
 <body>
 <div id="printArea" class="printDoc"></div>
@@ -116,7 +146,10 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 <div class="card"><h2>📅 Ugens opgaver</h2><p class="muted">Denne uge fra mandag til søndag.</p><div class="list" id="weekOne"></div></div>
 <div class="card"><h2>📅 Uge nr. 2</h2><p class="muted">Næste uge fra mandag til søndag.</p><div class="list" id="weekTwo"></div></div></section>
 
-<section id="cust" class="hidden"><div class="card"><h2>Ny kunde</h2><div class="grid2"><div><label>Kundenavn</label><input id="cName"></div><div><label>Kundetype</label><select id="cType"></select></div></div><div class="grid2"><div><label>Kontaktperson</label><input id="cContact"></div><div><label>Telefon</label><input id="cPhone"></div></div><label>Adresse</label><input id="cAddr"><button class="btn" onclick="addCustomer()">Gem kunde</button></div><div class="card"><h2>Kundeliste</h2><div class="toolbar"><button class="btn secondary" onclick="printCustomerCards()">Print kundekort</button><button class="btn secondary" onclick="printAnonJobs()">Print anonyme opgaver</button></div><div class="list" id="cList"></div></div></section>
+<section id="cust" class="hidden"><div class="card"><h2>Ny kunde</h2><div class="grid2"><div><label>Kundenavn</label><input id="cName"></div><div><label>Kundetype</label><select id="cType"></select></div></div><div class="grid2"><div><label>Kontaktperson</label><input id="cContact"></div><div><label>Telefon</label><input id="cPhone"></div></div><label>Adresse</label><input id="cAddr"><button class="btn" onclick="addCustomer()">Gem kunde</button></div><div class="card"><h2>Kundeliste</h2>
+<div class="searchBar"><input id="customerSearch" placeholder="Søg efter navn, telefon, adresse eller kundenummer" oninput="renderCustomerListV1()"><button class="miniBtn" onclick="customerSearch.value='';renderCustomerListV1()">Ryd søgning</button></div>
+<div class="toolbar"><button class="btn secondary" onclick="printCustomerCards()">Print kundekort</button><button class="btn secondary" onclick="printAnonJobs()">Print anonyme opgaver</button></div>
+<div class="list" id="cList"></div></div></section>
 
 
 <section id="history" class="hidden"><div class="card"><h2>Kundehistorik</h2>
@@ -230,7 +263,40 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 
 <section id="agreements" class="hidden"><div class="card"><h2>Samarbejds-/driftaftale</h2><div class="grid2"><div><label>Kunde</label><select id="aCustomer"></select></div><div><label>Aftaletype</label><select id="aType"><option>Samarbejdsaftale</option><option>Driftaftale</option><option>Serviceaftale</option></select></div></div><label>Ydelser / omfang</label><textarea id="aScope"></textarea><div class="grid3"><div><label>Prisgrundlag</label><input id="aPrice"></div><div><label>Betaling</label><select id="aPayment"><option>8 dage netto</option><option>14 dage netto</option><option>30 dage netto</option><option>EAN-fakturering</option></select></div><div><label>Opsigelse</label><select id="aNotice"><option>1 måned</option><option>3 måneder</option><option>6 måneder</option></select></div></div><label>Særlige vilkår</label><textarea id="aTerms"></textarea><button class="btn" onclick="addAgreement()">Gem aftale</button><button class="btn secondary" onclick="printAgreements()">Print aftaler</button><p class="muted">Få standardskabelonen juridisk gennemgået før bindende brug.</p><div class="list" id="aList"></div></div></section>
 
-<section id="offers" class="hidden"><div class="card"><h2>Tilbud</h2><div class="grid2"><div><label>Kunde</label><select id="oCustomer"></select></div><div><label>Tilbudspris</label><input id="oPrice" type="number"></div></div><label>Tilbudstekst</label><textarea id="oText"></textarea><button class="btn" onclick="addOffer()">Gem tilbud</button><button class="btn secondary" onclick="printOffers()">Print tilbud</button><div class="list" id="oList"></div></div></section>
+
+<section id="offers" class="hidden">
+  <div class="card">
+    <div class="financeHeader">
+      <div><span class="sectionEyebrow">Salg</span><h2>Nyt tilbud</h2><p class="muted">Timer, materialer, kørsel, rabat og moms beregnes automatisk.</p></div>
+      <span class="badge blue" id="offerLiveTotal">0 kr. ekskl. moms</span>
+    </div>
+    <div class="grid3">
+      <div><label>Kunde</label><select id="oCustomer"></select></div>
+      <div><label>Gyldig til</label><input id="oValid" type="date"></div>
+      <div><label>Status</label><select id="oStatus"><option>Kladde</option><option>Sendt</option><option>Accepteret</option><option>Afvist</option></select></div>
+    </div>
+    <label>Tilbudstekst</label><textarea id="oText" placeholder="Beskriv arbejdets omfang og forudsætninger"></textarea>
+    <div class="grid3">
+      <div><label>Fast pris / arbejde</label><input id="oPrice" type="number" value="0" oninput="calcOfferV1()"></div>
+      <div><label>Timer</label><input id="oHours" type="number" value="0" step="0.25" oninput="calcOfferV1()"></div>
+      <div><label>Timepris</label><input id="oRate" type="number" value="450" oninput="calcOfferV1()"></div>
+      <div><label>Materialer</label><input id="oMaterials" type="number" value="0" oninput="calcOfferV1()"></div>
+      <div><label>Kørsel</label><input id="oTravel" type="number" value="0" oninput="calcOfferV1()"></div>
+      <div><label>Rabat %</label><input id="oDiscount" type="number" value="0" min="0" max="100" oninput="calcOfferV1()"></div>
+    </div>
+    <div class="pricePreview">
+      <div><span>Subtotal</span><b id="offerSubtotal">0 kr.</b></div>
+      <div><span>Rabat</span><b id="offerDiscountValue">0 kr.</b></div>
+      <div><span>Moms 25%</span><b id="offerVat">0 kr.</b></div>
+      <div class="total"><span>Total inkl. moms</span><b id="offerTotal">0 kr.</b></div>
+    </div>
+    <div class="toolbar"><button class="btn" onclick="addOfferV1()">Gem tilbud</button><button class="btn secondary" onclick="printOffersV1()">Print tilbud</button></div>
+  </div>
+  <div class="card">
+    <div class="financeHeader"><div><span class="sectionEyebrow">Oversigt</span><h2>Tilbud</h2></div></div>
+    <div class="list" id="oList"></div>
+  </div>
+</section>
 
 <section id="materials" class="hidden"><div class="card"><h2>Materialer</h2><div class="grid3"><div><label>Materiale</label><input id="matName"></div><div><label>Antal</label><input id="matQty" type="number"></div><div><label>Pris</label><input id="matPrice" type="number"></div></div><button class="btn" onclick="addMaterial()">Gem materiale</button><div class="list" id="matList"></div></div></section>
 
@@ -240,7 +306,33 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 
 <section id="machines" class="hidden"><div class="card"><h2>Maskinregister</h2><div class="grid3"><div><label>Maskine</label><input id="mName"></div><div><label>Timer</label><input id="mHours" type="number"></div><div><label>Næste service</label><input id="mService" type="date"></div></div><label>Note</label><textarea id="mNote"></textarea><button class="btn" onclick="addMachine()">Gem maskine</button><div class="list" id="mList"></div></div></section>
 
-<section id="invoice" class="hidden"><div class="card"><h2>Fakturagrundlag</h2><button class="btn secondary" onclick="printInvoices()">Print fakturagrundlag</button><div class="list" id="fList"></div></div></section>
+
+<section id="invoice" class="hidden">
+  <div class="card">
+    <div class="financeHeader">
+      <div><span class="sectionEyebrow">Økonomi</span><h2>Fakturagrundlag</h2><p class="muted">Vælg afsluttede opgaver og saml arbejde, materialer og kørsel.</p></div>
+      <span class="badge ok" id="invoiceSelectedCount">0 valgt</span>
+    </div>
+    <div class="invoiceStats">
+      <div><span>Klar til faktura</span><b id="invoiceReadyCount">0</b></div>
+      <div><span>Ekskl. moms</span><b id="invoiceWorkSum">0 kr.</b></div>
+      <div><span>Moms</span><b id="invoiceVatSum">0 kr.</b></div>
+      <div><span>Inkl. moms</span><b id="invoiceGrandSum">0 kr.</b></div>
+    </div>
+    <div class="grid3">
+      <div><label>Ekstra materialer</label><input id="invoiceMaterials" type="number" value="0" oninput="calcInvoiceV1()"></div>
+      <div><label>Kilometer</label><input id="invoiceKm" type="number" value="0" oninput="calcInvoiceV1()"></div>
+      <div><label>Pris pr. km</label><input id="invoiceKmRate" type="number" value="4" oninput="calcInvoiceV1()"></div>
+    </div>
+    <div class="toolbar">
+      <button class="btn secondary" onclick="selectAllInvoiceJobsV1(true)">Vælg alle</button>
+      <button class="btn secondary" onclick="selectAllInvoiceJobsV1(false)">Fravælg alle</button>
+      <button class="btn" onclick="printSelectedInvoicesV1()">Print fakturagrundlag</button>
+      <button class="btn" onclick="markSelectedInvoicedV1()">Markér faktureret</button>
+    </div>
+  </div>
+  <div class="card"><h2>Opgaver klar til faktura</h2><div class="list" id="fList"></div></div>
+</section>
 
 <section id="daily" class="hidden"><div class="card"><h2>Daglig tjekliste</h2>
 <p class="muted">Bruges om morgenen før bilen kører.</p>
@@ -590,18 +682,128 @@ window.addEventListener('load',()=>{
 });
 </script>
 
-
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      const reg = await navigator.serviceWorker.register('./sw.js?v=2');
-      reg.update();
-    } catch (error) {
-      console.log('Service worker fejl:', error);
-    }
-  });
-}
-</script>
+// Version 1.0
+function moneyV1(v){return (Number(v)||0).toLocaleString('da-DK',{minimumFractionDigits:2,maximumFractionDigits:2})+' kr.';}
 
+function copyCustomer(i){
+  const c=store.c[i]; if(!c)return;
+  const copy={...c,no:cno(c.type),name:(c.name||'')+' (kopi)'};
+  store.c.push(copy); persist();
+}
+function renderCustomerListV1(){
+  const root=document.getElementById('cList'); if(!root)return;
+  const q=(document.getElementById('customerSearch')?.value||'').trim().toLowerCase();
+  const rows=store.c.map((x,i)=>({x,i})).filter(({x})=>!q||[x.no,x.name,x.contact,x.phone,x.addr,tname(x.type)].join(' ').toLowerCase().includes(q));
+  root.innerHTML=rows.map(({x,i})=>{
+    const tel=(x.phone||'').replace(/\s+/g,'');
+    const mail=(x.email||'').trim();
+    const maps='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(x.addr||x.name||'');
+    return `<div class="item"><b>${x.no}</b> <span class="badge">${tname(x.type)}</span><br>${x.name}<br>${x.contact||''}${x.phone?' · '+x.phone:''}<br>${x.addr||''}
+      <div class="quickLinks">
+        ${tel?`<a class="call" href="tel:${tel}">📞 Ring</a>`:''}
+        ${mail?`<a class="mail" href="mailto:${mail}">✉️ Mail</a>`:''}
+        <a class="map" href="${maps}" target="_blank">🗺️ Kort</a>
+      </div>
+      <div class="actionRow">
+        <button class="miniBtn" onclick="editCustomerV1(${i})">✏️ Rediger</button>
+        <button class="miniBtn copy" onclick="copyCustomer(${i})">📋 Kopiér</button>
+        <button class="miniBtn danger" onclick="moveToTrash('c',${i},'${x.no}')">🗑️ Slet</button>
+      </div></div>`;
+  }).join('')||'<div class="item">Ingen kunder fundet.</div>';
+}
+function editCustomerV1(i){
+  const c=store.c[i]; if(!c)return;
+  const name=prompt('Kundenavn',c.name||''); if(name===null)return;
+  const contact=prompt('Kontaktperson',c.contact||''); if(contact===null)return;
+  const phone=prompt('Telefon',c.phone||''); if(phone===null)return;
+  const email=prompt('E-mail',c.email||''); if(email===null)return;
+  const addr=prompt('Adresse',c.addr||''); if(addr===null)return;
+  const type=prompt('Kundetypekode (fx PRI, ERH, GF)',c.type||'PRI'); if(type===null)return;
+  Object.assign(c,{name:name.trim(),contact:contact.trim(),phone:phone.trim(),email:email.trim(),addr:addr.trim(),type:(type.trim().toUpperCase()||c.type)});
+  ['j','p','e','profiles','agreements','offers','history','risks','deviations','documents','signatures'].forEach(k=>(store[k]||[]).forEach(x=>{if(x.cno===c.no)x.c=c.name;}));
+  persist();
+}
+
+function offerNumbersV1(){
+  const base=+oPrice.value||0,hours=+oHours.value||0,rate=+oRate.value||0,materials=+oMaterials.value||0,travel=+oTravel.value||0;
+  const discountPct=Math.min(100,Math.max(0,+oDiscount.value||0));
+  const beforeDiscount=base+hours*rate+materials+travel;
+  const discount=beforeDiscount*discountPct/100;
+  const subtotal=beforeDiscount-discount,vat=subtotal*.25,total=subtotal+vat;
+  return {base,hours,rate,materials,travel,discountPct,beforeDiscount,discount,subtotal,vat,total};
+}
+function calcOfferV1(){
+  if(!document.getElementById('oPrice'))return;
+  const n=offerNumbersV1();
+  offerSubtotal.textContent=moneyV1(n.beforeDiscount);
+  offerDiscountValue.textContent='- '+moneyV1(n.discount);
+  offerVat.textContent=moneyV1(n.vat);
+  offerTotal.textContent=moneyV1(n.total);
+  offerLiveTotal.textContent=moneyV1(n.subtotal)+' ekskl. moms';
+}
+function addOfferV1(){
+  const c=store.c.find(x=>x.no==oCustomer.value); if(!c)return alert('Vælg kunde');
+  const n=offerNumbersV1();
+  store.offers.push({no:'TIL-'+String(store.offers.length+1).padStart(3,'0'),cno:c.no,c:c.name,text:oText.value,date:new Date().toISOString().slice(0,10),valid:oValid.value,status:oStatus.value,price:n.subtotal,total:n.total,vat:n.vat,base:n.base,hours:n.hours,rate:n.rate,materials:n.materials,travel:n.travel,discount:n.discountPct});
+  oText.value='';oPrice.value=0;oHours.value=0;oMaterials.value=0;oTravel.value=0;oDiscount.value=0;persist();calcOfferV1();
+}
+function editOfferV1(i){
+  const x=store.offers[i]; if(!x)return;
+  const text=prompt('Tilbudstekst',x.text||''); if(text===null)return;
+  const price=prompt('Pris ekskl. moms',x.price||0); if(price===null)return;
+  const status=prompt('Status: Kladde / Sendt / Accepteret / Afvist',x.status||'Kladde'); if(status===null)return;
+  x.text=text;x.price=+price||0;x.status=status;x.vat=x.price*.25;x.total=x.price+x.vat;persist();
+}
+function offerToJobV1(i){
+  const o=store.offers[i]; if(!o)return;
+  const c=store.c.find(x=>x.no===o.cno); if(!c)return alert('Kunden findes ikke');
+  store.j.push({no:jno(c.no,'EA'),cno:c.no,c:c.name,sc:'EA',s:'Ekstraarbejde',date:'',status:'Planlagt',price:o.price||0,note:'Fra tilbud '+o.no+': '+(o.text||'')});
+  o.status='Accepteret';persist();alert('Tilbuddet er omdannet til arbejdsordre.');
+}
+function printOffersV1(){
+  const body=store.offers.map(x=>`<div class="printBlock"><h2>Tilbud ${x.no}</h2><p><b>Kunde:</b> ${x.cno} · ${x.c}<br><b>Dato:</b> ${x.date||''}<br><b>Gyldig til:</b> ${x.valid||''}<br><b>Status:</b> ${x.status||'Kladde'}</p><p>${x.text||''}</p><table class="printTable"><tr><th>Total ekskl. moms</th><td>${moneyV1(x.price||0)}</td></tr><tr><th>Moms 25%</th><td>${moneyV1(x.vat||((x.price||0)*.25))}</td></tr><tr><th>Total inkl. moms</th><td><b>${moneyV1(x.total||((x.price||0)*1.25))}</b></td></tr></table></div>`).join('');
+  printShell('Tilbud','Nordisk Have & Anlæg',body||'<div class="printBlock">Ingen tilbud.</div>');
+}
+
+function selectedInvoiceJobsV1(){return Array.from(document.querySelectorAll('.invoiceJobChk:checked')).map(x=>store.j[Number(x.value)]).filter(Boolean);}
+function calcInvoiceV1(){
+  if(!document.getElementById('invoiceWorkSum'))return;
+  const jobs=selectedInvoiceJobsV1(),work=jobs.reduce((s,x)=>s+(+x.price||0),0),materials=+invoiceMaterials.value||0,km=+invoiceKm.value||0,rate=+invoiceKmRate.value||0;
+  const subtotal=work+materials+km*rate,vat=subtotal*.25;
+  invoiceSelectedCount.textContent=jobs.length+' valgt';invoiceWorkSum.textContent=moneyV1(subtotal);invoiceVatSum.textContent=moneyV1(vat);invoiceGrandSum.textContent=moneyV1(subtotal+vat);
+}
+function selectAllInvoiceJobsV1(v){document.querySelectorAll('.invoiceJobChk').forEach(x=>x.checked=v);calcInvoiceV1();}
+function printSelectedInvoicesV1(){
+  const jobs=selectedInvoiceJobsV1(); if(!jobs.length)return alert('Vælg mindst én opgave');
+  const work=jobs.reduce((s,x)=>s+(+x.price||0),0),materials=+invoiceMaterials.value||0,km=+invoiceKm.value||0,rate=+invoiceKmRate.value||0,subtotal=work+materials+km*rate,vat=subtotal*.25;
+  const rows=jobs.map(x=>`<tr><td>${x.no}</td><td>${x.c}</td><td>${x.s}</td><td>${moneyV1(x.price||0)}</td></tr>`).join('');
+  printShell('Fakturagrundlag','Klar til e-conomic',table(['Opgave','Kunde','Ydelse','Beløb'],rows)+`<div class="printBlock"><p>Ekstra materialer: ${moneyV1(materials)}<br>Kørsel: ${km} km × ${moneyV1(rate)} = ${moneyV1(km*rate)}</p><h3>Subtotal: ${moneyV1(subtotal)}</h3><p>Moms: ${moneyV1(vat)}</p><h2>Total inkl. moms: ${moneyV1(subtotal+vat)}</h2></div>`);
+}
+function markSelectedInvoicedV1(){
+  const indexes=Array.from(document.querySelectorAll('.invoiceJobChk:checked')).map(x=>Number(x.value));
+  if(!indexes.length)return alert('Vælg mindst én opgave');
+  if(!confirm('Markér de valgte opgaver som faktureret?'))return;
+  indexes.forEach(i=>{if(store.j[i])store.j[i].status='Faktureret';});persist();
+}
+function renderVersion1(){
+  renderCustomerListV1();
+  if(document.getElementById('oList')){
+    oList.innerHTML=store.offers.map((x,i)=>{const st=x.status||'Kladde';const badge=st==='Accepteret'?'ok':st==='Afvist'?'red':st==='Sendt'?'blue':'yellow';return `<div class="item"><div class="offerTop"><div><b>${x.no}</b> <span class="badge ${badge}">${st}</span><br>${x.cno} · ${x.c}</div><b class="offerAmount">${moneyV1(x.price||0)}</b></div><p>${x.text||''}</p><div class="actionRow"><button class="miniBtn" onclick="editOfferV1(${i})">✏️ Rediger</button><button class="miniBtn copy" onclick="offerToJobV1(${i})">🚚 Til arbejdsordre</button><button class="miniBtn danger" onclick="moveToTrash('offers',${i},'${x.no}')">🗑️ Slet</button></div></div>`;}).join('')||'<div class="item">Ingen tilbud endnu.</div>';
+  }
+  if(document.getElementById('fList')){
+    const ready=store.j.map((x,i)=>({...x,_index:i})).filter(x=>x.status==='Klar til faktura');
+    invoiceReadyCount.textContent=ready.length;
+    fList.innerHTML=ready.map(x=>`<label class="item invoiceCheck"><input class="invoiceJobChk" type="checkbox" value="${x._index}" onchange="calcInvoiceV1()" checked><span><b>${x.no}</b><br>${x.c}<br>${x.s} · ${x.date||'Ingen dato'}</span><b class="invoiceAmount">${moneyV1(x.price||0)}</b></label>`).join('')||'<div class="item">Ingen opgaver klar til faktura.</div>';
+    calcInvoiceV1();
+  }
+  calcOfferV1();
+}
+const originalRenderV1=render;
+render=function(){originalRenderV1();renderVersion1();};
+renderVersion1();
+</script>
+<script>
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(console.error));}
+</script>
 </body></html>

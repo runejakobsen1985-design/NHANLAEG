@@ -1,21 +1,21 @@
-# Nordisk Have & Anlæg – PWA ikonrettelse
+# Nordisk Have & Anlæg Driftsystem – Version 1.0
 
-Denne pakke retter det grå standardikon og bruger Nordisk Have & Anlæg-logoet som appikon.
+## Bygget
+- Kunde: søg, rediger, kopiér, slet, ring og åbn kort
+- Tilbud: timer, timepris, materialer, kørsel, rabat, moms og status
+- Tilbud kan omdannes til arbejdsordre
+- Fakturagrundlag: vælg flere opgaver, materialer, kilometer, moms og print
+- Markér opgaver som faktureret
+- Installerbar PWA med korrekt ikon og offline-cache
+- Eksisterende kunder, opgaver, kalender, dokumenter og lokale data bevares
 
-## Upload disse filer til roden af GitHub-repositoryet
-- `index.html`
-- `manifest.json`
-- `sw.js`
-- `logo.png`
-- hele mappen `icons/`
+## Upload til GitHub
+Upload/erstat:
+- index.html
+- manifest.json
+- sw.js
+- logo.png
+- hele mappen icons/
 
-## Commit-besked
-`Ret appikon og PWA-installation`
-
-## Efter Vercel er færdig
-1. Fjern den gamle genvej/app fra telefonens startskærm.
-2. Åbn siden i Chrome.
-3. Åbn browsermenuen og vælg **Installer app** eller **Føj til startskærm**.
-4. Det grønne Nordisk Have & Anlæg-logo skal nu vises.
-
-Det gamle grå ikon kan være gemt i telefonens cache, så den gamle installation skal fjernes først.
+Commit-besked:
+Version 1.0 - kunder tilbud faktura og app
