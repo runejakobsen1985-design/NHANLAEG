@@ -1,14 +1,25 @@
-# Nordisk Have & Anlæg Driftsystem - Drift klar i morgen
+# Nordisk Have & Anlæg Driftsystem — Sprint 4
 
-Upload/erstat alle filer i GitHub:
-- index.html
-- logo.png
-- manifest.json
-- sw.js
-- icons/ hvis mappen findes
-- README.md
+## Bygget
+- Professionel ugekalender
+- Forrige, denne og næste uge
+- Træk opgaver mellem dage
+- Statusfiltrering
+- Medarbejdertildeling
+- Liste over opgaver uden medarbejder
+- Dagens rute med Google Maps
+- Mobilvenlig kalender
+- Sprint 2-dashboard og alle eksisterende funktioner bevaret
 
-Denne version er klar til brug i morgen.
-## Test
+## Installation
+Erstat den eksisterende `index.html` med denne fil.
 
-Redigeret fra GitSync på Android.
+Commit-besked:
+`Sprint 4 - kalender og planlægning`
+
+Derefter:
+1. Stage
+2. Commit
+3. Push Changes
+4. Vent på Vercel
+5. Genindlæs appen

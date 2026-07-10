@@ -43,6 +43,39 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 .miniBtn.danger{background:#fee2e2;color:#b91c1c}
 .miniBtn.copy{background:#dbeafe;color:#1d4ed8}
 
+
+/* Sprint 4 - Kalender og planlægning */
+.dashboardHero{
+  background:linear-gradient(135deg,var(--forest),var(--forest2));
+  color:white;border-radius:26px;padding:24px;margin-bottom:18px;
+  box-shadow:0 18px 42px rgba(13,47,32,.18);
+  display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;
+}
+.dashboardHero h2{color:white;margin:6px 0 8px;font-size:34px}
+.dashboardHero p{margin:0;color:#e7f0e9;max-width:650px}
+.dashboardEyebrow,.sectionEyebrow{display:block;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.dashboardEyebrow{color:#d6e7d9}.sectionEyebrow{color:var(--leaf);margin-bottom:5px}
+.heroActions{display:flex;gap:10px;flex-wrap:wrap}.heroActions .btn{margin:0}
+.heroPrimary{background:var(--gold);color:var(--forest)}.heroSecondary{background:white;color:var(--forest)}
+.calendarHeader{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.calendarControls{display:flex;gap:8px;flex-wrap:wrap}
+.planningCalendar{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.planDay{min-height:230px;background:#fbfcf8;border:1px solid var(--line);border-radius:18px;padding:12px}
+.planDay.today{border:2px solid var(--gold);background:#fffdf5}
+.planDay.dragOver{outline:3px solid rgba(31,122,67,.25);background:#eef8ee}
+.planDayHeader{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:10px}
+.planDayHeader b{color:var(--forest)}.planDayHeader small{color:var(--muted)}
+.planTask{background:white;border:1px solid var(--line);border-left:5px solid var(--leaf);border-radius:12px;padding:10px;margin-top:8px;cursor:grab;box-shadow:0 5px 14px rgba(13,47,32,.05)}
+.planTask.inProgress{border-left-color:var(--blue)}.planTask.done{border-left-color:#16a34a}.planTask.invoice{border-left-color:#9333ea}.planTask.unassigned{background:#fff7ed}
+.planTask b,.planTask span,.planTask small{display:block}.planTask span{margin-top:3px}.planTask small{color:var(--muted);margin-top:5px}
+.routeCheck{display:flex!important;gap:10px;align-items:center}.routeCheck input{width:auto;margin:0}
+@media(max-width:1050px){.planningCalendar{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){
+  .planningCalendar{grid-template-columns:1fr}
+  .calendarControls{width:100%}.calendarControls .miniBtn{flex:1}
+  .dashboardHero h2{font-size:30px}.heroActions{width:100%}.heroActions .btn{flex:1;min-width:140px}
+}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -67,7 +100,19 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 <header class="topbar"><div class="title"><h2 id="pageTitle">Dashboard</h2><p id="pageSub">Professionel ejendomsservice · ordrestyring · planlægning · dokumentation</p></div><div class="toolbar"><button class="btn secondary" onclick="printAllJobs()">Print opgaver</button><button class="btn secondary" onclick="printAnonJobs()">Print anonymt</button><button class="btn secondary" onclick="printAgreements()">Print aftaler</button><button class="btn" onclick="showById('job','Arbejdsordrer')">+ Opgave</button></div></header>
 <div class="content">
 
-<section id="dash"><div class="card" style="border-left:7px solid var(--gold)"><h2>DRIFT KLAR TIL I MORGEN</h2><p class="muted">Stabil version til kunder, opgaver, kalender, print, billeder, aftaler, påmindelser og fakturagrundlag.</p></div><div class="grid4"><div class="card stat"><span>Kunder</span><b id="sC">0</b></div><div class="card stat"><span>Opgaver</span><b id="sJ">0</b></div><div class="card stat"><span>Klar faktura</span><b id="sF">0</b></div><div class="card stat"><span>Uge 1 / Uge 2</span><b><span id="sW1">0</span>/<span id="sW2">0</span></b></div></div><div class="grid2"><div class="card"><h2>Dagens drift</h2><div class="list" id="today"></div></div><div class="card weather"><h2>🌦️ Vejr-råd</h2><div class="big" id="wTemp">--°</div><p id="wText">Åbn Vejr og tryk “Hent vejr”.</p><span class="badge blue" id="wAdviceShort">Afventer data</span></div></div>
+<section id="dash">
+<div class="dashboardHero">
+  <div>
+    <span class="dashboardEyebrow">Nordisk Have & Anlæg Driftsystem</span>
+    <h2>God arbejdsdag 👋</h2>
+    <p>Overblik over dagens drift, kunder, opgaver, vejr og fakturagrundlag.</p>
+  </div>
+  <div class="heroActions">
+    <button class="btn heroPrimary" onclick="showById('cust','Kunder')">+ Ny kunde</button>
+    <button class="btn heroSecondary" onclick="showById('job','Arbejdsordrer')">+ Ny opgave</button>
+    <button class="btn heroSecondary" onclick="showById('cal','Kalender')">Åbn kalender</button>
+  </div>
+</div><div class="grid4"><div class="card stat"><span>Kunder</span><b id="sC">0</b></div><div class="card stat"><span>Opgaver</span><b id="sJ">0</b></div><div class="card stat"><span>Klar faktura</span><b id="sF">0</b></div><div class="card stat"><span>Uge 1 / Uge 2</span><b><span id="sW1">0</span>/<span id="sW2">0</span></b></div></div><div class="grid2"><div class="card"><h2>Dagens drift</h2><div class="list" id="today"></div></div><div class="card weather"><h2>🌦️ Vejr-råd</h2><div class="big" id="wTemp">--°</div><p id="wText">Åbn Vejr og tryk “Hent vejr”.</p><span class="badge blue" id="wAdviceShort">Afventer data</span></div></div>
 <div class="card"><h2>📅 Ugens opgaver</h2><p class="muted">Denne uge fra mandag til søndag.</p><div class="list" id="weekOne"></div></div>
 <div class="card"><h2>📅 Uge nr. 2</h2><p class="muted">Næste uge fra mandag til søndag.</p><div class="list" id="weekTwo"></div></div></section>
 
@@ -97,7 +142,91 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 
 <section id="plan" class="hidden"><div class="card"><h2>Klippeplan</h2><div class="grid3"><div><label>Kunde</label><select id="pCustomer"></select></div><div><label>Ydelse</label><select id="pService"><option value="G">Græsslåning</option><option value="SK">Skråningsklipning</option></select></div><div><label>Interval</label><select id="pInt"><option value="8">Hver 8. dag ±2 dage</option><option value="10">Hver 10. dag ±2 dage</option><option value="14">Hver 14. dag ±2 dage</option><option value="30">1 gang pr. måned ±2 dage</option></select></div></div><div class="grid2"><div><label>Sidst udført</label><input id="pLast" type="date"></div><div><label>Tolerance</label><input id="pTol" type="number" value="2"></div></div><button class="btn" onclick="addPlan()">Gem klippeaftale</button><button class="btn secondary" onclick="printPlans()">Print driftsplan</button><div class="list" id="pList"></div></div></section>
 
-<section id="cal" class="hidden"><div class="card"><h2>Kalender</h2><div class="grid3"><div><label>Dato</label><input id="eDate" type="date"></div><div><label>Kunde</label><select id="eCustomer"></select></div><div><label>Ydelse</label><select id="eService"></select></div></div><label>Note</label><input id="eNote"><button class="btn" onclick="addEvent()">Tilføj kalender</button><button class="btn secondary" onclick="printCalendar()">Print kalender</button></div><div class="card"><h2>Næste 7 dage</h2><div class="calendar" id="calGrid"></div></div></section>
+
+<section id="cal" class="hidden">
+  <div class="card">
+    <div class="calendarHeader">
+      <div>
+        <span class="sectionEyebrow">Planlægning</span>
+        <h2>Kalender & ugeplan</h2>
+        <p class="muted">Flyt opgaver mellem dage, filtrér på status og planlæg medarbejdere.</p>
+      </div>
+      <div class="calendarControls">
+        <button class="miniBtn" onclick="changeCalendarWeek(-1)">← Forrige uge</button>
+        <button class="miniBtn" onclick="changeCalendarWeek(0)">Denne uge</button>
+        <button class="miniBtn" onclick="changeCalendarWeek(1)">Næste uge →</button>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div>
+        <label>Dato</label>
+        <input id="eDate" type="date">
+      </div>
+      <div>
+        <label>Kunde</label>
+        <select id="eCustomer"></select>
+      </div>
+      <div>
+        <label>Ydelse</label>
+        <select id="eService"></select>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div>
+        <label>Medarbejder</label>
+        <select id="eEmployee"><option value="">Ikke tildelt</option></select>
+      </div>
+      <div>
+        <label>Starttid</label>
+        <input id="eTime" type="time">
+      </div>
+      <div>
+        <label>Statusfilter</label>
+        <select id="calStatusFilter" onchange="renderPlanningCalendar()">
+          <option value="">Alle</option>
+          <option>Planlagt</option>
+          <option>I gang</option>
+          <option>Udført</option>
+          <option>Klar til faktura</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Note</label>
+    <input id="eNote">
+
+    <div class="toolbar">
+      <button class="btn" onclick="addPlanningEvent()">Tilføj i kalender</button>
+      <button class="btn secondary" onclick="printCalendar()">Print kalender</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="calendarHeader">
+      <div>
+        <span class="sectionEyebrow">Ugevisning</span>
+        <h2 id="calendarWeekTitle">Denne uge</h2>
+      </div>
+      <span class="badge blue">Træk kort til en ny dag</span>
+    </div>
+    <div class="planningCalendar" id="planningCalendar"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Opgaver uden medarbejder</h2>
+      <div class="list" id="unassignedJobs"></div>
+    </div>
+    <div class="card">
+      <h2>Dagens rute</h2>
+      <p class="muted">Åbn de valgte adresser i Google Maps.</p>
+      <div class="list" id="calendarRouteJobs"></div>
+      <button class="btn" onclick="openCalendarRoute()">Åbn dagens rute</button>
+    </div>
+  </div>
+</section>
 
 <section id="agreements" class="hidden"><div class="card"><h2>Samarbejds-/driftaftale</h2><div class="grid2"><div><label>Kunde</label><select id="aCustomer"></select></div><div><label>Aftaletype</label><select id="aType"><option>Samarbejdsaftale</option><option>Driftaftale</option><option>Serviceaftale</option></select></div></div><label>Ydelser / omfang</label><textarea id="aScope"></textarea><div class="grid3"><div><label>Prisgrundlag</label><input id="aPrice"></div><div><label>Betaling</label><select id="aPayment"><option>8 dage netto</option><option>14 dage netto</option><option>30 dage netto</option><option>EAN-fakturering</option></select></div><div><label>Opsigelse</label><select id="aNotice"><option>1 måned</option><option>3 måneder</option><option>6 måneder</option></select></div></div><label>Særlige vilkår</label><textarea id="aTerms"></textarea><button class="btn" onclick="addAgreement()">Gem aftale</button><button class="btn secondary" onclick="printAgreements()">Print aftaler</button><p class="muted">Få standardskabelonen juridisk gennemgået før bindende brug.</p><div class="list" id="aList"></div></div></section>
 
@@ -460,6 +589,115 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+
+// Sprint 4 - Kalender og planlægning
+let calendarWeekOffset = 0;
+
+function isoLocal(d){
+  const x = new Date(d.getTime() - d.getTimezoneOffset()*60000);
+  return x.toISOString().slice(0,10);
+}
+function calendarMonday(offset=0){
+  const d = new Date();
+  d.setHours(0,0,0,0);
+  const day = d.getDay() || 7;
+  d.setDate(d.getDate() - day + 1 + offset*7);
+  return d;
+}
+function changeCalendarWeek(direction){
+  calendarWeekOffset = direction === 0 ? 0 : calendarWeekOffset + direction;
+  renderPlanningCalendar();
+}
+function addPlanningEvent(){
+  const c = store.c.find(x=>x.no==eCustomer.value);
+  if(!c || !eDate.value) return alert('Vælg kunde og dato');
+  const emp = store.employees[Number(eEmployee.value)] || null;
+  store.e.push({
+    id:Date.now(),
+    date:eDate.value,
+    c:c.name,
+    cno:c.no,
+    s:sname(eService.value),
+    sc:eService.value,
+    note:eNote.value,
+    time:eTime.value,
+    employee:emp ? emp.name : '',
+    status:'Planlagt'
+  });
+  eDate.value=''; eNote.value=''; eTime.value='';
+  persist();
+}
+function moveCalendarItem(kind,index,newDate){
+  if(kind==='job' && store.j[index]) store.j[index].date=newDate;
+  if(kind==='event' && store.e[index]) store.e[index].date=newDate;
+  persist();
+}
+function renderPlanningCalendar(){
+  const root=document.getElementById('planningCalendar');
+  if(!root) return;
+  const monday=calendarMonday(calendarWeekOffset);
+  const sunday=new Date(monday); sunday.setDate(monday.getDate()+6);
+  const filter=document.getElementById('calStatusFilter')?.value||'';
+  calendarWeekTitle.textContent=monday.toLocaleDateString('da-DK',{day:'numeric',month:'long'})+' – '+sunday.toLocaleDateString('da-DK',{day:'numeric',month:'long',year:'numeric'});
+  let html='';
+  for(let i=0;i<7;i++){
+    const d=new Date(monday); d.setDate(monday.getDate()+i);
+    const ds=isoLocal(d);
+    const today=ds===isoLocal(new Date());
+    const jobs=store.j.map((x,index)=>({...x,_kind:'job',_index:index})).filter(x=>x.date===ds && (!filter||x.status===filter));
+    const events=store.e.map((x,index)=>({...x,_kind:'event',_index:index,status:x.status||'Planlagt'})).filter(x=>x.date===ds && (!filter||(x.status||'Planlagt')===filter));
+    const items=[...jobs,...events];
+    html+=`<div class="planDay ${today?'today':''}" data-date="${ds}" ondragover="event.preventDefault();this.classList.add('dragOver')" ondragleave="this.classList.remove('dragOver')" ondrop="event.preventDefault();this.classList.remove('dragOver');const p=event.dataTransfer.getData('text/plain').split(':');moveCalendarItem(p[0],Number(p[1]),'${ds}')">
+      <div class="planDayHeader"><div><b>${d.toLocaleDateString('da-DK',{weekday:'short'})}</b><small>${d.toLocaleDateString('da-DK',{day:'numeric',month:'numeric'})}</small></div><span class="badge">${items.length}</span></div>
+      ${items.map(x=>{
+        const cls=x.status==='I gang'?'inProgress':x.status==='Udført'?'done':x.status==='Klar til faktura'?'invoice':(!x.employee?'unassigned':'');
+        return `<div draggable="true" ondragstart="event.dataTransfer.setData('text/plain','${x._kind}:${x._index}')" class="planTask ${cls}">
+          <b>${x.time?x.time+' · ':''}${x.c||''}</b>
+          <span>${x.s||''}</span>
+          <small>${x.employee||'Ikke tildelt'} · ${x.status||'Planlagt'}</small>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+  root.innerHTML=html;
+
+  const unassigned=[
+    ...store.j.map((x,index)=>({...x,_kind:'job',_index:index})).filter(x=>!x.employee),
+    ...store.e.map((x,index)=>({...x,_kind:'event',_index:index})).filter(x=>!x.employee)
+  ];
+  unassignedJobs.innerHTML=unassigned.map(x=>`<div class="item"><b>${x.date||'Ingen dato'} · ${x.c||''}</b><br>${x.s||''}<br><span class="badge yellow">Ikke tildelt</span></div>`).join('')||'<div class="item">Alle opgaver er tildelt.</div>';
+
+  const today=isoLocal(new Date());
+  const routeItems=[
+    ...store.j.filter(x=>x.date===today),
+    ...store.e.filter(x=>x.date===today)
+  ];
+  calendarRouteJobs.innerHTML=routeItems.map((x,i)=>`<label class="item routeCheck"><input class="calendarRouteChk" type="checkbox" value="${x.cno||''}" checked><span><b>${x.c||''}</b><br>${x.s||''}</span></label>`).join('')||'<div class="item">Ingen opgaver i dag.</div>';
+}
+function openCalendarRoute(){
+  const start=document.getElementById('routeStart')?.value||'';
+  const selected=Array.from(document.querySelectorAll('.calendarRouteChk:checked')).map(x=>x.value);
+  const addresses=selected.map(cno=>store.c.find(c=>c.no===cno)?.addr).filter(Boolean);
+  const parts=[start,...addresses].filter(Boolean);
+  if(!parts.length) return alert('Ingen adresser fundet');
+  window.open('https://www.google.com/maps/dir/'+parts.map(encodeURIComponent).join('/'),'_blank');
+}
+function populatePlanningEmployees(){
+  const select=document.getElementById('eEmployee');
+  if(!select) return;
+  select.innerHTML='<option value="">Ikke tildelt</option>'+store.employees.map((x,i)=>`<option value="${i}">${x.name}</option>`).join('');
+}
+
+</script>
+
+
+<script>
+window.addEventListener('load',()=>{
+  try{
+    populatePlanningEmployees();
+    renderPlanningCalendar();
+  }catch(e){console.warn('Sprint 4 kalender:',e)}
+});
 </script>
 
 </body></html>
