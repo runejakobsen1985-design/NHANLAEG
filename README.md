@@ -1,21 +1,21 @@
-# Nordisk Have & Anlæg Driftsystem – installerbar app
+# Nordisk Have & Anlæg – PWA ikonrettelse
 
-Denne pakke gør websiden til en PWA, som kan installeres på telefonens startskærm.
+Denne pakke retter det grå standardikon og bruger Nordisk Have & Anlæg-logoet som appikon.
 
-## Filer
+## Upload disse filer til roden af GitHub-repositoryet
 - `index.html`
 - `manifest.json`
 - `sw.js`
 - `logo.png`
-- `icons/`
+- hele mappen `icons/`
 
-## Upload
-Erstat/upload alle filerne i GitHub-repositoryets rodmappe. Bevar mappen `icons`.
+## Commit-besked
+`Ret appikon og PWA-installation`
 
-Commit-besked:
-`Gør driftsystemet installerbart som app`
+## Efter Vercel er færdig
+1. Fjern den gamle genvej/app fra telefonens startskærm.
+2. Åbn siden i Chrome.
+3. Åbn browsermenuen og vælg **Installer app** eller **Føj til startskærm**.
+4. Det grønne Nordisk Have & Anlæg-logo skal nu vises.
 
-Når Vercel er færdig:
-1. Åbn siden i Chrome på telefonen.
-2. Tryk på knappen **Installer app**, når den vises.
-3. Alternativt: Chrome-menu → **Føj til startskærm** eller **Installer app**.
+Det gamle grå ikon kan være gemt i telefonens cache, så den gamle installation skal fjernes først.

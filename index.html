@@ -76,31 +76,19 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
   .dashboardHero h2{font-size:30px}.heroActions{width:100%}.heroActions .btn{flex:1;min-width:140px}
 }
 
-
-/* Installerbar app */
-#installAppBtn{
-  display:none;position:fixed;right:16px;bottom:18px;z-index:9999;
-  border:0;border-radius:16px;padding:14px 18px;font-weight:900;
-  background:#d7b35b;color:#0d2f20;box-shadow:0 12px 32px rgba(13,47,32,.28);
-}
-#installAppBtn.show{display:block}
-@media(max-width:900px){#installAppBtn{left:14px;right:14px;width:calc(100% - 28px)}}
-
 </style>
 
-<link rel="manifest" href="manifest.json">
+<meta name="application-name" content="Nordisk Have & Anlæg">
+<link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#0d2f20">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="application-name" content="Nordisk Have & Anlæg">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Nordisk Have & Anlæg">
-<link rel="icon" href="icons/icon-192.png">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NH&A Drift">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png?v=2">
 </head>
 <body>
-<button id="installAppBtn" type="button">📲 Installer app</button>
-
 <div id="printArea" class="printDoc"></div>
 <div class="mobilebar noPrint"><div style="display:flex;gap:10px;align-items:center"><img src="logo.png"><b>Nordisk Have & Anlæg</b></div><button class="btn secondary" onclick="toggleMenu()" style="margin:0">Menu</button></div>
 <div class="app noPrint">
@@ -594,116 +582,6 @@ render()
 </script>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js').catch(function(error) {
-      console.log('ServiceWorker fejl:', error);
-    });
-  });
-}
-
-// Sprint 4 - Kalender og planlægning
-let calendarWeekOffset = 0;
-
-function isoLocal(d){
-  const x = new Date(d.getTime() - d.getTimezoneOffset()*60000);
-  return x.toISOString().slice(0,10);
-}
-function calendarMonday(offset=0){
-  const d = new Date();
-  d.setHours(0,0,0,0);
-  const day = d.getDay() || 7;
-  d.setDate(d.getDate() - day + 1 + offset*7);
-  return d;
-}
-function changeCalendarWeek(direction){
-  calendarWeekOffset = direction === 0 ? 0 : calendarWeekOffset + direction;
-  renderPlanningCalendar();
-}
-function addPlanningEvent(){
-  const c = store.c.find(x=>x.no==eCustomer.value);
-  if(!c || !eDate.value) return alert('Vælg kunde og dato');
-  const emp = store.employees[Number(eEmployee.value)] || null;
-  store.e.push({
-    id:Date.now(),
-    date:eDate.value,
-    c:c.name,
-    cno:c.no,
-    s:sname(eService.value),
-    sc:eService.value,
-    note:eNote.value,
-    time:eTime.value,
-    employee:emp ? emp.name : '',
-    status:'Planlagt'
-  });
-  eDate.value=''; eNote.value=''; eTime.value='';
-  persist();
-}
-function moveCalendarItem(kind,index,newDate){
-  if(kind==='job' && store.j[index]) store.j[index].date=newDate;
-  if(kind==='event' && store.e[index]) store.e[index].date=newDate;
-  persist();
-}
-function renderPlanningCalendar(){
-  const root=document.getElementById('planningCalendar');
-  if(!root) return;
-  const monday=calendarMonday(calendarWeekOffset);
-  const sunday=new Date(monday); sunday.setDate(monday.getDate()+6);
-  const filter=document.getElementById('calStatusFilter')?.value||'';
-  calendarWeekTitle.textContent=monday.toLocaleDateString('da-DK',{day:'numeric',month:'long'})+' – '+sunday.toLocaleDateString('da-DK',{day:'numeric',month:'long',year:'numeric'});
-  let html='';
-  for(let i=0;i<7;i++){
-    const d=new Date(monday); d.setDate(monday.getDate()+i);
-    const ds=isoLocal(d);
-    const today=ds===isoLocal(new Date());
-    const jobs=store.j.map((x,index)=>({...x,_kind:'job',_index:index})).filter(x=>x.date===ds && (!filter||x.status===filter));
-    const events=store.e.map((x,index)=>({...x,_kind:'event',_index:index,status:x.status||'Planlagt'})).filter(x=>x.date===ds && (!filter||(x.status||'Planlagt')===filter));
-    const items=[...jobs,...events];
-    html+=`<div class="planDay ${today?'today':''}" data-date="${ds}" ondragover="event.preventDefault();this.classList.add('dragOver')" ondragleave="this.classList.remove('dragOver')" ondrop="event.preventDefault();this.classList.remove('dragOver');const p=event.dataTransfer.getData('text/plain').split(':');moveCalendarItem(p[0],Number(p[1]),'${ds}')">
-      <div class="planDayHeader"><div><b>${d.toLocaleDateString('da-DK',{weekday:'short'})}</b><small>${d.toLocaleDateString('da-DK',{day:'numeric',month:'numeric'})}</small></div><span class="badge">${items.length}</span></div>
-      ${items.map(x=>{
-        const cls=x.status==='I gang'?'inProgress':x.status==='Udført'?'done':x.status==='Klar til faktura'?'invoice':(!x.employee?'unassigned':'');
-        return `<div draggable="true" ondragstart="event.dataTransfer.setData('text/plain','${x._kind}:${x._index}')" class="planTask ${cls}">
-          <b>${x.time?x.time+' · ':''}${x.c||''}</b>
-          <span>${x.s||''}</span>
-          <small>${x.employee||'Ikke tildelt'} · ${x.status||'Planlagt'}</small>
-        </div>`;
-      }).join('')}
-    </div>`;
-  }
-  root.innerHTML=html;
-
-  const unassigned=[
-    ...store.j.map((x,index)=>({...x,_kind:'job',_index:index})).filter(x=>!x.employee),
-    ...store.e.map((x,index)=>({...x,_kind:'event',_index:index})).filter(x=>!x.employee)
-  ];
-  unassignedJobs.innerHTML=unassigned.map(x=>`<div class="item"><b>${x.date||'Ingen dato'} · ${x.c||''}</b><br>${x.s||''}<br><span class="badge yellow">Ikke tildelt</span></div>`).join('')||'<div class="item">Alle opgaver er tildelt.</div>';
-
-  const today=isoLocal(new Date());
-  const routeItems=[
-    ...store.j.filter(x=>x.date===today),
-    ...store.e.filter(x=>x.date===today)
-  ];
-  calendarRouteJobs.innerHTML=routeItems.map((x,i)=>`<label class="item routeCheck"><input class="calendarRouteChk" type="checkbox" value="${x.cno||''}" checked><span><b>${x.c||''}</b><br>${x.s||''}</span></label>`).join('')||'<div class="item">Ingen opgaver i dag.</div>';
-}
-function openCalendarRoute(){
-  const start=document.getElementById('routeStart')?.value||'';
-  const selected=Array.from(document.querySelectorAll('.calendarRouteChk:checked')).map(x=>x.value);
-  const addresses=selected.map(cno=>store.c.find(c=>c.no===cno)?.addr).filter(Boolean);
-  const parts=[start,...addresses].filter(Boolean);
-  if(!parts.length) return alert('Ingen adresser fundet');
-  window.open('https://www.google.com/maps/dir/'+parts.map(encodeURIComponent).join('/'),'_blank');
-}
-function populatePlanningEmployees(){
-  const select=document.getElementById('eEmployee');
-  if(!select) return;
-  select.innerHTML='<option value="">Ikke tildelt</option>'+store.employees.map((x,i)=>`<option value="${i}">${x.name}</option>`).join('');
-}
-
-</script>
-
-
-<script>
 window.addEventListener('load',()=>{
   try{
     populatePlanningEmployees();
@@ -714,30 +592,16 @@ window.addEventListener('load',()=>{
 
 
 <script>
-let deferredInstallPrompt = null;
-const installAppBtn = document.getElementById('installAppBtn');
-
-window.addEventListener('beforeinstallprompt', (event) => {
-  event.preventDefault();
-  deferredInstallPrompt = event;
-  installAppBtn.classList.add('show');
-});
-
-installAppBtn.addEventListener('click', async () => {
-  if (!deferredInstallPrompt) {
-    alert('Åbn browsermenuen og vælg “Føj til startskærm” eller “Installer app”.');
-    return;
-  }
-  deferredInstallPrompt.prompt();
-  await deferredInstallPrompt.userChoice;
-  deferredInstallPrompt = null;
-  installAppBtn.classList.remove('show');
-});
-
-window.addEventListener('appinstalled', () => {
-  installAppBtn.classList.remove('show');
-  deferredInstallPrompt = null;
-});
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('./sw.js?v=2');
+      reg.update();
+    } catch (error) {
+      console.log('Service worker fejl:', error);
+    }
+  });
+}
 </script>
 
 </body></html>
