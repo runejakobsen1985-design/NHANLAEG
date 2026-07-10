@@ -103,6 +103,22 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 @media(max-width:900px){.invoiceStats{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.invoiceStats{grid-template-columns:1fr}.invoiceCheck{grid-template-columns:auto 1fr}.invoiceCheck .invoiceAmount{grid-column:2}}
 
+
+/* Version 1.1 */
+.workSummary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.workSummary div{background:#fbfcf8;border:1px solid var(--line);border-radius:14px;padding:12px}
+.workSummary span{display:block;color:var(--muted);font-size:12px;font-weight:900;text-transform:uppercase}
+.workSummary b{display:block;color:var(--forest);font-size:20px;margin-top:5px}
+.photoGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.photoGrid figure{margin:0;background:#fbfcf8;border:1px solid var(--line);border-radius:14px;padding:8px}
+.photoGrid img{width:100%;max-height:240px;object-fit:cover;border-radius:10px}
+.photoGrid figcaption{font-size:12px;font-weight:900;color:var(--muted);margin-top:6px}
+.signatureBox{border:1px solid #cfd8ca;border-radius:14px;background:white;touch-action:none;width:100%;height:190px}
+.dashboardMoney{font-size:26px!important}
+.reportCard{border-left:6px solid var(--leaf)}
+@media(max-width:900px){.workSummary{grid-template-columns:1fr 1fr}.photoGrid{grid-template-columns:1fr}}
+@media(max-width:520px){.workSummary{grid-template-columns:1fr}}
+
 </style>
 
 <meta name="theme-color" content="#0d2f20">
@@ -142,6 +158,11 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
     <button class="btn heroSecondary" onclick="showById('job','Arbejdsordrer')">+ Ny opgave</button>
     <button class="btn heroSecondary" onclick="showById('cal','Kalender')">Åbn kalender</button>
   </div>
+</div><div class="grid4">
+<div class="card stat"><span>Dagens omsætning</span><b class="dashboardMoney" id="v11TodayRevenue">0 kr.</b></div>
+<div class="card stat"><span>Åbne opgaver</span><b id="v11OpenJobs">0</b></div>
+<div class="card stat"><span>Tilbud afventer</span><b id="v11PendingOffers">0</b></div>
+<div class="card stat"><span>Klar til faktura</span><b id="v11ReadyInvoice">0</b></div>
 </div><div class="grid4"><div class="card stat"><span>Kunder</span><b id="sC">0</b></div><div class="card stat"><span>Opgaver</span><b id="sJ">0</b></div><div class="card stat"><span>Klar faktura</span><b id="sF">0</b></div><div class="card stat"><span>Uge 1 / Uge 2</span><b><span id="sW1">0</span>/<span id="sW2">0</span></b></div></div><div class="grid2"><div class="card"><h2>Dagens drift</h2><div class="list" id="today"></div></div><div class="card weather"><h2>🌦️ Vejr-råd</h2><div class="big" id="wTemp">--°</div><p id="wText">Åbn Vejr og tryk “Hent vejr”.</p><span class="badge blue" id="wAdviceShort">Afventer data</span></div></div>
 <div class="card"><h2>📅 Ugens opgaver</h2><p class="muted">Denne uge fra mandag til søndag.</p><div class="list" id="weekOne"></div></div>
 <div class="card"><h2>📅 Uge nr. 2</h2><p class="muted">Næste uge fra mandag til søndag.</p><div class="list" id="weekTwo"></div></div></section>
@@ -171,7 +192,50 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 
 <section id="job" class="hidden"><div class="card"><h2>Ny arbejdsordre</h2><div class="grid2"><div><label>Kunde</label><select id="jCustomer"></select></div><div><label>Ydelse</label><select id="jService"></select></div></div><div class="grid3"><div><label>Dato</label><input id="jDate" type="date"></div><div><label>Status</label><select id="jStatus"><option>Planlagt</option><option>I gang</option><option>Udført</option><option>Klar til faktura</option></select></div><div><label>Pris</label><input id="jPrice" type="number"></div></div><label>Note</label><textarea id="jNote"></textarea><button class="btn" onclick="addJob()">Gem arbejdsordre</button><button class="btn secondary" onclick="printAllJobs()">Print alle opgaver</button><button class="btn secondary" onclick="printAnonJobs()">Print anonymt</button></div><div class="card"><h2>Arbejdsordrer</h2><div class="list" id="jList"></div></div></section>
 
-<section id="work" class="hidden"><div class="card"><h2>Udfør opgave</h2><label>Vælg opgave</label><select id="workJob" onchange="renderChecklist()"></select><div class="checks" id="checklist"></div><div class="grid2"><div><label>Starttid</label><input id="workStart" type="time"></div><div><label>Sluttid</label><input id="workEnd" type="time"></div></div><label>Billede før</label><input id="beforePhoto" type="file" accept="image/*"><label>Billede efter</label><input id="afterPhoto" type="file" accept="image/*"><label>Afslutningsnote</label><textarea id="workNote"></textarea><button class="btn" onclick="finishWork()">Afslut og klar til faktura</button><div id="workMsg"></div></div></section>
+
+<section id="work" class="hidden">
+  <div class="card">
+    <h2>Udfør opgave</h2>
+    <label>Vælg opgave</label>
+    <select id="workJob" onchange="renderChecklist();renderWorkHistoryV11()"></select>
+    <div class="checks" id="checklist"></div>
+
+    <div class="grid3">
+      <div><label>Starttid</label><input id="workStart" type="time"></div>
+      <div><label>Sluttid</label><input id="workEnd" type="time"></div>
+      <div><label>Ekstra timer</label><input id="workExtraHours" type="number" min="0" step="0.25" value="0"></div>
+    </div>
+
+    <div class="grid3">
+      <div><label>Materialer i kr.</label><input id="workMaterials" type="number" min="0" value="0"></div>
+      <div><label>Kilometer</label><input id="workKm" type="number" min="0" value="0"></div>
+      <div><label>Pris pr. km</label><input id="workKmRate" type="number" min="0" value="4"></div>
+    </div>
+
+    <div class="grid2">
+      <div><label>Billede før</label><input id="beforePhoto" type="file" accept="image/*" capture="environment"></div>
+      <div><label>Billede efter</label><input id="afterPhoto" type="file" accept="image/*" capture="environment"></div>
+    </div>
+
+    <label>Afslutningsnote</label>
+    <textarea id="workNote" placeholder="Beskriv det udførte arbejde"></textarea>
+
+    <label>Kundens underskrift</label>
+    <canvas id="workSigCanvas" width="900" height="300" class="signatureBox"></canvas>
+    <div class="toolbar">
+      <button class="btn secondary" onclick="clearWorkSignatureV11()">Ryd underskrift</button>
+      <button class="btn" onclick="finishWorkV11()">Afslut og klar til faktura</button>
+      <button class="btn secondary" onclick="printWorkReportV11()">Print arbejdsrapport</button>
+    </div>
+
+    <div id="workMsg"></div>
+  </div>
+
+  <div class="card">
+    <h2>Dokumentation på valgt opgave</h2>
+    <div class="list" id="workHistoryV11"></div>
+  </div>
+</section>
 
 <section id="plan" class="hidden"><div class="card"><h2>Klippeplan</h2><div class="grid3"><div><label>Kunde</label><select id="pCustomer"></select></div><div><label>Ydelse</label><select id="pService"><option value="G">Græsslåning</option><option value="SK">Skråningsklipning</option></select></div><div><label>Interval</label><select id="pInt"><option value="8">Hver 8. dag ±2 dage</option><option value="10">Hver 10. dag ±2 dage</option><option value="14">Hver 14. dag ±2 dage</option><option value="30">1 gang pr. måned ±2 dage</option></select></div></div><div class="grid2"><div><label>Sidst udført</label><input id="pLast" type="date"></div><div><label>Tolerance</label><input id="pTol" type="number" value="2"></div></div><button class="btn" onclick="addPlan()">Gem klippeaftale</button><button class="btn secondary" onclick="printPlans()">Print driftsplan</button><div class="list" id="pList"></div></div></section>
 
@@ -804,6 +868,119 @@ render=function(){originalRenderV1();renderVersion1();};
 renderVersion1();
 </script>
 <script>
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(console.error));}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=1.1').catch(console.error));}
+</script>
+<script>
+// Version 1.1
+function dataUrlFromFileV11(file){
+  return new Promise(resolve=>{
+    if(!file){resolve('');return;}
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result||'');
+    reader.onerror=()=>resolve('');
+    reader.readAsDataURL(file);
+  });
+}
+function durationHoursV11(start,end){
+  if(!start||!end)return 0;
+  const [sh,sm]=start.split(':').map(Number),[eh,em]=end.split(':').map(Number);
+  let mins=(eh*60+em)-(sh*60+sm);
+  if(mins<0)mins+=24*60;
+  return Math.round((mins/60)*100)/100;
+}
+let workSigDrawingV11=false,workSigCtxV11=null;
+function initWorkSignatureV11(){
+  const c=document.getElementById('workSigCanvas'); if(!c||c.dataset.ready)return;
+  c.dataset.ready='1'; workSigCtxV11=c.getContext('2d');
+  workSigCtxV11.lineWidth=4;workSigCtxV11.lineCap='round';workSigCtxV11.strokeStyle='#0d2f20';
+  const point=e=>{const r=c.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:(t.clientX-r.left)*(c.width/r.width),y:(t.clientY-r.top)*(c.height/r.height)}};
+  const start=e=>{e.preventDefault();workSigDrawingV11=true;const p=point(e);workSigCtxV11.beginPath();workSigCtxV11.moveTo(p.x,p.y)};
+  const move=e=>{if(!workSigDrawingV11)return;e.preventDefault();const p=point(e);workSigCtxV11.lineTo(p.x,p.y);workSigCtxV11.stroke()};
+  const stop=()=>workSigDrawingV11=false;
+  c.addEventListener('mousedown',start);c.addEventListener('mousemove',move);window.addEventListener('mouseup',stop);
+  c.addEventListener('touchstart',start,{passive:false});c.addEventListener('touchmove',move,{passive:false});c.addEventListener('touchend',stop);
+}
+function clearWorkSignatureV11(){
+  const c=document.getElementById('workSigCanvas');if(c)c.getContext('2d').clearRect(0,0,c.width,c.height);
+}
+async function finishWorkV11(){
+  const job=store.j.find(x=>x.no===workJob.value);if(!job)return alert('Vælg en opgave');
+  const before=await dataUrlFromFileV11(beforePhoto.files[0]);
+  const after=await dataUrlFromFileV11(afterPhoto.files[0]);
+  const timed=durationHoursV11(workStart.value,workEnd.value);
+  const extra=+workExtraHours.value||0;
+  const hours=Math.round((timed+extra)*100)/100;
+  const materials=+workMaterials.value||0;
+  const km=+workKm.value||0;
+  const kmRate=+workKmRate.value||0;
+  const canvas=document.getElementById('workSigCanvas');
+  const signature=canvas?canvas.toDataURL('image/png'):'';
+  const checked=Array.from(document.querySelectorAll('#checklist input:checked')).map(x=>x.parentElement.textContent.trim());
+
+  job.status='Klar til faktura';
+  job.hours=hours;job.materials=materials;job.km=km;job.kmRate=kmRate;
+  store.work.push({
+    id:Date.now(),job:job.no,cno:job.cno,c:job.c,s:job.s,
+    start:workStart.value,end:workEnd.value,hours,materials,km,kmRate,
+    note:workNote.value,before,after,signature,checked,
+    date:new Date().toISOString()
+  });
+  workMsg.innerHTML='<div class="item"><b>Opgaven er afsluttet og klar til faktura.</b></div>';
+  workNote.value='';workStart.value='';workEnd.value='';workExtraHours.value=0;workMaterials.value=0;workKm.value=0;
+  beforePhoto.value='';afterPhoto.value='';clearWorkSignatureV11();
+  persist();renderWorkHistoryV11();
+}
+function workRecordsV11(){return store.work.filter(x=>x.job===workJob.value).sort((a,b)=>(b.date||'').localeCompare(a.date||''));}
+function renderWorkHistoryV11(){
+  const root=document.getElementById('workHistoryV11');if(!root)return;
+  const rows=workRecordsV11();
+  root.innerHTML=rows.map((x,i)=>`<div class="item reportCard">
+    <b>${new Date(x.date).toLocaleString('da-DK')}</b><br>${x.c||''} · ${x.s||''}
+    <div class="workSummary">
+      <div><span>Timer</span><b>${x.hours||0}</b></div>
+      <div><span>Materialer</span><b>${moneyV1(x.materials||0)}</b></div>
+      <div><span>Kørsel</span><b>${x.km||0} km</b></div>
+      <div><span>Kørsel pris</span><b>${moneyV1((x.km||0)*(x.kmRate||0))}</b></div>
+    </div>
+    <p>${x.note||''}</p>
+    ${(x.before||x.after)?`<div class="photoGrid">${x.before?`<figure><img src="${x.before}"><figcaption>Før</figcaption></figure>`:''}${x.after?`<figure><img src="${x.after}"><figcaption>Efter</figcaption></figure>`:''}</div>`:''}
+    ${x.signature?`<div style="margin-top:12px"><b>Kundens underskrift</b><br><img src="${x.signature}" style="max-width:100%;height:120px;object-fit:contain;border:1px solid #ddd;border-radius:10px;background:white"></div>`:''}
+  </div>`).join('')||'<div class="item">Ingen dokumentation på denne opgave endnu.</div>';
+}
+function selectedWorkV11(){return workRecordsV11()[0]||null;}
+function printWorkReportV11(){
+  const job=store.j.find(x=>x.no===workJob.value);if(!job)return alert('Vælg en opgave');
+  const x=selectedWorkV11();if(!x)return alert('Opgaven har ingen afsluttet dokumentation');
+  const photos=`${x.before?`<div class="printBlock"><h3>Før</h3><img src="${x.before}" style="max-width:100%"></div>`:''}${x.after?`<div class="printBlock"><h3>Efter</h3><img src="${x.after}" style="max-width:100%"></div>`:''}`;
+  const sig=x.signature?`<div class="printBlock"><h3>Kundens underskrift</h3><img src="${x.signature}" style="max-width:100%;height:140px;object-fit:contain"></div>`:'';
+  printShell('Arbejdsrapport',job.no+' · '+job.c,`<div class="printBlock"><p><b>Ydelse:</b> ${job.s}<br><b>Dato:</b> ${job.date||''}<br><b>Timer:</b> ${x.hours||0}<br><b>Materialer:</b> ${moneyV1(x.materials||0)}<br><b>Kørsel:</b> ${x.km||0} km</p><p><b>Udført arbejde:</b><br>${x.note||''}</p></div>${photos}${sig}`);
+}
+function editJobV11(i){
+  const j=store.j[i];if(!j)return;
+  const date=prompt('Dato',j.date||'');if(date===null)return;
+  const status=prompt('Status',j.status||'Planlagt');if(status===null)return;
+  const price=prompt('Pris',j.price||0);if(price===null)return;
+  const note=prompt('Note',j.note||'');if(note===null)return;
+  Object.assign(j,{date,status,price:+price||0,note});persist();
+}
+function renderJobsV11(){
+  const root=document.getElementById('jList');if(!root)return;
+  root.innerHTML=store.j.map((x,i)=>`<div class="item"><b>${x.no}</b> <span class="badge">${x.status}</span><br>${x.c}<br>${x.s} · ${x.date||'Ingen dato'}<br>${x.note||''}<div class="actionRow"><button class="miniBtn" onclick="editJobV11(${i})">✏️ Rediger</button><button class="miniBtn copy" onclick="copyJob(${i})">📋 Kopiér</button><button class="miniBtn danger" onclick="moveToTrash('j',${i},'${x.no}')">🗑️ Slet</button></div></div>`).join('')||'<div class="item">Ingen arbejdsordrer endnu.</div>';
+}
+function renderDashboardV11(){
+  const today=new Date().toISOString().slice(0,10);
+  const todayRevenue=store.j.filter(x=>x.date===today).reduce((s,x)=>s+(+x.price||0),0);
+  const open=store.j.filter(x=>!['Klar til faktura','Faktureret'].includes(x.status)).length;
+  const pending=store.offers.filter(x=>['Kladde','Sendt',undefined,''].includes(x.status)).length;
+  const ready=store.j.filter(x=>x.status==='Klar til faktura').length;
+  if(document.getElementById('v11TodayRevenue'))v11TodayRevenue.textContent=moneyV1(todayRevenue);
+  if(document.getElementById('v11OpenJobs'))v11OpenJobs.textContent=open;
+  if(document.getElementById('v11PendingOffers'))v11PendingOffers.textContent=pending;
+  if(document.getElementById('v11ReadyInvoice'))v11ReadyInvoice.textContent=ready;
+}
+const renderBeforeV11=render;
+render=function(){renderBeforeV11();renderJobsV11();renderDashboardV11();renderWorkHistoryV11();initWorkSignatureV11();};
+window.addEventListener('load',()=>{initWorkSignatureV11();renderDashboardV11();renderWorkHistoryV11();});
+render();
 </script>
 </body></html>

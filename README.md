@@ -1,21 +1,22 @@
-# Nordisk Have & Anlæg Driftsystem – Version 1.0
+# Nordisk Have & Anlæg Driftsystem – Version 1.1
 
-## Bygget
-- Kunde: søg, rediger, kopiér, slet, ring og åbn kort
-- Tilbud: timer, timepris, materialer, kørsel, rabat, moms og status
-- Tilbud kan omdannes til arbejdsordre
-- Fakturagrundlag: vælg flere opgaver, materialer, kilometer, moms og print
-- Markér opgaver som faktureret
-- Installerbar PWA med korrekt ikon og offline-cache
-- Eksisterende kunder, opgaver, kalender, dokumenter og lokale data bevares
+## Nyheder
+- Før- og efterbilleder på arbejdsordrer
+- Kundens underskrift direkte på telefonen
+- Timer, materialer og kilometer på udført arbejde
+- Dokumentationshistorik pr. arbejdsordre
+- Printbar arbejdsrapport med billeder og underskrift
+- Rediger, kopiér og slet arbejdsordrer
+- Dashboard med dagens omsætning, åbne opgaver, tilbud der afventer og klar til faktura
+- Version 1.0-kunder, tilbud, faktura og PWA er bevaret
 
 ## Upload til GitHub
-Upload/erstat:
+Erstat/upload:
 - index.html
 - manifest.json
 - sw.js
 - logo.png
-- hele mappen icons/
+- icons/
 
-Commit-besked:
-Version 1.0 - kunder tilbud faktura og app
+Commit:
+Version 1.1 - billeder underskrift arbejdsrapport dashboard
