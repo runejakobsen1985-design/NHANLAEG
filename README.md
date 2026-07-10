@@ -1,25 +1,21 @@
-# Nordisk Have & Anlæg Driftsystem — Sprint 4
+# Nordisk Have & Anlæg Driftsystem – installerbar app
 
-## Bygget
-- Professionel ugekalender
-- Forrige, denne og næste uge
-- Træk opgaver mellem dage
-- Statusfiltrering
-- Medarbejdertildeling
-- Liste over opgaver uden medarbejder
-- Dagens rute med Google Maps
-- Mobilvenlig kalender
-- Sprint 2-dashboard og alle eksisterende funktioner bevaret
+Denne pakke gør websiden til en PWA, som kan installeres på telefonens startskærm.
 
-## Installation
-Erstat den eksisterende `index.html` med denne fil.
+## Filer
+- `index.html`
+- `manifest.json`
+- `sw.js`
+- `logo.png`
+- `icons/`
+
+## Upload
+Erstat/upload alle filerne i GitHub-repositoryets rodmappe. Bevar mappen `icons`.
 
 Commit-besked:
-`Sprint 4 - kalender og planlægning`
+`Gør driftsystemet installerbart som app`
 
-Derefter:
-1. Stage
-2. Commit
-3. Push Changes
-4. Vent på Vercel
-5. Genindlæs appen
+Når Vercel er færdig:
+1. Åbn siden i Chrome på telefonen.
+2. Tryk på knappen **Installer app**, når den vises.
+3. Alternativt: Chrome-menu → **Føj til startskærm** eller **Installer app**.

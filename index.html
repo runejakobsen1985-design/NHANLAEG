@@ -76,6 +76,16 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
   .dashboardHero h2{font-size:30px}.heroActions{width:100%}.heroActions .btn{flex:1;min-width:140px}
 }
 
+
+/* Installerbar app */
+#installAppBtn{
+  display:none;position:fixed;right:16px;bottom:18px;z-index:9999;
+  border:0;border-radius:16px;padding:14px 18px;font-weight:900;
+  background:#d7b35b;color:#0d2f20;box-shadow:0 12px 32px rgba(13,47,32,.28);
+}
+#installAppBtn.show{display:block}
+@media(max-width:900px){#installAppBtn{left:14px;right:14px;width:calc(100% - 28px)}}
+
 </style>
 
 <link rel="manifest" href="manifest.json">
@@ -89,6 +99,8 @@ label{display:block;font-weight:850;margin-top:12px;color:var(--forest)}input,se
 
 </head>
 <body>
+<button id="installAppBtn" type="button">📲 Installer app</button>
+
 <div id="printArea" class="printDoc"></div>
 <div class="mobilebar noPrint"><div style="display:flex;gap:10px;align-items:center"><img src="logo.png"><b>Nordisk Have & Anlæg</b></div><button class="btn secondary" onclick="toggleMenu()" style="margin:0">Menu</button></div>
 <div class="app noPrint">
@@ -697,6 +709,34 @@ window.addEventListener('load',()=>{
     populatePlanningEmployees();
     renderPlanningCalendar();
   }catch(e){console.warn('Sprint 4 kalender:',e)}
+});
+</script>
+
+
+<script>
+let deferredInstallPrompt = null;
+const installAppBtn = document.getElementById('installAppBtn');
+
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  installAppBtn.classList.add('show');
+});
+
+installAppBtn.addEventListener('click', async () => {
+  if (!deferredInstallPrompt) {
+    alert('Åbn browsermenuen og vælg “Føj til startskærm” eller “Installer app”.');
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  installAppBtn.classList.remove('show');
+});
+
+window.addEventListener('appinstalled', () => {
+  installAppBtn.classList.remove('show');
+  deferredInstallPrompt = null;
 });
 </script>
 
