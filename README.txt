@@ -1,0 +1,1 @@
+Pak ZIP-filen ud. Upload index.html til GitHub/Vercel. Første gang Ledelse åbnes, opretter Rune eller Isabella en 4-8-cifret kode.
