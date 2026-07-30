@@ -1,12 +1,13 @@
-# Nordisk Have & Anlæg – V3.2.1
+# Nordisk Have & Anlæg – V4 MASTER
 
-Rettet mobilforside til GitHub/Vercel.
+Upload `index.html` til GitHub-projektets rod og deploy via Vercel.
 
-- fjerner den dobbelte forside visuelt ved at erstatte hele startkortet
-- retter overlap i toppen
-- mobil topnavigation og bundnavigation
-- kørsel og kvitteringer/udgifter er med
-- eksisterende funktioner og localStorage-data er bevaret
-- eksisterende printlayouts for arbejdssedler, kontrakter og aftaler er ikke ændret
+V4 samler den eksisterende løsning og tilføjer:
+- medarbejdersignatur på arbejdsseddel
+- nød-arbejdsseddel
+- maskinregister med GR/HB/BT/JA/RE/VI/DV-numre
+- lagerstyring med minimumsbeholdning og bevægelser
+- regnskabsmappe til bogholder/revisor
+- eksisterende kørsel, udgifter, kunder, kontrakter, samarbejdsaftaler, printkø, arkiv og backup bevares
 
-Brug `index.html` som Vercel/GitHub-startfil.
+Eksisterende printdesigns er ikke redesignet.
