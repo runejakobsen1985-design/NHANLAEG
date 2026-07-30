@@ -1,21 +1,17 @@
-# Nordisk Have & Anlæg Driftsystem – Version 1.2
+# Nordisk Have & Anlæg – Arbejdssystem V3.1
 
-## Rettet og opdateret
-- Åbne opgaver vises nu direkte på dashboardet
-- Alle åbne opgaver har en synlig **Rediger**-knap
-- Du kan ændre kunde, ydelse, dato, status, pris og note
-- Hurtigknapper til **I gang**, **Udført**, **Kopiér** og **Slet**
-- Arbejdsordrelisten har fortsat redigeringsfunktioner
-- Version 1.0 og 1.1-funktionerne er bevaret
-- PWA-cache er opdateret til Version 1.2
+Ny funktion i V3.1:
+- Kvitteringer & udgifter
+- Udgiftsnummer: UDG-ÅÅÅÅ-000001
+- Foto af kvittering (komprimeres lokalt)
+- Leverandør, kategori, beløb, moms og betalingsform
+- Tilknytning til kunde, arbejdsseddel/opgave, bil og maskine
+- Søgning og filtrering i udgiftshistorikken
+- Automatisk summering af inkl. moms, moms og ekskl. moms
+- Printbart udgiftsbilag i Nordisk Have & Anlæg-design
 
-## Upload til GitHub
-Erstat/upload:
-- index.html
-- manifest.json
-- sw.js
-- logo.png
-- icons/
+Vigtigt:
+De eksisterende arbejdssedler, kontrakter og aftaler er ikke ændret i deres printlayout.
 
-Commit:
-Version 1.2 - rediger åbne opgaver
+Bemærk:
+Data gemmes fortsat lokalt i browseren. Store mængder kvitteringsfotos kan derfor ramme browserens lagergrænse.

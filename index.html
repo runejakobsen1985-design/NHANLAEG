@@ -4396,5 +4396,248 @@ function changeManagementPin(){
 }
 </script>
 
+
+<!-- ===== V3.0: KØRSELSRAPPORT + FÆLLES DOKUMENTNUMRE ===== -->
+<style>
+#nhDrivePanel{position:fixed;inset:0;z-index:10040;background:#f5efdf;display:none;overflow:auto;color:#172019;font-family:Arial,sans-serif}
+#nhDrivePanel.open{display:block}
+.nhdrTop{position:sticky;top:0;z-index:2;background:linear-gradient(90deg,#032d22,#073b2c);color:#fff;border-bottom:5px solid #c8942f;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nhdrTop h2{margin:0;color:#fff;border:0;font-family:Georgia,serif;font-size:25px}.nhdrTop small{display:block;color:#e3c77e;margin-top:3px}
+.nhdrTop button,.nhdrBtn{border:0;border-radius:10px;padding:11px 15px;font-weight:800;cursor:pointer}.nhdrClose{background:#fff;color:#073b2c}.nhdrGold{background:#c8942f;color:#032d22}.nhdrGreen{background:#073b2c;color:#fff}
+.nhdrWrap{max-width:1180px;margin:auto;padding:18px}.nhdrCard{background:#fff;border:1px solid #d7ddd8;border-radius:15px;padding:16px;margin-bottom:15px;box-shadow:0 2px 8px #00000010}.nhdrCard h3{margin:0 0 12px;color:#073b2c;font-family:Georgia,serif}
+.nhdrGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.nhdrGrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.nhdrField label{display:block;font-size:12px;font-weight:800;color:#53635c;margin:0 0 5px}.nhdrField input,.nhdrField select,.nhdrField textarea{width:100%;border:1px solid #cbd4ce;border-radius:9px;padding:10px;background:#fff;font:inherit}.nhdrField textarea{min-height:75px;resize:vertical}
+.nhdrTableWrap{overflow:auto}.nhdrTable{width:100%;border-collapse:collapse;min-width:900px}.nhdrTable th,.nhdrTable td{border-bottom:1px solid #dde3df;padding:8px;text-align:left}.nhdrTable th{background:#eef3ef;color:#073b2c;font-size:12px}.nhdrTable input{width:100%;min-width:95px;border:1px solid #cad3cd;border-radius:7px;padding:8px}.nhdrTable .kmOut{font-weight:800;color:#073b2c;white-space:nowrap}.nhdrDel{border:0;background:#f3e5e2;color:#8f2e25;border-radius:8px;padding:8px 10px;cursor:pointer}
+.nhdrActions{display:flex;flex-wrap:wrap;gap:10px}.nhdrSummary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.nhdrStat{background:#eef3ef;border-left:5px solid #c8942f;border-radius:10px;padding:12px}.nhdrStat b{display:block;font-size:24px;color:#073b2c}.nhdrSaved{display:grid;gap:8px}.nhdrSavedRow{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid #dbe1dc;border-radius:10px;padding:10px;background:#fafbf9}.nhdrSavedRow small{color:#627069}
+.nhdrDocBadge{display:inline-block;background:#f2e4bd;color:#073b2c;border-radius:999px;padding:3px 8px;font-weight:800;font-size:11px}
+@media(max-width:760px){.nhdrGrid,.nhdrGrid.two,.nhdrSummary{grid-template-columns:1fr}.nhdrTop{align-items:flex-start}.nhdrTop h2{font-size:21px}.nhdrWrap{padding:10px}.nhdrActions button{flex:1}}
+@media print{#nhDrivePanel{display:none!important}}
+</style>
+
+<div id="nhDrivePanel" aria-hidden="true">
+  <div class="nhdrTop">
+    <div><h2>Kørselsrapporter</h2><small>Samme Nordisk Have & Anlæg-standard – uden ændringer af eksisterende dokumenter</small></div>
+    <button type="button" class="nhdrClose" onclick="closeDrivingReports()">Luk</button>
+  </div>
+  <div class="nhdrWrap">
+    <div class="nhdrCard">
+      <h3>Rapportoplysninger</h3>
+      <div class="nhdrGrid">
+        <div class="nhdrField"><label>Dokumentnummer</label><input id="drDocNo" readonly></div>
+        <div class="nhdrField"><label>Dato</label><input id="drDate" type="date"></div>
+        <div class="nhdrField"><label>Medarbejder</label><input id="drEmployee" placeholder="Navn"></div>
+        <div class="nhdrField"><label>Bil / registreringsnummer</label><input id="drVehicle" placeholder="VW Caddy – AB 12 345"></div>
+      </div>
+    </div>
+
+    <div class="nhdrCard">
+      <h3>Dagens kørsel</h3>
+      <div class="nhdrTableWrap"><table class="nhdrTable"><thead><tr><th>Tid</th><th>Kunde</th><th>Adresse</th><th>Start km</th><th>Slut km</th><th>Kørte km</th><th></th></tr></thead><tbody id="drRows"></tbody></table></div>
+      <div style="margin-top:12px"><button type="button" class="nhdrBtn nhdrGreen" onclick="addDrivingRow()">+ Tilføj kørsel</button></div>
+    </div>
+
+    <div class="nhdrCard">
+      <div class="nhdrSummary">
+        <div class="nhdrStat"><span>Antal ture</span><b id="drTrips">0</b></div>
+        <div class="nhdrStat"><span>Samlet kørsel</span><b id="drKm">0 km</b></div>
+        <div class="nhdrStat"><span>Fra / til kilometer</span><b id="drRange">—</b></div>
+      </div>
+    </div>
+
+    <div class="nhdrCard">
+      <h3>Bemærkninger</h3>
+      <div class="nhdrField"><textarea id="drNotes" placeholder="Eventuelle bemærkninger til dagens kørsel"></textarea></div>
+    </div>
+
+    <div class="nhdrCard">
+      <div class="nhdrActions">
+        <button type="button" class="nhdrBtn nhdrGold" onclick="saveDrivingReport()">Gem rapport</button>
+        <button type="button" class="nhdrBtn nhdrGreen" onclick="printDrivingReport()">Print rapport</button>
+        <button type="button" class="nhdrBtn" onclick="newDrivingReport()">Ny rapport</button>
+      </div>
+    </div>
+
+    <div class="nhdrCard"><h3>Gemte kørselsrapporter</h3><div id="drSaved" class="nhdrSaved"></div></div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const DR_KEY='nha_driving_reports_v1', DOC_KEY='nha_document_counters_v1';
+let drEditingId='';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function getJSON(k,f){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f))}catch(e){return f}}
+function setJSON(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function nextDocumentNumber(prefix,consume=true){
+  const year=new Date().getFullYear(), key=prefix+'-'+year, all=getJSON(DOC_KEY,{}), n=(Number(all[key])||0)+1;
+  if(consume){all[key]=n;setJSON(DOC_KEY,all)}
+  return prefix+'-'+year+'-'+String(n).padStart(6,'0');
+}
+window.nhaNextDocumentNumber=nextDocumentNumber;
+function reportNo(){return nextDocumentNumber('KR',false)}
+function today(){const d=new Date();return d.toISOString().slice(0,10)}
+function allReports(){return getJSON(DR_KEY,[])}
+function setReports(v){setJSON(DR_KEY,v)}
+function rowTemplate(r={}){return `<tr>
+<td><input class="drTime" type="time" value="${esc(r.time||'')}"></td>
+<td><input class="drCustomer" value="${esc(r.customer||'')}"></td>
+<td><input class="drAddress" value="${esc(r.address||'')}"></td>
+<td><input class="drStart" type="number" inputmode="numeric" value="${esc(r.startKm??'')}"></td>
+<td><input class="drEnd" type="number" inputmode="numeric" value="${esc(r.endKm??'')}"></td>
+<td class="kmOut">0 km</td><td><button type="button" class="nhdrDel">Slet</button></td></tr>`}
+function wireRow(tr){tr.querySelectorAll('input').forEach(x=>x.addEventListener('input',calculateDrivingReport));tr.querySelector('.nhdrDel').addEventListener('click',()=>{tr.remove();calculateDrivingReport()})}
+window.addDrivingRow=function(r={}){const tr=document.createElement('tr');tr.innerHTML=rowTemplate(r).replace(/^<tr>|<\/tr>$/g,'');$('drRows').appendChild(tr);wireRow(tr);calculateDrivingReport()}
+function readRows(){return [...$('drRows').querySelectorAll('tr')].map(tr=>({time:tr.querySelector('.drTime').value,customer:tr.querySelector('.drCustomer').value.trim(),address:tr.querySelector('.drAddress').value.trim(),startKm:Number(tr.querySelector('.drStart').value)||0,endKm:Number(tr.querySelector('.drEnd').value)||0}))}
+window.calculateDrivingReport=function(){let total=0,first=null,last=null,trips=0;[...$('drRows').querySelectorAll('tr')].forEach(tr=>{const s=Number(tr.querySelector('.drStart').value),e=Number(tr.querySelector('.drEnd').value),km=(Number.isFinite(s)&&Number.isFinite(e)&&e>=s)?e-s:0;tr.querySelector('.kmOut').textContent=km+' km';if(km||s||e)trips++;total+=km;if(first===null&&s)first=s;if(e)last=e});$('drTrips').textContent=trips;$('drKm').textContent=total.toLocaleString('da-DK')+' km';$('drRange').textContent=first&&last?first.toLocaleString('da-DK')+' – '+last.toLocaleString('da-DK'):'—'}
+window.openDrivingReports=function(){const p=$('nhDrivePanel');p.classList.add('open');p.setAttribute('aria-hidden','false');if(!$('drDocNo').value)newDrivingReport();renderSavedReports()}
+window.closeDrivingReports=function(){$('nhDrivePanel').classList.remove('open');$('nhDrivePanel').setAttribute('aria-hidden','true')}
+window.newDrivingReport=function(){drEditingId='';$('drDocNo').value=reportNo();$('drDate').value=today();$('drEmployee').value='';$('drVehicle').value='';$('drNotes').value='';$('drRows').innerHTML='';addDrivingRow();calculateDrivingReport()}
+function dataFromForm(){return{id:drEditingId||('DR-'+Date.now()),documentNo:$('drDocNo').value,date:$('drDate').value,employee:$('drEmployee').value.trim(),vehicle:$('drVehicle').value.trim(),notes:$('drNotes').value.trim(),rows:readRows(),updated:new Date().toISOString()}}
+window.saveDrivingReport=function(){const d=dataFromForm();if(!d.date){alert('Dato skal udfyldes.');return}if(!d.employee){alert('Medarbejder skal udfyldes.');return}if(!d.vehicle){alert('Bil eller registreringsnummer skal udfyldes.');return}if(!d.rows.some(r=>r.startKm||r.endKm||r.customer)){alert('Tilføj mindst én kørsel.');return}let all=allReports(),i=all.findIndex(x=>x.id===d.id);if(i<0){d.documentNo=nextDocumentNumber('KR',true);$('drDocNo').value=d.documentNo;all.unshift(d)}else all[i]=d;setReports(all);drEditingId=d.id;renderSavedReports();alert('Kørselsrapporten er gemt som '+d.documentNo+'.')}
+window.editDrivingReport=function(id){const d=allReports().find(x=>x.id===id);if(!d)return;drEditingId=d.id;$('drDocNo').value=d.documentNo;$('drDate').value=d.date||today();$('drEmployee').value=d.employee||'';$('drVehicle').value=d.vehicle||'';$('drNotes').value=d.notes||'';$('drRows').innerHTML='';(d.rows||[]).forEach(addDrivingRow);if(!(d.rows||[]).length)addDrivingRow();calculateDrivingReport();window.scrollTo({top:0,behavior:'smooth'})}
+window.deleteDrivingReport=function(id){if(!confirm('Slet kørselsrapporten?'))return;setReports(allReports().filter(x=>x.id!==id));renderSavedReports();if(drEditingId===id)newDrivingReport()}
+function renderSavedReports(){const all=allReports();$('drSaved').innerHTML=all.length?all.map(d=>`<div class="nhdrSavedRow"><div><span class="nhdrDocBadge">${esc(d.documentNo)}</span> <b>${esc(d.date||'')}</b><br><small>${esc(d.employee||'')} · ${esc(d.vehicle||'')}</small></div><div><button class="nhdrBtn" onclick="editDrivingReport('${esc(d.id)}')">Åbn</button> <button class="nhdrDel" onclick="deleteDrivingReport('${esc(d.id)}')">Slet</button></div></div>`).join(''):'Ingen gemte kørselsrapporter.'}
+function logoSrc(){const candidates=[...document.images].map(x=>x.src).filter(x=>x&&x.startsWith('data:image'));return candidates[0]||''}
+function printHtml(d){const rows=(d.rows||[]).map(r=>{const km=Math.max(0,(Number(r.endKm)||0)-(Number(r.startKm)||0));return `<tr><td>${esc(r.time)}</td><td>${esc(r.customer)}</td><td>${esc(r.address)}</td><td>${Number(r.startKm||0).toLocaleString('da-DK')}</td><td>${Number(r.endKm||0).toLocaleString('da-DK')}</td><td><b>${km.toLocaleString('da-DK')}</b></td></tr>`}).join('');const total=(d.rows||[]).reduce((a,r)=>a+Math.max(0,(Number(r.endKm)||0)-(Number(r.startKm)||0)),0);return `<!doctype html><html lang="da"><head><meta charset="utf-8"><title>${esc(d.documentNo)}</title><style>
+@page{size:A4 portrait;margin:0}*{box-sizing:border-box;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}html,body{margin:0;background:#fff;font-family:Arial,sans-serif;color:#172019}.doc{width:210mm;min-height:297mm;padding:0 9mm 25mm;position:relative}.head{margin:0 -9mm 6mm;background:linear-gradient(90deg,#032d22,#073b2c);color:#fff;border-bottom:1mm solid #c8942f;height:38mm;display:grid;grid-template-columns:31mm 1fr 52mm;align-items:center;padding:4mm 8mm}.head img{width:27mm;height:27mm;border-radius:50%;object-fit:cover}.brand h1{font-family:Georgia,serif;font-size:18pt;line-height:1;margin:0}.brand div{color:#c8942f;font-weight:800;letter-spacing:1.3px;font-size:7pt;margin-top:2mm}.type{border-left:.4mm solid #c8942f;padding-left:4mm;font-size:8pt;line-height:1.5}.meta{display:grid;grid-template-columns:1fr 1fr;gap:2mm 8mm;border:1px solid #d9ded9;border-radius:8px;padding:4mm;margin:0 0 5mm;font-size:8.5pt;background:#faf9f5}h2{font-family:Georgia,serif;color:#073b2c;font-size:11pt;border-bottom:.35mm solid #c8942f;padding-bottom:1.2mm;margin:4.5mm 0 1.5mm}table{width:100%;border-collapse:collapse;font-size:8pt;margin:2mm 0 4mm}th,td{border:1px solid #dfe3df;padding:2mm;vertical-align:top}th{background:#f2f5f2;color:#073b2c;text-align:left}.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin:4mm 0}.box{border:1px solid #d9ded9;border-left:1.2mm solid #c8942f;border-radius:6px;padding:3mm;background:#faf9f5}.box b{display:block;color:#073b2c;font-size:14pt;margin-top:1mm}.notes{min-height:25mm;border:1px solid #d9ded9;border-radius:6px;padding:3mm;font-size:8.5pt;white-space:pre-wrap}.sign{display:grid;grid-template-columns:1fr 1fr;gap:12mm;margin-top:12mm}.line{border-top:.3mm solid #333;padding-top:1.5mm;font-size:8pt;margin-top:12mm}.foot{position:absolute;left:0;right:0;bottom:0;height:22mm;background:linear-gradient(90deg,#032d22,#073b2c,#032d22);color:#fff;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:2mm 8mm}.foot strong{font-family:Georgia,serif}.foot span{text-align:right;color:#e3c77e;font-size:7pt}</style></head><body><div class="doc"><header class="head"><img src="${logoSrc()}"><div class="brand"><h1>NORDISK HAVE & ANLÆG</h1><div>EJENDOMSSERVICE</div></div><div class="type"><b>KØRSELSRAPPORT</b><br>${esc(d.documentNo)}<br>${esc(d.date)}</div></header><div class="meta"><div><b>Medarbejder:</b> ${esc(d.employee)}</div><div><b>Bil:</b> ${esc(d.vehicle)}</div><div><b>Dokumentnummer:</b> ${esc(d.documentNo)}</div><div><b>Dato:</b> ${esc(d.date)}</div></div><h2>Dagens kørsel</h2><table><thead><tr><th>Tid</th><th>Kunde</th><th>Adresse</th><th>Start km</th><th>Slut km</th><th>Kørte km</th></tr></thead><tbody>${rows}</tbody></table><div class="sum"><div class="box">Antal ture<b>${d.rows.length}</b></div><div class="box">Samlet kørsel<b>${total.toLocaleString('da-DK')} km</b></div><div class="box">Bil<b style="font-size:9pt">${esc(d.vehicle)}</b></div></div><h2>Bemærkninger</h2><div class="notes">${esc(d.notes||'Ingen bemærkninger.')}</div><div class="sign"><div class="line">Medarbejder / dato</div><div class="line">Ledelse / dato</div></div><footer class="foot"><strong>NORDISK HAVE & ANLÆG</strong><span>${esc(d.documentNo)} · Side 1 af 1</span></footer></div><script>window.onload=()=>setTimeout(()=>window.print(),250)<\/script></body></html>`}
+window.printDrivingReport=function(){let d=dataFromForm();if(!d.employee||!d.vehicle){alert('Udfyld medarbejder og bil først.');return}if(!drEditingId){saveDrivingReport();d=dataFromForm()}const w=window.open('','_blank');if(!w){alert('Browseren blokerede printvinduet.');return}w.document.write(printHtml(d));w.document.close()}
+
+// Tilføj menupunkt uden at ændre de eksisterende knapper eller dokumentlayouts.
+function addMenuButtons(){const grids=document.querySelectorAll('.nhHomeGrid');grids.forEach(g=>{if(g.querySelector('.nhDrivingBtn'))return;const b=document.createElement('button');b.type='button';b.className='nhDrivingBtn';b.innerHTML='<span class="nhIcon">K</span>Kørselsrapporter<small>Opret, gem og print kørselsrapporter</small>';b.addEventListener('click',openDrivingReports);g.appendChild(b)})}
+
+// Diskrete dokumentnumre i dataarkivet. Eksisterende printdesign røres ikke.
+function ensureQueueNumbers(){try{const key='nha_printkoe_v1',q=getJSON(key,[]);let changed=false;q.forEach(x=>{if(!x.documentNo){x.documentNo=nextDocumentNumber('AS',true);changed=true}});if(changed)setJSON(key,q)}catch(e){}}
+function patchPartnerData(){if(typeof window.partnerAgreementData==='function'&&!window.partnerAgreementData.__docPatched){const old=window.partnerAgreementData;const wrapped=function(){const d=old();const existing=(typeof paGetAll==='function'?paGetAll():[]).find(x=>x.id===d.id);d.documentNo=(existing&&existing.documentNo)||nextDocumentNumber('PA',true);return d};wrapped.__docPatched=true;window.partnerAgreementData=wrapped}}
+setTimeout(()=>{addMenuButtons();ensureQueueNumbers();patchPartnerData()},350);
+})();
+</script>
+<!-- ===== SLUT V3.0 ===== -->
+
+
+<!-- ===== V3.1: KVITTERINGER + UDGIFTSHISTORIK ===== -->
+<style>
+#nhExpensePanel{position:fixed;inset:0;z-index:10050;background:#f5efdf;display:none;overflow:auto;color:#172019;font-family:Arial,sans-serif}
+#nhExpensePanel.open{display:block}
+.nhexTop{position:sticky;top:0;z-index:2;background:linear-gradient(90deg,#032d22,#073b2c);color:#fff;border-bottom:5px solid #c8942f;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nhexTop h2{margin:0;color:#fff;border:0;font-family:Georgia,serif;font-size:25px}.nhexTop small{display:block;color:#e3c77e;margin-top:3px}.nhexClose{border:0;border-radius:10px;padding:11px 15px;font-weight:800;cursor:pointer;background:#fff;color:#073b2c}
+.nhexWrap{max-width:1180px;margin:auto;padding:18px}.nhexCard{background:#fff;border:1px solid #d7ddd8;border-radius:15px;padding:16px;margin-bottom:15px;box-shadow:0 2px 8px #00000010}.nhexCard h3{margin:0 0 12px;color:#073b2c;font-family:Georgia,serif}
+.nhexGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.nhexGrid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.nhexField label{display:block;font-size:12px;font-weight:800;color:#53635c;margin:0 0 5px}.nhexField input,.nhexField select,.nhexField textarea{width:100%;border:1px solid #cbd4ce;border-radius:9px;padding:10px;background:#fff;font:inherit}.nhexField textarea{min-height:75px;resize:vertical}
+.nhexActions{display:flex;flex-wrap:wrap;gap:10px}.nhexBtn{border:0;border-radius:10px;padding:11px 15px;font-weight:800;cursor:pointer}.nhexGold{background:#c8942f;color:#032d22}.nhexGreen{background:#073b2c;color:#fff}.nhexNeutral{background:#edf1ee;color:#073b2c}.nhexDel{border:0;background:#f3e5e2;color:#8f2e25;border-radius:8px;padding:8px 10px;cursor:pointer}
+.nhexSummary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.nhexStat{background:#eef3ef;border-left:5px solid #c8942f;border-radius:10px;padding:12px}.nhexStat b{display:block;font-size:22px;color:#073b2c;margin-top:3px}.nhexSaved{display:grid;gap:8px}.nhexSavedRow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid #dbe1dc;border-radius:10px;padding:10px;background:#fafbf9}.nhexSavedRow small{color:#627069}.nhexBadge{display:inline-block;background:#f2e4bd;color:#073b2c;border-radius:999px;padding:3px 8px;font-weight:800;font-size:11px}.nhexAmount{font-weight:900;color:#073b2c}.nhexThumb{display:none;margin-top:10px;max-width:180px;max-height:180px;object-fit:contain;border:1px solid #d7ddd8;border-radius:10px;background:#fff;padding:5px}.nhexFilters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:12px}.nhexEmpty{color:#65736d;font-style:italic}.nhexHomeBtn{position:relative}
+@media(max-width:760px){.nhexGrid,.nhexGrid.two,.nhexSummary,.nhexFilters{grid-template-columns:1fr}.nhexTop{align-items:flex-start}.nhexTop h2{font-size:21px}.nhexWrap{padding:10px}.nhexActions button{flex:1}.nhexSavedRow{grid-template-columns:1fr}}
+@media print{#nhExpensePanel{display:none!important}}
+</style>
+
+<div id="nhExpensePanel" aria-hidden="true">
+  <div class="nhexTop">
+    <div><h2>Kvitteringer & udgifter</h2><small>Lille intern udgiftshistorik – bogføringen kan fortsat ligge i e-conomic</small></div>
+    <button type="button" class="nhexClose" onclick="closeExpenseHistory()">Luk</button>
+  </div>
+  <div class="nhexWrap">
+    <div class="nhexCard">
+      <h3>Udgift</h3>
+      <div class="nhexGrid">
+        <div class="nhexField"><label>Dokumentnummer</label><input id="exDocNo" readonly></div>
+        <div class="nhexField"><label>Dato</label><input id="exDate" type="date"></div>
+        <div class="nhexField"><label>Leverandør</label><input id="exSupplier" placeholder="Fx Circle K, Stark, XL-BYG"></div>
+        <div class="nhexField"><label>Kategori</label><select id="exCategory"><option>Brændstof</option><option>Materialer</option><option>Maskiner / reservedele</option><option>Bil / værksted</option><option>Værktøj</option><option>Affald / bortkørsel</option><option>Kontor</option><option>Forplejning</option><option>Andet</option></select></div>
+      </div>
+      <div class="nhexGrid" style="margin-top:12px">
+        <div class="nhexField"><label>Beløb inkl. moms (kr.)</label><input id="exAmount" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0,00"></div>
+        <div class="nhexField"><label>Moms (kr.)</label><input id="exVat" type="number" inputmode="decimal" step="0.01" min="0" placeholder="0,00"></div>
+        <div class="nhexField"><label>Betalt med</label><select id="exPayment"><option>Firmakort</option><option>Privat udlæg</option><option>Kontant</option><option>Bankoverførsel</option><option>Andet</option></select></div>
+        <div class="nhexField"><label>Medarbejder</label><input id="exEmployee" placeholder="Navn"></div>
+      </div>
+    </div>
+
+    <div class="nhexCard">
+      <h3>Tilknytning</h3>
+      <div class="nhexGrid">
+        <div class="nhexField"><label>Kunde / kundenr.</label><input id="exCustomer" placeholder="Valgfrit"></div>
+        <div class="nhexField"><label>Arbejdsseddel / opgave</label><input id="exJob" placeholder="Valgfrit"></div>
+        <div class="nhexField"><label>Bil</label><input id="exVehicle" placeholder="Valgfrit"></div>
+        <div class="nhexField"><label>Maskine</label><input id="exMachine" placeholder="Valgfrit"></div>
+      </div>
+    </div>
+
+    <div class="nhexCard">
+      <h3>Kvittering</h3>
+      <div class="nhexGrid two">
+        <div class="nhexField"><label>Foto af kvittering</label><input id="exReceipt" type="file" accept="image/*"></div>
+        <div class="nhexField"><label>Bemærkning</label><textarea id="exNotes" placeholder="Fx benzin til VW Caddy eller materialer til kunde NH-001-PRI"></textarea></div>
+      </div>
+      <img id="exPreview" class="nhexThumb" alt="Forhåndsvisning af kvittering">
+      <div style="margin-top:8px"><button type="button" class="nhexBtn nhexNeutral" onclick="removeExpenseReceipt()">Fjern kvitteringsfoto</button></div>
+    </div>
+
+    <div class="nhexCard">
+      <div class="nhexActions">
+        <button type="button" class="nhexBtn nhexGold" onclick="saveExpense()">Gem udgift</button>
+        <button type="button" class="nhexBtn nhexGreen" onclick="printExpense()">Print udgift</button>
+        <button type="button" class="nhexBtn nhexNeutral" onclick="newExpense()">Ny udgift</button>
+      </div>
+    </div>
+
+    <div class="nhexCard">
+      <h3>Udgiftshistorik</h3>
+      <div class="nhexFilters">
+        <input id="exSearch" placeholder="Søg leverandør, kunde, bil, maskine…">
+        <select id="exFilterCategory"><option value="">Alle kategorier</option><option>Brændstof</option><option>Materialer</option><option>Maskiner / reservedele</option><option>Bil / værksted</option><option>Værktøj</option><option>Affald / bortkørsel</option><option>Kontor</option><option>Forplejning</option><option>Andet</option></select>
+        <input id="exFilterMonth" type="month">
+      </div>
+      <div class="nhexSummary">
+        <div class="nhexStat"><span>Antal udgifter</span><b id="exCount">0</b></div>
+        <div class="nhexStat"><span>I alt inkl. moms</span><b id="exTotal">0,00 kr.</b></div>
+        <div class="nhexStat"><span>Moms</span><b id="exVatTotal">0,00 kr.</b></div>
+        <div class="nhexStat"><span>Ekskl. moms</span><b id="exNetTotal">0,00 kr.</b></div>
+      </div>
+      <div id="exSaved" class="nhexSaved" style="margin-top:12px"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+const EX_KEY='nha_expenses_v1', EX_DOC_KEY='nha_document_counters_v1';
+let exEditingId='', exReceiptData='';
+const ex$=id=>document.getElementById(id);
+const exEsc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function exGetJSON(k,f){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f))}catch(e){return f}}
+function exSetJSON(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function exNextDocumentNumber(prefix,consume=true){
+  if(typeof window.nhaNextDocumentNumber==='function') return window.nhaNextDocumentNumber(prefix,consume);
+  const year=new Date().getFullYear(), key=prefix+'-'+year, all=exGetJSON(EX_DOC_KEY,{}), n=(Number(all[key])||0)+1;
+  if(consume){all[key]=n;exSetJSON(EX_DOC_KEY,all)}
+  return prefix+'-'+year+'-'+String(n).padStart(6,'0');
+}
+function exToday(){return new Date().toISOString().slice(0,10)}
+function exAll(){return exGetJSON(EX_KEY,[])}
+function exSet(v){exSetJSON(EX_KEY,v)}
+function exMoney(v){return (Number(v)||0).toLocaleString('da-DK',{minimumFractionDigits:2,maximumFractionDigits:2})+' kr.'}
+function exLogo(){const candidates=[...document.images].map(x=>x.src).filter(x=>x&&x.startsWith('data:image'));return candidates[0]||''}
+function exFormData(){return{id:exEditingId||('EX-'+Date.now()),documentNo:ex$('exDocNo').value,date:ex$('exDate').value,supplier:ex$('exSupplier').value.trim(),category:ex$('exCategory').value,amount:Number(ex$('exAmount').value)||0,vat:Number(ex$('exVat').value)||0,payment:ex$('exPayment').value,employee:ex$('exEmployee').value.trim(),customer:ex$('exCustomer').value.trim(),job:ex$('exJob').value.trim(),vehicle:ex$('exVehicle').value.trim(),machine:ex$('exMachine').value.trim(),notes:ex$('exNotes').value.trim(),receipt:exReceiptData,updated:new Date().toISOString()}}
+window.openExpenseHistory=function(){ex$('nhExpensePanel').classList.add('open');ex$('nhExpensePanel').setAttribute('aria-hidden','false');if(!ex$('exDocNo').value)newExpense();exRender()}
+window.closeExpenseHistory=function(){ex$('nhExpensePanel').classList.remove('open');ex$('nhExpensePanel').setAttribute('aria-hidden','true')}
+window.newExpense=function(){exEditingId='';exReceiptData='';ex$('exDocNo').value=exNextDocumentNumber('UDG',false);ex$('exDate').value=exToday();ex$('exSupplier').value='';ex$('exCategory').value='Brændstof';ex$('exAmount').value='';ex$('exVat').value='';ex$('exPayment').value='Firmakort';ex$('exEmployee').value='';ex$('exCustomer').value='';ex$('exJob').value='';ex$('exVehicle').value='';ex$('exMachine').value='';ex$('exNotes').value='';exUpdatePreview()}
+window.removeExpenseReceipt=function(){exReceiptData='';ex$('exReceipt').value='';exUpdatePreview()}
+function exUpdatePreview(){const p=ex$('exPreview');if(exReceiptData){p.src=exReceiptData;p.style.display='block'}else{p.removeAttribute('src');p.style.display='none'}}
+function exCompressReceipt(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onerror=reject;reader.onload=()=>{const img=new Image();img.onerror=reject;img.onload=()=>{const max=1400, scale=Math.min(1,max/Math.max(img.width,img.height)),w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale)),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',0.72))};img.src=reader.result};reader.readAsDataURL(file)})}
+ex$('exReceipt').addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')){alert('Vælg et billede af kvitteringen.');return}try{exReceiptData=await exCompressReceipt(f);exUpdatePreview()}catch(err){alert('Kvitteringen kunne ikke læses.')}})
+window.saveExpense=function(){const d=exFormData();if(!d.date){alert('Dato skal udfyldes.');return}if(!d.supplier){alert('Leverandør skal udfyldes.');return}if(!(d.amount>0)){alert('Beløb skal være større end 0 kr.');return}if(d.vat>d.amount){alert('Moms kan ikke være større end totalbeløbet.');return}let all=exAll(),i=all.findIndex(x=>x.id===d.id);if(i<0){d.documentNo=exNextDocumentNumber('UDG',true);ex$('exDocNo').value=d.documentNo;all.unshift(d)}else all[i]=d;try{exSet(all)}catch(e){alert('Der er ikke mere lokal lagerplads. Fjern evt. nogle kvitteringsbilleder og prøv igen.');return}exEditingId=d.id;exRender();alert('Udgiften er gemt som '+d.documentNo+'.')}
+window.editExpense=function(id){const d=exAll().find(x=>x.id===id);if(!d)return;exEditingId=d.id;exReceiptData=d.receipt||'';ex$('exDocNo').value=d.documentNo||'';ex$('exDate').value=d.date||exToday();ex$('exSupplier').value=d.supplier||'';ex$('exCategory').value=d.category||'Andet';ex$('exAmount').value=d.amount||'';ex$('exVat').value=d.vat||'';ex$('exPayment').value=d.payment||'Firmakort';ex$('exEmployee').value=d.employee||'';ex$('exCustomer').value=d.customer||'';ex$('exJob').value=d.job||'';ex$('exVehicle').value=d.vehicle||'';ex$('exMachine').value=d.machine||'';ex$('exNotes').value=d.notes||'';exUpdatePreview();ex$('nhExpensePanel').scrollTo({top:0,behavior:'smooth'})}
+window.deleteExpense=function(id){if(!confirm('Slet denne udgift fra historikken?'))return;exSet(exAll().filter(x=>x.id!==id));if(exEditingId===id)newExpense();exRender()}
+function exFiltered(){const q=(ex$('exSearch').value||'').trim().toLowerCase(),cat=ex$('exFilterCategory').value,month=ex$('exFilterMonth').value;return exAll().filter(d=>{const hay=[d.documentNo,d.supplier,d.category,d.employee,d.customer,d.job,d.vehicle,d.machine,d.notes].join(' ').toLowerCase();return(!q||hay.includes(q))&&(!cat||d.category===cat)&&(!month||String(d.date||'').startsWith(month))})}
+function exRender(){const all=exFiltered(),total=all.reduce((a,d)=>a+(Number(d.amount)||0),0),vat=all.reduce((a,d)=>a+(Number(d.vat)||0),0);ex$('exCount').textContent=all.length;ex$('exTotal').textContent=exMoney(total);ex$('exVatTotal').textContent=exMoney(vat);ex$('exNetTotal').textContent=exMoney(total-vat);ex$('exSaved').innerHTML=all.length?all.map(d=>`<div class="nhexSavedRow"><div><span class="nhexBadge">${exEsc(d.documentNo)}</span> <b>${exEsc(d.date||'')}</b> · ${exEsc(d.supplier||'')}<br><small>${exEsc(d.category||'')} · ${exEsc(d.payment||'')}${d.customer?' · Kunde: '+exEsc(d.customer):''}${d.vehicle?' · Bil: '+exEsc(d.vehicle):''}${d.machine?' · Maskine: '+exEsc(d.machine):''}${d.receipt?' · Kvittering ✓':''}</small></div><div style="text-align:right"><div class="nhexAmount">${exMoney(d.amount)}</div><button class="nhexBtn nhexNeutral" onclick="editExpense('${exEsc(d.id)}')">Åbn</button> <button class="nhexDel" onclick="deleteExpense('${exEsc(d.id)}')">Slet</button></div></div>`).join(''):'<div class="nhexEmpty">Ingen udgifter i den valgte visning.</div>'}
+['exSearch','exFilterCategory','exFilterMonth'].forEach(id=>ex$(id).addEventListener(id==='exSearch'?'input':'change',exRender));
+function exPrintHtml(d){const net=Math.max(0,(Number(d.amount)||0)-(Number(d.vat)||0)),receipt=d.receipt?`<h2>Kvittering</h2><div class="receipt"><img src="${d.receipt}"></div>`:'';return `<!doctype html><html lang="da"><head><meta charset="utf-8"><title>${exEsc(d.documentNo)}</title><style>@page{size:A4 portrait;margin:0}*{box-sizing:border-box;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}html,body{margin:0;background:#fff;font-family:Arial,sans-serif;color:#172019}.doc{width:210mm;min-height:297mm;padding:0 9mm 25mm;position:relative}.head{margin:0 -9mm 6mm;background:linear-gradient(90deg,#032d22,#073b2c);color:#fff;border-bottom:1mm solid #c8942f;height:38mm;display:grid;grid-template-columns:31mm 1fr 52mm;align-items:center;padding:4mm 8mm}.head img{width:27mm;height:27mm;border-radius:50%;object-fit:cover}.brand h1{font-family:Georgia,serif;font-size:18pt;line-height:1;margin:0}.brand div{color:#c8942f;font-weight:800;letter-spacing:1.3px;font-size:7pt;margin-top:2mm}.type{border-left:.4mm solid #c8942f;padding-left:4mm;font-size:8pt;line-height:1.5}.meta{display:grid;grid-template-columns:1fr 1fr;gap:2mm 8mm;border:1px solid #d9ded9;border-radius:8px;padding:4mm;margin:0 0 5mm;font-size:8.5pt;background:#faf9f5}h2{font-family:Georgia,serif;color:#073b2c;font-size:11pt;border-bottom:.35mm solid #c8942f;padding-bottom:1.2mm;margin:4.5mm 0 1.5mm}.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin:4mm 0}.box{border:1px solid #d9ded9;border-left:1.2mm solid #c8942f;border-radius:6px;padding:3mm;background:#faf9f5}.box b{display:block;color:#073b2c;font-size:14pt;margin-top:1mm}.detail{display:grid;grid-template-columns:1fr 1fr;gap:3mm}.detail div,.notes{border:1px solid #d9ded9;border-radius:6px;padding:3mm;font-size:8.5pt;min-height:13mm}.notes{white-space:pre-wrap;min-height:22mm}.receipt{text-align:center;border:1px solid #d9ded9;border-radius:6px;padding:4mm;break-inside:avoid}.receipt img{max-width:100%;max-height:95mm;object-fit:contain}.foot{position:absolute;left:0;right:0;bottom:0;height:22mm;background:linear-gradient(90deg,#032d22,#073b2c,#032d22);color:#fff;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:2mm 8mm}.foot strong{font-family:Georgia,serif}.foot span{text-align:right;color:#e3c77e;font-size:7pt}</style></head><body><div class="doc"><header class="head"><img src="${exLogo()}"><div class="brand"><h1>NORDISK HAVE & ANLÆG</h1><div>EJENDOMSSERVICE</div></div><div class="type"><b>UDGIFTSBILAG</b><br>${exEsc(d.documentNo)}<br>${exEsc(d.date)}</div></header><div class="meta"><div><b>Leverandør:</b> ${exEsc(d.supplier)}</div><div><b>Kategori:</b> ${exEsc(d.category)}</div><div><b>Medarbejder:</b> ${exEsc(d.employee||'—')}</div><div><b>Betalt med:</b> ${exEsc(d.payment)}</div></div><div class="sum"><div class="box">Beløb inkl. moms<b>${exMoney(d.amount)}</b></div><div class="box">Moms<b>${exMoney(d.vat)}</b></div><div class="box">Ekskl. moms<b>${exMoney(net)}</b></div></div><h2>Tilknytning</h2><div class="detail"><div><b>Kunde:</b><br>${exEsc(d.customer||'—')}<br><br><b>Arbejdsseddel / opgave:</b><br>${exEsc(d.job||'—')}</div><div><b>Bil:</b><br>${exEsc(d.vehicle||'—')}<br><br><b>Maskine:</b><br>${exEsc(d.machine||'—')}</div></div><h2>Bemærkning</h2><div class="notes">${exEsc(d.notes||'Ingen bemærkning.')}</div>${receipt}<footer class="foot"><strong>NORDISK HAVE & ANLÆG</strong><span>${exEsc(d.documentNo)} · Side 1 af 1</span></footer></div><script>window.onload=()=>setTimeout(()=>window.print(),250)<\/script></body></html>`}
+window.printExpense=function(){let d=exFormData();if(!d.supplier||!(d.amount>0)){alert('Udfyld leverandør og beløb først.');return}if(!exEditingId){saveExpense();d=exFormData()}const w=window.open('','_blank');if(!w){alert('Browseren blokerede printvinduet.');return}w.document.write(exPrintHtml(d));w.document.close()}
+function exAddMenuButtons(){document.querySelectorAll('.nhHomeGrid').forEach(g=>{if(g.querySelector('.nhexHomeBtn'))return;const b=document.createElement('button');b.type='button';b.className='nhexHomeBtn';b.innerHTML='<span class="nhIcon">U</span>Kvitteringer & udgifter<small>Gem kvitteringer og se udgiftshistorik</small>';b.addEventListener('click',openExpenseHistory);g.appendChild(b)})}
+setTimeout(exAddMenuButtons,450);
+})();
+</script>
+<!-- ===== SLUT V3.1 ===== -->
+
 </body>
 </html>
