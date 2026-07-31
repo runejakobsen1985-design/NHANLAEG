@@ -1,17 +1,17 @@
-# Nordisk Have & Anlæg – V6.8 FYSISKE A4 AFTALER
+# Nordisk Have & Anlæg – V7.8 STABIL
 
-Denne version retter den konkrete fejl vist i Android print-preview.
+Stabilitetsopdatering oven på V7.7.
 
-Kundekontrakt/serviceaftale og samarbejdsaftale:
-- Den eksisterende aftale genereres først med samme indhold og design.
-- Derefter deles den programmæssigt op i fysiske A4-sider FØR print.
-- Hver A4-side er præcis 210 x 297 mm.
-- Hver side får sin egen eksisterende grønne header.
-- Hver side får sin egen eksisterende grønne footer.
-- Header/footer er en fysisk del af hver side, ikke browserens automatiske gentagelse.
-- Tabeller deles rækkevis ved sideskift.
-- Overskrifter holdes sammen med næste tekstblok, hvor pladsen tillader det.
-- Lange tekstblokke kan deles over flere sider.
+Kontrolleret og sikret:
+- alle JavaScript-blokke består syntakskontrol
+- ingen dublerede HTML-id'er
+- ingen manglende direkte onclick-funktioner
+- mandag-lørdag findes i ugeplansystemet
+- Udfør opgave har dedikeret arbejdsseddel-print og må ikke hijackes af generisk print
+- side 1 / side 2 får samme sagsnr., dato, uge og medarbejder
+- gammel fast bundnavigation fjernes, hvis den dukker op
+- Escape kan lukke åbne overlays
+- runtime-fejl logges lokalt til fejlsøgning
+- prisgrundlag og tilbud/e-conomic er bevaret
 
-Denne patch ændrer ikke kontraktens ordlyd eller den eksisterende visuelle header/footer.
-Den ændrer kun A4-pagineringen.
+TESTRAPPORT.json ligger i GitHub-pakken.
