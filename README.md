@@ -1,17 +1,30 @@
-# Nordisk Have & Anlæg – V7.8 STABIL
+# Nordisk Have & Anlæg – Final GitHub-pakke
 
-Stabilitetsopdatering oven på V7.7.
+Denne pakke er den samlede stabile version baseret på V10.5.
 
-Kontrolleret og sikret:
-- alle JavaScript-blokke består syntakskontrol
-- ingen dublerede HTML-id'er
-- ingen manglende direkte onclick-funktioner
-- mandag-lørdag findes i ugeplansystemet
-- Udfør opgave har dedikeret arbejdsseddel-print og må ikke hijackes af generisk print
-- side 1 / side 2 får samme sagsnr., dato, uge og medarbejder
-- gammel fast bundnavigation fjernes, hvis den dukker op
-- Escape kan lukke åbne overlays
-- runtime-fejl logges lokalt til fejlsøgning
-- prisgrundlag og tilbud/e-conomic er bevaret
+## Installation på GitHub
 
-TESTRAPPORT.json ligger i GitHub-pakken.
+1. Åbn dit GitHub-repository.
+2. Slet eller flyt gamle HTML-versioner til en mappe som `archive/`.
+3. Upload filen `index.html` fra denne pakke til roden af repositoryet.
+4. Sørg for, at filen præcis hedder `index.html`.
+5. Commit ændringerne.
+6. Hvis siden kører via Vercel, vil den normalt blive genudgivet automatisk.
+
+## Beholdt i denne version
+
+- Ledelse-only
+- kunder
+- arbejdssedler
+- udfør opgave
+- ugeplan og kalender
+- kundevalg i ugeplan
+- dokumentnumre
+- kontrakter og aftaler
+- tilbud og e-conomic
+- printreparation fra V10.5
+- QR, logo og træ i dokumentdesign
+
+## Vigtigt
+
+Gem gerne den gamle repository-version som backup, før du erstatter `index.html`.
